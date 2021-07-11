@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Maindialendar">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".view.activity.MainActivity"></activity>
         <activity
-            android:name=".SplashActivity"
+            android:name=".view.activity.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

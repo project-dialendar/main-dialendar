@@ -1,4 +1,4 @@
-package com.example.main_dialendar;
+package com.example.main_dialendar.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,11 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.example.main_dialendar.model.Day;
+import com.example.main_dialendar.R;
+import com.example.main_dialendar.view.adapter.CalendarAdapter;
+import com.example.main_dialendar.view.adapter.WeekAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
      * 그리드뷰 어댑터
      */
     private CalendarAdapter calendarAdapter;
-    private GridAdapter day_of_weekGridAdapter;
+    private WeekAdapter day_of_weekGridAdapter;
 
     /**
      * 요일 리스트
@@ -75,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         day_of_weekList.add("FRI");
         day_of_weekList.add("SAT");
 
-        day_of_weekGridAdapter = new GridAdapter(this, day_of_weekList);
+        day_of_weekGridAdapter = new WeekAdapter(this, day_of_weekList);
         gv_day_of_week.setAdapter(day_of_weekGridAdapter);
 
         dayList = new ArrayList<Day>();
@@ -118,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         lastMonthStartDay -= (dayOfMonth-1)-1;
 
         // 년월 표시
-        tv_month.setText(mCal.get(Calendar.MONTH)+"");
+        tv_month.setText((mCal.get(Calendar.MONTH)+1)+"");
         btn_year.setText(mCal.get(Calendar.YEAR)+"");
 
         Day day;

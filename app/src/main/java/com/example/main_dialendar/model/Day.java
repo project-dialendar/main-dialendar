@@ -1,4 +1,4 @@
-package com.example.main_dialendar;
+package com.example.main_dialendar.model;
 
 import android.media.Image;
 
