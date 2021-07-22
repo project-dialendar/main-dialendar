@@ -2,9 +2,12 @@ package com.example.main_dialendar.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -16,6 +19,7 @@ import com.example.main_dialendar.view.adapter.WeekAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,6 +59,16 @@ public class MainActivity extends AppCompatActivity {
      */
     private Calendar mCal;
 
+    /**
+     * YearPickerDialog에 필요한 DateSetListener
+     */
+    DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            Log.d("YearPickerTest", "year = " + year + ", month = " + month + ", day = " + dayOfMonth);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +98,17 @@ public class MainActivity extends AppCompatActivity {
         gv_day_of_week.setAdapter(day_of_weekGridAdapter);
 
         dayList = new ArrayList<Day>();
+
+        //btn_year 클릭 시, YearPickerDialog 띄우기
+        btn_year.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                YearPickerDialog pickerDialog = new YearPickerDialog();
+                pickerDialog.setListener(dateSetListener);
+                pickerDialog.show(getSupportFragmentManager(), "YearPickerTest");
+            }
+        });
+
     }
 
     @Override
