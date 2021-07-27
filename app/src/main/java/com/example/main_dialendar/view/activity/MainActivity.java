@@ -1,16 +1,23 @@
 package com.example.main_dialendar.view.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
@@ -30,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_date;
 
     /**
-     * 년도, 글쓰기, 사이드바 버튼
+     * 년도, 글쓰기 버튼, 사이드바 레이아웃
      */
     private Button btn_year;
     private ImageButton btn_write;
-    private ImageButton btn_sidebar;
+    private DrawerLayout drawerLayout;
 
     /**
      * 그리드뷰 어댑터
@@ -82,7 +89,15 @@ public class MainActivity extends AppCompatActivity {
 
         btn_year = (Button) findViewById(R.id.btn_year);
         btn_write = (ImageButton) findViewById(R.id.btn_write);
-        btn_sidebar = (ImageButton) findViewById(R.id.btn_sidebar);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+
+        // 상단 툴바 설정
+        setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayShowCustomEnabled(true);    // 커스터마이징을 위해 필요
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);      // 툴바 메뉴 버튼 생성
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_sidebar); // 메뉴 버튼 모양 설정
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //gridview_day_of_week에 요일 리스트 표시
         day_of_weekList = new ArrayList<String>();
@@ -186,4 +201,16 @@ public class MainActivity extends AppCompatActivity {
         gv_month.setAdapter(calendarAdapter);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home : {
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
