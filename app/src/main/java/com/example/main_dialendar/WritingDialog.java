@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -22,7 +23,7 @@ import java.util.Date;
 public class WritingDialog extends AppCompatActivity {
 
     private TextView tv_date;
-    private ImageButton btn_options, btn_photo;
+    private ImageView btn_options, btn_photo;
     private EditText et_writing;
 
 
@@ -46,17 +47,14 @@ public class WritingDialog extends AppCompatActivity {
         // 액티비티의 타이틀바 숨김
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        // 커스텀 다이얼로그 레이아웃 설정
-        dialog.setContentView(R.layout.dialog_writing);
-
         // 커스텀 다이얼로그 노출
         dialog.show();
 
         // 커스텀 다이얼로그의 각 위젯 정의
-        tv_date = findViewById(R.id.tv_date_writing);
-        btn_options = findViewById(R.id.btn_writing_options);
-        btn_photo = findViewById(R.id.btn_photo);
-        et_writing = findViewById(R.id.et_writing_text);
+        tv_date = dialog.findViewById(R.id.tv_date_writing);
+        btn_options = dialog.findViewById(R.id.btn_writing_options);
+        btn_photo = dialog.findViewById(R.id.btn_photo);
+        et_writing = dialog.findViewById(R.id.et_writing_text);
 
 
         // 이미지 버튼 -> 갤러리에서 사진 불러오기
@@ -74,7 +72,12 @@ public class WritingDialog extends AppCompatActivity {
 
 
         // 옵션 1.일기삭제 2. 공유
+        btn_options.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
 
     }
 /*
