@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+         <item
+            android:title="일기 공유"
+            android:id="@+id/share_diary"
+            />
+        <item
+            android:title="일기 삭제"
+            android:id="@+id/delete_diary"
+            />
+</menu>
