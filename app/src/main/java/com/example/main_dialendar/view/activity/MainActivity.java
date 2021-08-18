@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch(item.getItemId()) {
                     case (R.id.setting) :
+                        startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                         break;
                     case (R.id.backup) :
                         break;

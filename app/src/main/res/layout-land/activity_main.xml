@@ -27,20 +27,14 @@
                 android:layout_alignParentTop="true"
                 android:minHeight="?attr/actionBarSize">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="일 력"
-                    android:textSize="20sp"
-                    android:textStyle="bold"/>
                 <Button
                     android:id="@+id/btn_year"
                     android:layout_width="100dp"
                     android:layout_height="35dp"
+                    android:layout_gravity="center"
                     android:layout_marginLeft="35dp"
                     android:background="@drawable/btn_year"
-                    android:text="year" />
+                    android:text="2021" />
 
             </androidx.appcompat.widget.Toolbar>
 
