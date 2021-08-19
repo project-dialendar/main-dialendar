@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- settings_preference.xml에서 사용될 설정 리스트들 -->
+<resources>
+    <string-array name="array_font">
+        <item>굴림</item>
+        <item>돋움</item>
+    </string-array>
+
+    <string-array name="array_memo">
+        <item>메모장</item>
+        <item>체크리스트</item>
+        <item>사진</item>
+    </string-array>
+</resources>
