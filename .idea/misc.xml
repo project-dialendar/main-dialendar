@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/main-dialendar/app/src/main/res/layout-land/activity_diary.xml" value="0.1" />
         <entry key="..\:/main-dialendar/app/src/main/res/layout-land/activity_main.xml" value="0.10364583333333334" />
+        <entry key="..\:/main-dialendar/app/src/main/res/layout/activity_diary.xml" value="0.14666666666666667" />
         <entry key="..\:/main-dialendar/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/main-dialendar/app/src/main/res/layout/dialog_writing.xml" value="0.10099637681159421" />
         <entry key="..\:/main-dialendar/app/src/main/res/layout/dialog_writing_options.xml" value="0.1" />
