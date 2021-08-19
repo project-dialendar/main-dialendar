@@ -136,7 +136,8 @@ public class MainActivity extends AppCompatActivity {
         btn_write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writingDialog(v);
+                Intent diaryIntent = new Intent(MainActivity.this, DiaryActivity.class);
+                startActivity(diaryIntent);
             }
         });
     }
@@ -226,23 +227,6 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-
-
-    /**
-     * 글쓰기 다이얼로그
-     * @param v
-     */
-
-    public void writingDialog(View v){
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_writing, null);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-        builder.setView(dialogView);
-
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
     }
 
     /**

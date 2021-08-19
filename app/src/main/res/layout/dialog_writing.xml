@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/btn_writing_options"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -28,7 +28,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/btn_writing_options" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/btn_photo"
         android:layout_width="407dp"
         android:layout_height="411dp"
@@ -36,7 +36,7 @@
         android:layout_marginTop="45dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_date_writing"
-        app:srcCompat="@drawable/cat" />
+        app:srcCompat="@drawable/empty_photo" />
 
     <EditText
         android:id="@+id/et_writing_text"
@@ -50,5 +50,6 @@
         android:inputType="textMultiLine"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_photo" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
