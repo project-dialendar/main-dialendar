@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="설정">
+
+        <!--메모지 설정-->
+        <PreferenceScreen
+            android:key="memo_screen"
+            android:title="메모지"
+            android:summary="사용 안 함">
+
+            <SwitchPreference
+                android:defaultValue="false"
+                android:key="memo"
+                android:title="메모지"/>
+
+            <ListPreference
+                android:entries="@array/array_memo"
+                android:entryValues="@array/array_memo"
+                android:key="memo_list"
+                android:summary="메모지"
+               android:title="메모지 설정"
+                android:dependency="memo"/>
+
+        </PreferenceScreen>
+
+        <!-- 폰트 설정-->
+        <ListPreference
+            android:entries="@array/array_font"
+            android:entryValues="@array/array_font"
+            android:key="font_list"
+            android:summary="시스템 설정"
+            android:title="폰트"/>
+
+        <!-- 알림 설정-->
+        <SwitchPreference
+            android:key="message"
+            android:title="알림"
+            android:summary="사용 안 함"/>
+
+        <!-- 잠금 모드 설정-->
+        <SwitchPreference
+            android:key="lock"
+            android:title="잠금 모드"
+            android:summary="사용 안 함"/>
+
+        <!-- 다크 모드 설정-->
+        <SwitchPreference
+            android:key="darkmode"
+            android:title="다크 모드"
+            android:summary="사용 안 함"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

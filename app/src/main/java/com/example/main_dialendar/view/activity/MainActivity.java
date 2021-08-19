@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,15 +19,19 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.main_dialendar.BuildConfig;
 import com.example.main_dialendar.WritingDialog;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.adapter.CalendarAdapter;
 import com.example.main_dialendar.view.adapter.WeekAdapter;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_year;
     private ImageButton btn_write;
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     /**
      * 그리드뷰 어댑터
@@ -74,15 +80,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tv_month = (TextView) findViewById(R.id.tv_month);
-        tv_date = (TextView) findViewById(R.id.tv_date);
+        tv_month = findViewById(R.id.tv_month);
+        tv_date = findViewById(R.id.tv_date);
 
-        gv_month = (GridView) findViewById(R.id.gv_month);
-        gv_day_of_week = (GridView) findViewById(R.id.gv_day_of_week);
+        gv_month = findViewById(R.id.gv_month);
+        gv_day_of_week = findViewById(R.id.gv_day_of_week);
 
-        btn_year = (Button) findViewById(R.id.btn_year);
-        btn_write = (ImageButton) findViewById(R.id.btn_write);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        btn_year = findViewById(R.id.btn_year);
+        btn_write = findViewById(R.id.btn_write);
+        drawerLayout = findViewById(R.id.drawerLayout);
+
+        navigationView = findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                drawerLayout.closeDrawers();
+
+                switch(item.getItemId()) {
+                    case (R.id.setting) :
+                        startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+                        break;
+                    case (R.id.backup) :
+                        break;
+                    case (R.id.mail) :
+                        sendEmailToAdmin("[일력 문의사항]", new String[]{"apps@gmail.com"});
+                        break;
+                }
+                return true;
+            }
+        });
 
         // 상단 툴바 설정
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
@@ -201,5 +227,20 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Intent.ACTION_SEND로 이메일 보내기
+     * @param title
+     * @param receiver
+     */
+    public void sendEmailToAdmin(String title, String[] receiver) {
+        Intent email = new Intent(Intent.ACTION_SEND);
+        email.putExtra(Intent.EXTRA_EMAIL, receiver);
+        email.putExtra(Intent.EXTRA_SUBJECT, title);
+        email.putExtra(Intent.EXTRA_TEXT, "앱 버전(AppVersion):" + BuildConfig.VERSION_NAME +
+                "\n기기명(Device): \n안드로이드 OS(Android OS): \n내용(Content): \n");
+        email.setType("message/rfc822");
+        startActivity(email);
     }
 }

@@ -2,11 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/menu1"
-            android:title="메뉴1" />
+            android:id="@+id/setting"
+            android:icon="@drawable/img_setting"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:title="설정" />
 
         <item
-            android:id="@+id/menu2"
-            android:title="메뉴2" />
+            android:id="@+id/backup"
+            android:icon="@drawable/img_backup"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:title="백업" />
+
+        <item
+            android:id="@+id/mail"
+            android:icon="@drawable/img_mail"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:title="문의하기" />
     </group>
 </menu>
