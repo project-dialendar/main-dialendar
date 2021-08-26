@@ -1,5 +1,8 @@
 package com.example.main_dialendar.view.activity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -7,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +18,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.WritingDialog;
 
+import java.io.InputStream;
+
 public class DiaryActivity extends AppCompatActivity {
+
+    // 이미지 불러올때 필요한 변수
+    private static final int PICK_IMAGE = 1111;
+    private static final int REQUEST_CODE = 0;
 
     private ImageView btn_diary_options, btn_diary_photo, btn_save_back;
     private TextView tv_diary_date;
@@ -25,6 +35,7 @@ public class DiaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary);
 
+        // 위젯 정의
         btn_diary_options = findViewById(R.id.btn_diary_options);
         btn_diary_photo = findViewById(R.id.btn_diary_photo);
         btn_save_back = findViewById(R.id.btn_save_back);
@@ -32,6 +43,9 @@ public class DiaryActivity extends AppCompatActivity {
         tv_diary_date = findViewById(R.id.tv_diary_date);
 
         et_diary = findViewById(R.id.et_diary);
+
+        // 이미지 버튼 -> 갤러리에서 사진 불러오기
+        btn_diary_photo.setOnClickListener(v -> pickFromGallery());
 
         // 달력 화면으로 나가면서 저장
         btn_save_back.setOnClickListener(new View.OnClickListener() {
@@ -66,4 +80,36 @@ public class DiaryActivity extends AppCompatActivity {
             }
         });
     }
+
+    /***
+     * 사진 불러오기
+     */
+    private void pickFromGallery(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,PICK_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    InputStream in = getContentResolver().openInputStream(data.getData());
+
+                    Bitmap img = BitmapFactory.decodeStream(in);
+                    in.close();
+
+                    btn_diary_photo.setImageBitmap(img);
+                } catch (Exception e) {
+
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
 }
