@@ -1,4 +1,4 @@
-package com.example.main_dialendar.view.activity;
+package com.example.main_dialendar.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -46,7 +46,7 @@ public class YearPickerDialog extends DialogFragment {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onDateSet(null, yearPicker.getValue(), monthPicker.getValue(), 0);
+                listener.onDateSet(null, yearPicker.getValue(), monthPicker.getValue()-1, 0);
                 YearPickerDialog.this.getDialog().cancel();
             }
         });
