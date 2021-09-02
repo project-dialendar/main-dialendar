@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.main_dialendar.DBHelper;
 import com.example.main_dialendar.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.io.InputStream;
 
 public class DiaryActivity extends AppCompatActivity {
@@ -34,6 +37,7 @@ public class DiaryActivity extends AppCompatActivity {
     private ImageView btn_diary_options, btn_diary_photo, btn_save_back;
     private TextView tv_diary_date;
     private EditText et_diary;
+    private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd. hh:mm");
 
 
     @Override
@@ -58,8 +62,12 @@ public class DiaryActivity extends AppCompatActivity {
         btn_save_back = findViewById(R.id.btn_save_back);
 
         tv_diary_date = findViewById(R.id.tv_diary_date);
-
         et_diary = findViewById(R.id.et_diary);
+
+        Intent diaryIntent = getIntent();
+        boolean isToday = diaryIntent.getBooleanExtra("today", true);
+        if (isToday)
+            tv_diary_date.setText(getTime());
 
         // 이미지 버튼 -> 갤러리에서 사진 불러오기
         btn_diary_photo.setOnClickListener(v -> pickFromGallery());
@@ -100,6 +108,15 @@ public class DiaryActivity extends AppCompatActivity {
         });
 
     }
+  
+    /***
+    * 현재 시간 반환 메소드
+    */
+    private String getTime() {
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        return mFormat.format(date);
+    }
 
     /***
      * 사진 불러오기
@@ -131,5 +148,4 @@ public class DiaryActivity extends AppCompatActivity {
             }
         }
     }
-
 }
