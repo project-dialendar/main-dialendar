@@ -1,6 +1,10 @@
 package com.example.main_dialendar.view.activity;
 
+import static com.example.main_dialendar.DBHelper.DB_NAME;
+import static com.example.main_dialendar.DBHelper.DB_VERSION;
+
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -15,8 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.main_dialendar.DBHelper;
 import com.example.main_dialendar.R;
-import com.example.main_dialendar.WritingDialog;
 
 import java.io.InputStream;
 
@@ -26,14 +30,27 @@ public class DiaryActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 1111;
     private static final int REQUEST_CODE = 0;
 
+    // 위젯
     private ImageView btn_diary_options, btn_diary_photo, btn_save_back;
     private TextView tv_diary_date;
     private EditText et_diary;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary);
+
+        // 데이터 베이스
+        DBHelper dbHelper;
+        SQLiteDatabase db;
+        dbHelper = new DBHelper(
+                DiaryActivity.this,
+                DB_NAME,
+                null,
+                DB_VERSION);
+        db = dbHelper.getWritableDatabase();
+        dbHelper.onCreate(db);
 
         // 위젯 정의
         btn_diary_options = findViewById(R.id.btn_diary_options);
@@ -51,7 +68,7 @@ public class DiaryActivity extends AppCompatActivity {
         btn_save_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // db save
                 finish();
             }
         });
@@ -70,7 +87,9 @@ public class DiaryActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.share_diary:
+                                // db read and make share image
                             case R.id.delete_diary:
+                                // db delete
                         }
                         return true;
                     }
@@ -79,6 +98,7 @@ public class DiaryActivity extends AppCompatActivity {
                 popupMenu.show();
             }
         });
+
     }
 
     /***
