@@ -1,8 +1,12 @@
 package com.example.main_dialendar;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.sql.Blob;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -10,7 +14,9 @@ public class DBHelper extends SQLiteOpenHelper {
     // 데이터 베이스
     public static final int DB_VERSION = 1;
     public static final String DB_NAME = "dialendar.db";
-    public static final String TB_NAME = "diary_table";
+    public static final String TB_NAME = "myDiaryData";
+    public static final String KEY_NAME = "diary";
+    public static final String KEY_IMAGE = "image";
     // 비트맵 이미지 -> db 저장 변수 생성
 
     public DBHelper(Context context, String dbName, SQLiteDatabase.CursorFactory factory, int version) {
@@ -19,20 +25,22 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE if not exists mytable ("
-                + "_date integer primary key autoincrement,"
-                + "diary text);";
+        String sql = "CREATE TABLE if not exists myDiaryData ("
+                + "_id integer primary key autoincrement,"
+                + KEY_NAME + " text,"
+                + KEY_IMAGE + " BLOB);";
 
         db.execSQL(sql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "DROP TABLE if exists mytable";
+        String sql = "DROP TABLE if exists myDiaryData";
 
         db.execSQL(sql);
         onCreate(db);
+
+
     }
 
-    // crud
 }
