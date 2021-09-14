@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,11 +55,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tv_month;
     private TextView tv_date;
 
-    // 년도, 글쓰기 버튼, 사이드바 레이아웃
+    // 년도, 글쓰기 버튼
     private Button btn_year;
     private ImageButton btn_write;
+
+    // 사이드바 레이아웃
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private ImageView iv_profile;
+    private TextView tv_profile;
 
     DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -107,11 +113,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_write.setOnClickListener(this);
 
         drawerLayout = findViewById(R.id.drawerLayout);
-
         navigationView = findViewById(R.id.navigationView);
+        iv_profile = findViewById(R.id.iv_profile);
+        tv_profile = findViewById(R.id.tv_profile);
 
         // 구글 로그인 옵션 설정
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.google_default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -167,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         dayList = new ArrayList<Day>();
     }
-
+/*
     @Override
     protected void onStart() {
         super.onStart();
@@ -175,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
-
+*/
     @Override
     protected void onResume() {
         super.onResume();
@@ -311,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
-                Toast.makeText(this, "Failed Google Login", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_LONG);
             }
         }
     }
@@ -322,13 +330,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                        if (task.isSuccessful())
+                        {
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            updateUI(null);
+                            Toast.makeText(MainActivity.this, "구글 로그인 성공, " + user.getPhotoUrl(), Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this, "구글 로그인 실패", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -337,4 +346,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void updateUI(FirebaseUser user) {
 
     }
+
 }
