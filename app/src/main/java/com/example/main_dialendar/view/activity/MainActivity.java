@@ -4,14 +4,17 @@ package com.example.main_dialendar.view.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // 그리드뷰 어댑터
     private CalendarAdapter calendarAdapter;
     private WeekAdapter day_of_weekGridAdapter;
+    private int cellSize = 0;
 
     // 요일 리스트
     private ArrayList<Day> dayList;
@@ -94,18 +98,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     GoogleSignInClient client;
     private FirebaseAuth mAuth;
 
+    // 기기 별 기준 사이즈와 해상도
+    int standardSize_X, standardSize_Y;
+    float density;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 접속한 기기의 해상도 확인
+        getStandardSize();
+
         tv_month = findViewById(R.id.tv_month);
+        tv_month.setTextSize((float) (standardSize_X/7));
+
         tv_date = findViewById(R.id.tv_date);
 
         gv_month = findViewById(R.id.gv_month);
         gv_day_of_week = findViewById(R.id.gv_day_of_week);
-
+        cellSize = (standardSize_X - gv_month.getRequestedHorizontalSpacing()) / 7;
         btn_year = (Button)findViewById(R.id.btn_year);
         btn_year.setOnClickListener(this);
 
@@ -114,8 +126,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
-        iv_profile = findViewById(R.id.iv_profile);
-        tv_profile = findViewById(R.id.tv_profile);
+
+        View nav_header_view = navigationView.getHeaderView(0);
+        iv_profile = nav_header_view.findViewById(R.id.iv_profile);
+        tv_profile = nav_header_view.findViewById(R.id.tv_profile);
 
         // 구글 로그인 옵션 설정
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -170,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         day_of_weekList.add("FRI");
         day_of_weekList.add("SAT");
 
-        day_of_weekGridAdapter = new WeekAdapter(this, day_of_weekList);
+        day_of_weekGridAdapter = new WeekAdapter(this, day_of_weekList, cellSize);
         gv_day_of_week.setAdapter(day_of_weekGridAdapter);
 
         dayList = new ArrayList<Day>();
@@ -255,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initCalendarAdapter() {
-        calendarAdapter = new CalendarAdapter(this, dayList);
+        calendarAdapter = new CalendarAdapter(this, mCal.get(Calendar.YEAR), mCal.get(Calendar.MONTH), dayList, cellSize);
         gv_month.setAdapter(calendarAdapter);
     }
 
@@ -304,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(email);
     }
 
+    // 구글 로그인 메소드
     private void signIn() {
         Intent signInIntent = client.getSignInIntent();
         startActivityForResult(signInIntent, SIGN_IN);
@@ -313,17 +328,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == SIGN_IN) {
+        if (requestCode == SIGN_IN) {   // 구글 로그인
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account.getIdToken());
+                firebaseAuthWithGoogle(account.getIdToken());   // 구글 계정 권한 부여
             } catch (ApiException e) {
                 Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_LONG);
             }
         }
     }
 
+    // 구글 계정을 파이어베이스에 등록한 뒤, 토큰을 반환하는 메소드
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
@@ -334,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         {
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            Toast.makeText(MainActivity.this, "구글 로그인 성공, " + user.getPhotoUrl(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "구글 로그인 성공", Toast.LENGTH_LONG).show();
                         }
                         else {
                             Toast.makeText(MainActivity.this, "구글 로그인 실패", Toast.LENGTH_LONG).show();
@@ -343,8 +359,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
+    // 로그인 성공 후, 사이드바 헤더 변경 메소드
     private void updateUI(FirebaseUser user) {
+        String userName = user.getDisplayName();
+        Uri userImage = user.getPhotoUrl();
 
+        tv_profile.setText(userName + " 님, 환영합니다!");
+        iv_profile.setImageURI(userImage);
+    }
+
+    // 기기 별 기준 해상도를 계산
+    public void getStandardSize() {
+        Point ScreenSize = getScreenSize(this);
+        density  = getResources().getDisplayMetrics().density;
+
+        standardSize_X = (int) (ScreenSize.x / density);
+        standardSize_Y = (int) (ScreenSize.y / density);
+    }
+
+    // 기기 별 해상도 반환
+    public Point getScreenSize(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        return  size;
     }
 
 }

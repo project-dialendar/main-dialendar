@@ -4,6 +4,7 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/ll_week"
         android:layout_width="108dp"
         android:layout_height="36dp"
         android:background="@drawable/bg_day_of_week">

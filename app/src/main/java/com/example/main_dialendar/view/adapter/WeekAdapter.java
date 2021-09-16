@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.main_dialendar.R;
@@ -22,16 +23,19 @@ public class WeekAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
     private Calendar mCal;
 
+    int cellSize;
+
     /**
      * 생성자
      *
      * @param context
      * @param list
      */
-    public WeekAdapter(Context context, ArrayList<String> list) {
+    public WeekAdapter(Context context, ArrayList<String> list, int cellSize) {
         this.context = context;
         this.list = list;
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.cellSize = cellSize;
     }
 
 
@@ -58,6 +62,8 @@ public class WeekAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_calendar_day_of_week, parent, false);
             holder = new ViewHolder();
             holder.tvItemGridView = (TextView)convertView.findViewById(R.id.tv_day_of_week);
+            holder.llItemGridView = convertView.findViewById(R.id.ll_week);
+            // 수정해야 할 부분
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder)convertView.getTag();
@@ -69,6 +75,7 @@ public class WeekAdapter extends BaseAdapter {
 
     private class ViewHolder {
         TextView tvItemGridView;
+        LinearLayout llItemGridView;
     }
 }
 

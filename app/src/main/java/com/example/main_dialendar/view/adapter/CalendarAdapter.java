@@ -1,7 +1,11 @@
 package com.example.main_dialendar.view.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +15,13 @@ import android.widget.TextView;
 
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
+import com.example.main_dialendar.view.activity.DiaryActivity;
+import com.example.main_dialendar.view.activity.MainActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 그리드뷰 어댑터 - 캘린더
@@ -22,7 +30,13 @@ public class CalendarAdapter extends BaseAdapter {
     private ArrayList<Day> list;
     private Context context;
     private final LayoutInflater inflater;
-    private Calendar mCal;
+
+    private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd.");
+
+
+    int cellSize;
+    int year;
+    int month;
 
     /**
      * 생성자
@@ -30,10 +44,13 @@ public class CalendarAdapter extends BaseAdapter {
      * @param context
      * @param list
      */
-    public CalendarAdapter(Context context, ArrayList<Day> list) {
+    public CalendarAdapter(Context context, int year, int month, ArrayList<Day> list, int cellSize) {
         this.context = context;
+        this.year = year;
+        this.month = month;
         this.list = list;
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.cellSize = cellSize;
     }
 
 
@@ -64,7 +81,6 @@ public class CalendarAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.tv_item = (TextView)convertView.findViewById(R.id.tv_date);
             holder.iv_item = (ImageView)convertView.findViewById(R.id.iv_date);
-
             holder.iv_item.setClipToOutline(true);
 
             convertView.setTag(holder);
@@ -85,6 +101,22 @@ public class CalendarAdapter extends BaseAdapter {
             }
         }
 
+        holder.iv_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH, month);
+                cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day.getDay()));
+
+                String date = mFormat.format(cal.getTime());
+                Intent intent = new Intent(context, DiaryActivity.class);
+                intent.putExtra("today", false);
+                intent.putExtra("date", date);
+                context.startActivity(intent);
+            }
+        });
+
         return convertView;
     }
 
@@ -92,4 +124,5 @@ public class CalendarAdapter extends BaseAdapter {
         TextView tv_item;
         ImageView iv_item;
     }
+
 }
