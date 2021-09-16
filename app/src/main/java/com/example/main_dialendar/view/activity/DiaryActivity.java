@@ -1,7 +1,6 @@
 package com.example.main_dialendar.view.activity;
 
-import static com.example.main_dialendar.DBHelper.DB_NAME;
-import static com.example.main_dialendar.DBHelper.DB_VERSION;
+import static com.example.main_dialendar.DBHelper.*;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.main_dialendar.DBHelper;
 import com.example.main_dialendar.R;
 
@@ -30,7 +30,6 @@ import java.io.InputStream;
 public class DiaryActivity extends AppCompatActivity {
 
     // 이미지 불러올때 필요한 변수
-    private static final int PICK_IMAGE = 1111;
     private static final int REQUEST_CODE = 0;
 
     // 위젯
@@ -45,14 +44,10 @@ public class DiaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary);
 
-        // 데이터 베이스
+        // 데이터 베이스 연결
         DBHelper dbHelper;
         SQLiteDatabase db;
-        dbHelper = new DBHelper(
-                DiaryActivity.this,
-                DB_NAME,
-                null,
-                DB_VERSION);
+        dbHelper = new DBHelper(DiaryActivity.this);
         db = dbHelper.getWritableDatabase();
         dbHelper.onCreate(db);
 
@@ -129,7 +124,7 @@ public class DiaryActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,PICK_IMAGE);
+        startActivityForResult(intent,REQUEST_CODE);
     }
 
     @Override
@@ -137,16 +132,17 @@ public class DiaryActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                try {
-                    InputStream in = getContentResolver().openInputStream(data.getData());
-
-                    Bitmap img = BitmapFactory.decodeStream(in);
-                    in.close();
-
-                    btn_diary_photo.setImageBitmap(img);
-                } catch (Exception e) {
-
-                }
+//                try {
+//                    InputStream in = getContentResolver().openInputStream(data.getData());
+//
+//                    Bitmap img = BitmapFactory.decodeStream(in);
+//                    in.close();
+//
+//                    btn_diary_photo.setImageBitmap(img);
+//                } catch (Exception e) {
+//
+//                }
+                Glide.with(getApplicationContext()).load(data.getData()).override(400, 400).into(btn_diary_photo);
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
