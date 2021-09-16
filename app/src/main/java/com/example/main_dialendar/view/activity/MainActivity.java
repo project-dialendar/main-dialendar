@@ -5,74 +5,69 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import androidx.appcompat.app.AlertDialog;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.main_dialendar.BuildConfig;
-import com.example.main_dialendar.WritingDialog;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.adapter.CalendarAdapter;
 import com.example.main_dialendar.view.adapter.WeekAdapter;
+import com.example.main_dialendar.view.dialog.YearPickerDialog;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    /**
-     * 월/요일 텍스트뷰
-     */
+    // 월/요일 텍스트뷰
     private TextView tv_month;
     private TextView tv_date;
 
-    /**
-     * 년도, 글쓰기 버튼, 사이드바 레이아웃
-     */
+    // 년도, 글쓰기 버튼, 사이드바 레이아웃
     private Button btn_year;
     private ImageButton btn_write;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
-    /**
-     * 그리드뷰 어댑터
-     */
+    DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            mCal.set(Calendar.YEAR, year);
+            mCal.set(Calendar.MONTH, month);
+            getCalendar(mCal);
+        }
+    };
+
+    // 그리드뷰 어댑터
     private CalendarAdapter calendarAdapter;
     private WeekAdapter day_of_weekGridAdapter;
 
-    /**
-     * 요일 리스트
-     */
+    // 요일 리스트
     private ArrayList<Day> dayList;
     private ArrayList<String> day_of_weekList;
 
-    /**
-     * 그리드뷰
-     */
+    // 그리드뷰
     private GridView gv_month;
     private GridView gv_day_of_week;
 
-    /**
-     * 캘린더 변수
-     */
+    // 캘린더 변수
     private Calendar mCal;
 
     @Override
@@ -87,7 +82,11 @@ public class MainActivity extends AppCompatActivity {
         gv_day_of_week = findViewById(R.id.gv_day_of_week);
 
         btn_year = findViewById(R.id.btn_year);
+        btn_year.setOnClickListener(this);
+
         btn_write = findViewById(R.id.btn_write);
+        btn_write.setOnClickListener(this);
+
         drawerLayout = findViewById(R.id.drawerLayout);
 
         navigationView = findViewById(R.id.navigationView);
@@ -132,14 +131,6 @@ public class MainActivity extends AppCompatActivity {
         gv_day_of_week.setAdapter(day_of_weekGridAdapter);
 
         dayList = new ArrayList<Day>();
-
-        btn_write.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent diaryIntent = new Intent(MainActivity.this, DiaryActivity.class);
-                startActivity(diaryIntent);
-            }
-        });
     }
 
     @Override
@@ -217,6 +208,23 @@ public class MainActivity extends AppCompatActivity {
         gv_month.setAdapter(calendarAdapter);
     }
 
+    // onClick Listener
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_year :
+                YearPickerDialog dialog = new YearPickerDialog();
+                dialog.setListener(dateSetListener);
+                dialog.show(getSupportFragmentManager(), "YearPickerTest");
+                break;
+
+            case R.id.btn_write :
+                startActivity(new Intent(MainActivity.this, DiaryActivity.class));
+                break;
+        }
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -228,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     /**
      * Intent.ACTION_SEND로 이메일 보내기
