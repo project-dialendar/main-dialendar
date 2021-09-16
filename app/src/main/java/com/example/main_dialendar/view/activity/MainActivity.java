@@ -4,20 +4,26 @@ package com.example.main_dialendar.view.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -29,7 +35,19 @@ import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.adapter.CalendarAdapter;
 import com.example.main_dialendar.view.adapter.WeekAdapter;
 import com.example.main_dialendar.view.dialog.YearPickerDialog;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,11 +58,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tv_month;
     private TextView tv_date;
 
-    // 년도, 글쓰기 버튼, 사이드바 레이아웃
+    // 년도, 글쓰기 버튼
     private Button btn_year;
     private ImageButton btn_write;
+
+    // 사이드바 레이아웃
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private ImageView iv_profile;
+    private TextView tv_profile;
 
     DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -58,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // 그리드뷰 어댑터
     private CalendarAdapter calendarAdapter;
     private WeekAdapter day_of_weekGridAdapter;
+    private int cellSize = 0;
 
     // 요일 리스트
     private ArrayList<Day> dayList;
@@ -70,26 +93,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // 캘린더 변수
     private Calendar mCal;
 
+    // 구글 로그인 상수 & 변수
+    private static final int SIGN_IN = 9001;
+    GoogleSignInClient client;
+    private FirebaseAuth mAuth;
+
+    // 기기 별 기준 사이즈와 해상도
+    int standardSize_X, standardSize_Y;
+    float density;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 접속한 기기의 해상도 확인
+        getStandardSize();
+
         tv_month = findViewById(R.id.tv_month);
+        tv_month.setTextSize((float) (standardSize_X/7));
+
         tv_date = findViewById(R.id.tv_date);
 
         gv_month = findViewById(R.id.gv_month);
         gv_day_of_week = findViewById(R.id.gv_day_of_week);
-
-        btn_year = findViewById(R.id.btn_year);
+        cellSize = (standardSize_X - gv_month.getRequestedHorizontalSpacing()) / 7;
+        btn_year = (Button)findViewById(R.id.btn_year);
         btn_year.setOnClickListener(this);
 
-        btn_write = findViewById(R.id.btn_write);
+        btn_write = (ImageButton)findViewById(R.id.btn_write);
         btn_write.setOnClickListener(this);
 
         drawerLayout = findViewById(R.id.drawerLayout);
-
         navigationView = findViewById(R.id.navigationView);
+
+        View nav_header_view = navigationView.getHeaderView(0);
+        iv_profile = nav_header_view.findViewById(R.id.iv_profile);
+        tv_profile = nav_header_view.findViewById(R.id.tv_profile);
+
+        // 구글 로그인 옵션 설정
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.google_default_web_client_id))
+                .requestEmail()
+                .build();
+
+        client = GoogleSignIn.getClient(this, gso);
+        mAuth = FirebaseAuth.getInstance();
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -104,12 +154,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case (R.id.mail) :
                         sendEmailToAdmin("[일력 문의사항]", new String[]{"apps@gmail.com"});
                         break;
+                    case (R.id.login) :
+                        signIn();
+                        break;
                 }
                 return true;
             }
         });
 
         // 상단 툴바 설정
+        setToolbar();
+    }
+
+    private void setToolbar() {
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayShowCustomEnabled(true);    // 커스터마이징을 위해 필요
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);      // 툴바 메뉴 버튼 생성
@@ -127,12 +184,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         day_of_weekList.add("FRI");
         day_of_weekList.add("SAT");
 
-        day_of_weekGridAdapter = new WeekAdapter(this, day_of_weekList);
+        day_of_weekGridAdapter = new WeekAdapter(this, day_of_weekList, cellSize);
         gv_day_of_week.setAdapter(day_of_weekGridAdapter);
 
         dayList = new ArrayList<Day>();
     }
-
+/*
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
+    }
+*/
     @Override
     protected void onResume() {
         super.onResume();
@@ -204,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initCalendarAdapter() {
-        calendarAdapter = new CalendarAdapter(this, dayList);
+        calendarAdapter = new CalendarAdapter(this, mCal.get(Calendar.YEAR), mCal.get(Calendar.MONTH), dayList, cellSize);
         gv_month.setAdapter(calendarAdapter);
     }
 
@@ -252,4 +317,73 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         email.setType("message/rfc822");
         startActivity(email);
     }
+
+    // 구글 로그인 메소드
+    private void signIn() {
+        Intent signInIntent = client.getSignInIntent();
+        startActivityForResult(signInIntent, SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SIGN_IN) {   // 구글 로그인
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account.getIdToken());   // 구글 계정 권한 부여
+            } catch (ApiException e) {
+                Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_LONG);
+            }
+        }
+    }
+
+    // 구글 계정을 파이어베이스에 등록한 뒤, 토큰을 반환하는 메소드
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful())
+                        {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                            Toast.makeText(MainActivity.this, "구글 로그인 성공", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this, "구글 로그인 실패", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    // 로그인 성공 후, 사이드바 헤더 변경 메소드
+    private void updateUI(FirebaseUser user) {
+        String userName = user.getDisplayName();
+        Uri userImage = user.getPhotoUrl();
+
+        tv_profile.setText(userName + " 님, 환영합니다!");
+        iv_profile.setImageURI(userImage);
+    }
+
+    // 기기 별 기준 해상도를 계산
+    public void getStandardSize() {
+        Point ScreenSize = getScreenSize(this);
+        density  = getResources().getDisplayMetrics().density;
+
+        standardSize_X = (int) (ScreenSize.x / density);
+        standardSize_Y = (int) (ScreenSize.y / density);
+    }
+
+    // 기기 별 해상도 반환
+    public Point getScreenSize(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        return  size;
+    }
+
 }

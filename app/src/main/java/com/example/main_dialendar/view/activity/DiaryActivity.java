@@ -63,6 +63,10 @@ public class DiaryActivity extends AppCompatActivity {
         boolean isToday = diaryIntent.getBooleanExtra("today", true);
         if (isToday)
             tv_diary_date.setText(getTime());
+        else {
+            String date = diaryIntent.getStringExtra("date");
+            tv_diary_date.setText(date);
+        }
 
         // 이미지 버튼 -> 갤러리에서 사진 불러오기
         btn_diary_photo.setOnClickListener(v -> pickFromGallery());
