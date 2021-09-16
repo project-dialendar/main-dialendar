@@ -1,7 +1,6 @@
 package com.example.main_dialendar.view.activity;
 
-import static com.example.main_dialendar.DBHelper.DB_NAME;
-import static com.example.main_dialendar.DBHelper.DB_VERSION;
+import static com.example.main_dialendar.DBHelper.*;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -41,14 +40,10 @@ public class DiaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary);
 
-        // 데이터 베이스
+        // 데이터 베이스 연결
         DBHelper dbHelper;
         SQLiteDatabase db;
-        dbHelper = new DBHelper(
-                DiaryActivity.this,
-                DB_NAME,
-                null,
-                DB_VERSION);
+        dbHelper = new DBHelper(DiaryActivity.this);
         db = dbHelper.getWritableDatabase();
         dbHelper.onCreate(db);
 
