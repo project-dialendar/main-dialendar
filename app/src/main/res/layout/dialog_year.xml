@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="20dp"
+    android:background="@drawable/round_bg_border"
     >
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="날짜 선택"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/maruburittf"
         android:textSize="18sp"
         android:textColor="@color/black"
@@ -84,6 +85,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
             android:text="확인"
             android:textSize="18sp"
             android:textColor="@color/black"

@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridView;
@@ -121,8 +122,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         gv_month = findViewById(R.id.gv_month);
         gv_day_of_week = findViewById(R.id.gv_day_of_week);
-        LinearLayout ll_calendar = findViewById(R.id.ll_calendar);
-        cellSize = standardSize_X / 49 * 5;
 
         ll_year = findViewById(R.id.btn_year);
         tv_year = findViewById(R.id.tv_year);
@@ -173,6 +172,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 상단 툴바 설정
         setToolbar();
+
+        mCal = Calendar.getInstance();
+
+        // bundle에 저장되어 있는 데이터 가져오기
+        if(savedInstanceState != null) {
+            mCal.set(Calendar.YEAR, savedInstanceState.getInt("year"));
+            mCal.set(Calendar.MONTH, savedInstanceState.getInt("month"));
+        }
+        else
+            mCal.set(Calendar.DAY_OF_MONTH, 1);
+        getCalendar(mCal);
+
     }
 
     private void setToolbar() {
@@ -211,10 +222,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
 
-        // 캘린더 인스턴스 생성
-        mCal = Calendar.getInstance();
-        mCal.set(Calendar.DAY_OF_MONTH, 1);
-        getCalendar(mCal);
     }
 
     /**
@@ -288,6 +295,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btn_year :
                 YearPickerDialog dialog = new YearPickerDialog();
+                dialog.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setListener(dateSetListener);
                 dialog.show(getSupportFragmentManager(), "YearPickerTest");
                 break;
@@ -395,4 +403,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return  size;
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("year", mCal.get(Calendar.YEAR));
+        outState.putInt("month", mCal.get(Calendar.MONTH));
+    }
 }
