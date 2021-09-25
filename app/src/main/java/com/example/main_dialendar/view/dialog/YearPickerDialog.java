@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +30,7 @@ public class YearPickerDialog extends DialogFragment {
         this.listener = listener;
     }
 
-    Button btn_ok;
+    TextView btn_ok;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

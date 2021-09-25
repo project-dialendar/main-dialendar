@@ -1,12 +1,11 @@
 package com.example.main_dialendar.view.activity;
 
-import static com.example.main_dialendar.DBHelper.*;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,12 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.main_dialendar.DBHandler;
+//import com.bumptech.glide.Glide;
+import com.example.main_dialendar.DBHelper;
 import com.example.main_dialendar.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.io.InputStream;
 
 public class DiaryActivity extends AppCompatActivity {
 
