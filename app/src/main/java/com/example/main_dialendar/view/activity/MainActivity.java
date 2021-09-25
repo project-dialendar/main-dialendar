@@ -31,6 +31,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.main_dialendar.BuildConfig;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
@@ -135,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         View nav_header_view = navigationView.getHeaderView(0);
         iv_profile = nav_header_view.findViewById(R.id.iv_profile);
+        Glide.with(this).load(R.drawable.img_logo).circleCrop().into(iv_profile);
+
         tv_profile = nav_header_view.findViewById(R.id.tv_profile);
 
         // 구글 로그인 옵션 설정
@@ -371,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Uri userImage = user.getPhotoUrl();
 
         tv_profile.setText(userName + " 님, 환영합니다!");
-        iv_profile.setImageURI(userImage);
+        Glide.with(this).load(userImage).circleCrop().into(iv_profile);
     }
 
     // 기기 별 기준 해상도를 계산

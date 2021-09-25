@@ -40,9 +40,10 @@
                         android:layout_height="wrap_content"
                         android:letterSpacing="0.2"
                         android:text="2021"
+                        android:fontFamily="@font/maruburittf"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textSize_phone"
+                        android:textSize="@dimen/textSize_tab"
                         android:textStyle="bold" />
 
                     <ImageView
@@ -70,19 +71,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/line_toolbar"
-                android:weightSum="7"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="40dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="7">
 
                 <TextView
                     android:id="@+id/tv_month"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:fontFamily="@font/blkchcry"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/tway_sky"
                     android:gravity="center"
-                    android:text="M"
+                    android:text="0"
                     android:textColor="@color/black"
                     android:textSize="150sp" />
 
@@ -100,21 +102,21 @@
                         android:id="@+id/gv_day_of_week"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:verticalSpacing="10dp"
                         android:layout_marginLeft="2dp"
-                        android:layout_marginBottom="2dp"
                         android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
                         android:numColumns="7"
+                        android:verticalSpacing="10dp"
                         tools:listitem="@layout/item_calendar_day_of_week" />
 
                     <GridView
                         android:id="@+id/gv_month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:verticalSpacing="10dp"
                         android:layout_marginLeft="2dp"
                         android:layout_marginBottom="2dp"
                         android:numColumns="7"
+                        android:verticalSpacing="10dp"
                         tools:listitem="@layout/item_calendar_gridview" />
 
                 </LinearLayout>

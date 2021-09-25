@@ -9,7 +9,7 @@
         android:id="@+id/rl_date"
         android:layout_width="@dimen/gridWidth_tab"
         android:layout_height="@dimen/gridWidth_tab"
-        android:background="@drawable/round_bg_border">
+        android:background="@drawable/calendar_bg_border">
 
         <ImageView
             android:id="@+id/iv_date"
@@ -25,6 +25,7 @@
             android:gravity="center"
             android:text="00"
             android:textColor="@color/black"
+            android:fontFamily="@font/maruburittf"
             android:textSize="@dimen/textSize_tab" />
 
     </RelativeLayout>

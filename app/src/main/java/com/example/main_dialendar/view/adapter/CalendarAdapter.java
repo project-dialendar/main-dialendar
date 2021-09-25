@@ -91,10 +91,11 @@ public class CalendarAdapter extends BaseAdapter {
                 if(position % 7 == 0)
                     holder.tv_item.setTextColor(Color.parseColor("#C40000"));
                 else
-                    holder.tv_item.setTextColor(Color.GRAY);
+                    holder.tv_item.setTextColor(Color.BLACK);
             }
             else{
-                holder.tv_item.setTextColor(Color.LTGRAY);
+                holder.tv_item.setTextColor(Color.GRAY);
+                holder.iv_item.setBackgroundColor(Color.parseColor("#e8e8e8"));
             }
         }
         holder.iv_item.setOnClickListener(new View.OnClickListener() {
