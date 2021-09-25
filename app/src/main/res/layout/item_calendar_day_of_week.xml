@@ -5,9 +5,9 @@
 
     <LinearLayout
         android:id="@+id/ll_week"
-        android:layout_width="108dp"
-        android:layout_height="36dp"
-        android:background="@drawable/bg_day_of_week">
+        android:layout_width="@dimen/gridWidth_tab"
+        android:layout_height="@dimen/gridHeight_tab"
+        android:background="@drawable/calendar_bg_border">
 
         <TextView
             android:id="@+id/tv_day_of_week"
@@ -17,7 +17,10 @@
             android:gravity="center"
             android:text="DAY"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
+            android:textStyle="bold"
+            android:fontFamily="@font/maruburittf"
+            android:textSize="@dimen/textSmallSize_tab"/>
+
     </LinearLayout>
 
 </LinearLayout>

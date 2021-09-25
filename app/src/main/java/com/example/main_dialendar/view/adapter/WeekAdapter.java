@@ -21,9 +21,6 @@ public class WeekAdapter extends BaseAdapter {
     private ArrayList<String> list;
     private Context context;
     private final LayoutInflater inflater;
-    private Calendar mCal;
-
-    int cellSize;
 
     /**
      * 생성자
@@ -31,11 +28,10 @@ public class WeekAdapter extends BaseAdapter {
      * @param context
      * @param list
      */
-    public WeekAdapter(Context context, ArrayList<String> list, int cellSize) {
+    public WeekAdapter(Context context, ArrayList<String> list) {
         this.context = context;
         this.list = list;
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.cellSize = cellSize;
     }
 
 
@@ -63,13 +59,11 @@ public class WeekAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.tvItemGridView = (TextView)convertView.findViewById(R.id.tv_day_of_week);
             holder.llItemGridView = convertView.findViewById(R.id.ll_week);
-            // 수정해야 할 부분
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder)convertView.getTag();
         }
         holder.tvItemGridView.setText("" + getItem(position));
-
         return convertView;
     }
 

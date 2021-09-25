@@ -1,12 +1,7 @@
 package com.example.main_dialendar.view.activity;
 
-import static com.example.main_dialendar.DBHelper.*;
-
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,13 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
+//import com.bumptech.glide.Glide;
 import com.example.main_dialendar.DBHelper;
 import com.example.main_dialendar.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.io.InputStream;
 
 public class DiaryActivity extends AppCompatActivity {
 
@@ -49,7 +43,7 @@ public class DiaryActivity extends AppCompatActivity {
         SQLiteDatabase db;
         dbHelper = new DBHelper(DiaryActivity.this);
         db = dbHelper.getWritableDatabase();
-        dbHelper.onCreate(db);
+        //dbHelper.onCreate(db);
 
         // 위젯 정의
         btn_diary_options = findViewById(R.id.btn_diary_options);
@@ -142,7 +136,7 @@ public class DiaryActivity extends AppCompatActivity {
 //                } catch (Exception e) {
 //
 //                }
-                Glide.with(getApplicationContext()).load(data.getData()).override(400, 400).into(btn_diary_photo);
+                //Glide.with(getApplicationContext()).load(data.getData()).override(400, 400).into(btn_diary_photo);
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }

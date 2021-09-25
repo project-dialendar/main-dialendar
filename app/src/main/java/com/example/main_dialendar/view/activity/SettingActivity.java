@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ public class SettingActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home: {
                 // 뒤로 가기
+                startActivity(new Intent(this, MainActivity.class));
             }
             default:
                 return super.onOptionsItemSelected(item);

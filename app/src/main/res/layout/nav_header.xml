@@ -14,7 +14,7 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/img_logo"
+        android:src="@drawable/img_logo"
         android:layout_gravity="center"/>
 
     <LinearLayout
@@ -33,7 +33,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            app:srcCompat="@drawable/img_logo" />
 
         <TextView
             android:id="@+id/tv_profile"
@@ -42,6 +42,7 @@
             android:layout_gravity="center_vertical"
             android:paddingLeft="20dp"
             android:text="로그인이 필요합니다."
+            android:fontFamily="@font/maruburittf"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/black" />
     </LinearLayout>

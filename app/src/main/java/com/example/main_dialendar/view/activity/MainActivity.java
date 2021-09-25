@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.Display;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.main_dialendar.BuildConfig;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
@@ -59,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tv_date;
 
     // 년도, 글쓰기 버튼
-    private Button btn_year;
+    private LinearLayout ll_year;
+    private TextView tv_year;
     private ImageButton btn_write;
 
     // 사이드바 레이아웃
@@ -117,11 +121,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         gv_month = findViewById(R.id.gv_month);
         gv_day_of_week = findViewById(R.id.gv_day_of_week);
-        cellSize = (standardSize_X - gv_month.getRequestedHorizontalSpacing()) / 7;
-        btn_year = (Button)findViewById(R.id.btn_year);
-        btn_year.setOnClickListener(this);
+        LinearLayout ll_calendar = findViewById(R.id.ll_calendar);
+        cellSize = standardSize_X / 49 * 5;
 
-        btn_write = (ImageButton)findViewById(R.id.btn_write);
+        ll_year = findViewById(R.id.btn_year);
+        tv_year = findViewById(R.id.tv_year);
+        ll_year.setOnClickListener(this);
+
+        btn_write = findViewById(R.id.btn_write);
         btn_write.setOnClickListener(this);
 
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -129,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         View nav_header_view = navigationView.getHeaderView(0);
         iv_profile = nav_header_view.findViewById(R.id.iv_profile);
+        Glide.with(this).load(R.drawable.img_logo).circleCrop().into(iv_profile);
+
         tv_profile = nav_header_view.findViewById(R.id.tv_profile);
 
         // 구글 로그인 옵션 설정
@@ -184,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         day_of_weekList.add("FRI");
         day_of_weekList.add("SAT");
 
-        day_of_weekGridAdapter = new WeekAdapter(this, day_of_weekList, cellSize);
+        day_of_weekGridAdapter = new WeekAdapter(this, day_of_weekList);
         gv_day_of_week.setAdapter(day_of_weekGridAdapter);
 
         dayList = new ArrayList<Day>();
@@ -236,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 년월 표시
         tv_month.setText((mCal.get(Calendar.MONTH)+1)+"");
-        btn_year.setText(mCal.get(Calendar.YEAR)+"");
+        tv_year.setText(mCal.get(Calendar.YEAR)+"");
 
         Day day;
         Log.e("DayOfMonth", dayOfMonth+"");
@@ -269,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initCalendarAdapter() {
-        calendarAdapter = new CalendarAdapter(this, mCal.get(Calendar.YEAR), mCal.get(Calendar.MONTH), dayList, cellSize);
+        calendarAdapter = new CalendarAdapter(this, mCal.get(Calendar.YEAR), mCal.get(Calendar.MONTH), dayList);
         gv_month.setAdapter(calendarAdapter);
     }
 
@@ -365,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Uri userImage = user.getPhotoUrl();
 
         tv_profile.setText(userName + " 님, 환영합니다!");
-        iv_profile.setImageURI(userImage);
+        Glide.with(this).load(userImage).circleCrop().into(iv_profile);
     }
 
     // 기기 별 기준 해상도를 계산
