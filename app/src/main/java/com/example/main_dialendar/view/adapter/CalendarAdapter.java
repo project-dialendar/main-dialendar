@@ -33,8 +33,6 @@ public class CalendarAdapter extends BaseAdapter {
 
     private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd.");
 
-
-    int cellSize;
     int year;
     int month;
 
@@ -44,13 +42,12 @@ public class CalendarAdapter extends BaseAdapter {
      * @param context
      * @param list
      */
-    public CalendarAdapter(Context context, int year, int month, ArrayList<Day> list, int cellSize) {
+    public CalendarAdapter(Context context, int year, int month, ArrayList<Day> list) {
         this.context = context;
         this.year = year;
         this.month = month;
         this.list = list;
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.cellSize = cellSize;
     }
 
 
@@ -92,7 +89,7 @@ public class CalendarAdapter extends BaseAdapter {
             holder.tv_item.setText(day.getDay());
             if(day.isInMonth()){
                 if(position % 7 == 0)
-                    holder.tv_item.setTextColor(Color.RED);
+                    holder.tv_item.setTextColor(Color.parseColor("#C40000"));
                 else
                     holder.tv_item.setTextColor(Color.GRAY);
             }
@@ -100,7 +97,6 @@ public class CalendarAdapter extends BaseAdapter {
                 holder.tv_item.setTextColor(Color.LTGRAY);
             }
         }
-
         holder.iv_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
