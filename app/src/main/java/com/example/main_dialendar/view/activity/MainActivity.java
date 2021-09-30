@@ -4,6 +4,7 @@ package com.example.main_dialendar.view.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.MenuItem;
@@ -33,7 +35,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
-import com.example.main_dialendar.BuildConfig;
+import com.example.main_dialendar.DriveServiceHelper;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.adapter.CalendarAdapter;
@@ -44,17 +46,36 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.FileContent;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
+import com.google.firebase.BuildConfig;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -100,8 +121,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // 구글 로그인 상수 & 변수
     private static final int SIGN_IN = 9001;
+    private static final int DRIVE_SIGN_IN = 9002;
     GoogleSignInClient client;
     private FirebaseAuth mAuth;
+
+    DriveServiceHelper driveServiceHelper;
 
     // 기기 별 기준 사이즈와 해상도
     int standardSize_X, standardSize_Y;
@@ -158,7 +182,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                         break;
                     case (R.id.backup) :
+                        //requestSignIn();
+                        TedPermission.with(MainActivity.this)
+                                .setPermissionListener(permissionListener)
+                                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+                                .check();
                         break;
+//                    case (R.id.restore) :
+//                        try {
+//                            File sd = Environment.getExternalStorageDirectory();
+//                            File data = Environment.getDataDirectory();
+//
+//                            if (sd.canWrite()) {
+//                                File currentDB = new File(sd, "/Download/dialendar.db");
+//                                File restoreDB = new File(data, "/data/com.example.main_dialendar/databases/dialendar.db");
+//
+//                                FileChannel src = new FileInputStream(currentDB).getChannel();
+//                                FileChannel dst = new FileOutputStream(restoreDB).getChannel();
+//                                dst.transferFrom(src, 0, src.size());
+//
+//                                src.close();
+//                                dst.close();
+//                                Toast.makeText(MainActivity.this,"복원을 성공했습니다.", Toast.LENGTH_LONG).show();
+//                            }
+//                        } catch (Exception e) {
+//                            Toast.makeText(MainActivity.this,"복원을 실패했습니다.", Toast.LENGTH_LONG).show();
+//                        }
+//                        break;
                     case (R.id.mail) :
                         sendEmailToAdmin("[일력 문의사항]", new String[]{"apps@gmail.com"});
                         break;
@@ -184,6 +235,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mCal.set(Calendar.DAY_OF_MONTH, 1);
         getCalendar(mCal);
 
+    }
+
+    private void requestSignIn() {
+        GoogleSignInOptions signInOptions =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
+                .build();
+        GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
+
+        startActivityForResult(client.getSignInIntent(), DRIVE_SIGN_IN);
     }
 
     private void setToolbar() {
@@ -354,6 +416,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_LONG);
             }
         }
+
+        if (requestCode == DRIVE_SIGN_IN) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                handleSignInResult(data);
+            }
+        }
+    }
+
+    private void handleSignInResult(Intent result) {
+        GoogleSignIn.getSignedInAccountFromIntent(result)
+                .addOnSuccessListener(googleAccount -> {
+                    GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE));
+                    credential.setSelectedAccount(googleAccount.getAccount());
+
+                    Drive googleDriverService = new Drive.Builder(
+                            AndroidHttp.newCompatibleTransport(),
+                            new GsonFactory(),
+                            credential)
+                            .setApplicationName("Drive API Migration")
+                            .build();
+
+                    driveServiceHelper = new DriveServiceHelper(googleDriverService);
+
+                    Toast.makeText(MainActivity.this, "로그인 성공!", Toast.LENGTH_LONG);
+                    createFile();
+                })
+                .addOnFailureListener(exception -> Toast.makeText(MainActivity.this, exception + "", Toast.LENGTH_LONG));
+    }
+
+    private void createFile() {
+        if (driveServiceHelper != null) {
+            Log.d("###", "Creating a file.");
+
+            driveServiceHelper.createFile()
+                    .addOnSuccessListener(new OnSuccessListener<String>() {
+                        @Override
+                        public void onSuccess(String s) {
+                            Toast.makeText(MainActivity.this, "백업 성공!", Toast.LENGTH_LONG);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(MainActivity.this, "백업 실패!", Toast.LENGTH_LONG);
+                        }
+                    });
+        }
     }
 
     // 구글 계정을 파이어베이스에 등록한 뒤, 토큰을 반환하는 메소드
@@ -367,10 +476,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         {
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            Toast.makeText(MainActivity.this, "구글 로그인 성공", Toast.LENGTH_LONG).show();
+                            Log.i("GOOGLE##", "Signed in ");
                         }
                         else {
-                            Toast.makeText(MainActivity.this, "구글 로그인 실패", Toast.LENGTH_LONG).show();
+                            Log.i("GOOGLE##", "Sign Failed ");
                         }
                     }
                 });
@@ -410,4 +519,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         outState.putInt("year", mCal.get(Calendar.YEAR));
         outState.putInt("month", mCal.get(Calendar.MONTH));
     }
+
+    PermissionListener permissionListener = new PermissionListener() {
+        @Override
+        public void onPermissionGranted() {
+            try {
+                File sd = Environment.getExternalStorageDirectory();
+                File data = Environment.getDataDirectory();
+
+                if (sd.canWrite()) {
+                    File currentDB = new File(data, "/data/com.example.main_dialendar/databases/dialendar.db");
+                    File backupDB = new File(sd, "/Download/dialendar.db");
+
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+
+                    src.close();
+                    dst.close();
+                    Toast.makeText(MainActivity.this, "백업 성공", Toast.LENGTH_LONG);
+                    Log.i("###", "backup success");
+                }
+                Toast.makeText(MainActivity.this, "백업 실패 in try", Toast.LENGTH_LONG);
+            } catch (Exception e) {
+                Toast.makeText(MainActivity.this, "백업 실패", Toast.LENGTH_LONG);
+                Log.e("###", "backup failed");
+            }
+        }
+
+        @Override
+        public void onPermissionDenied(List<String> deniedPermissions) {
+            Toast.makeText(MainActivity.this, "접근이 거부되었습니다. 권한을 허용해주세요.", Toast.LENGTH_LONG);
+        }
+    };
 }

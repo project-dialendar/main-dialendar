@@ -38,12 +38,12 @@
                         android:id="@+id/tv_year"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/maruburittf"
                         android:letterSpacing="0.2"
                         android:text="2021"
-                        android:fontFamily="@font/maruburittf"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textSize_tab"
+                        android:textSize="@dimen/textSize_phone"
                         android:textStyle="bold" />
 
                     <ImageView
