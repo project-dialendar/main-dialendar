@@ -6,6 +6,6 @@
     <dimen name="textSmallSize_phone">10sp</dimen>
     <dimen name="gridWidth_tab">108dp</dimen>
     <dimen name="gridHeight_tab">36dp</dimen>
-    <dimen name="gridWidth_phone">96dp</dimen>
-    <dimen name="gridHeight_phone">30dp</dimen>
+    <dimen name="gridWidth_phone">72dp</dimen>
+    <dimen name="gridHeight_phone">20dp</dimen>
 </resources>

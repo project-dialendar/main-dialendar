@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+// 구글 드라이브 서비스 헬퍼 - 추후에 구글 드라이브 백업 기능 사용할까봐 그대로 남겨놓음
+
 /**
  * A utility for performing read/write operations on Drive files via the REST API and opening a
  * file picker UI via Storage Access Framework.

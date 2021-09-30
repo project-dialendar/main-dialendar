@@ -19,7 +19,7 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:fontFamily="@font/maruburittf"
-            android:textSize="@dimen/textSmallSize_tab"/>
+            android:textSize="@dimen/textSize_phone"/>
 
     </LinearLayout>
 

@@ -119,13 +119,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // 캘린더 변수
     private Calendar mCal;
 
-    // 구글 로그인 상수 & 변수
-    private static final int SIGN_IN = 9001;
-    private static final int DRIVE_SIGN_IN = 9002;
-    GoogleSignInClient client;
-    private FirebaseAuth mAuth;
-
-    DriveServiceHelper driveServiceHelper;
+    // 구글 드라이브 상수 & 변수
+//    private static final int DRIVE_SIGN_IN = 9002;
+//    GoogleSignInClient client;
+//    DriveServiceHelper driveServiceHelper;
 
     // 기기 별 기준 사이즈와 해상도
     int standardSize_X, standardSize_Y;
@@ -157,20 +154,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
 
-        View nav_header_view = navigationView.getHeaderView(0);
-        iv_profile = nav_header_view.findViewById(R.id.iv_profile);
-        Glide.with(this).load(R.drawable.img_logo).circleCrop().into(iv_profile);
+//        // 구글 로그인 옵션 설정
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.google_default_web_client_id))
+//                .requestEmail()
+//                .build();
 
-        tv_profile = nav_header_view.findViewById(R.id.tv_profile);
-
-        // 구글 로그인 옵션 설정
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.google_default_web_client_id))
-                .requestEmail()
-                .build();
-
-        client = GoogleSignIn.getClient(this, gso);
-        mAuth = FirebaseAuth.getInstance();
+//        client = GoogleSignIn.getClient(this, gso);
+//        mAuth = FirebaseAuth.getInstance();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -213,9 +204,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case (R.id.mail) :
                         sendEmailToAdmin("[일력 문의사항]", new String[]{"apps@gmail.com"});
                         break;
-                    case (R.id.login) :
-                        signIn();
-                        break;
                 }
                 return true;
             }
@@ -237,16 +225,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void requestSignIn() {
-        GoogleSignInOptions signInOptions =
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
-                .build();
-        GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
-
-        startActivityForResult(client.getSignInIntent(), DRIVE_SIGN_IN);
-    }
+    // 구글 드라이브 API - 드라이브 접속 전에 구글 로그인 요청
+//    private void requestSignIn() {
+//        GoogleSignInOptions signInOptions =
+//                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestEmail()
+//                .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
+//                .build();
+//        GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
+//
+//        startActivityForResult(client.getSignInIntent(), DRIVE_SIGN_IN);
+//    }
 
     private void setToolbar() {
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
@@ -270,20 +259,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         gv_day_of_week.setAdapter(day_of_weekGridAdapter);
 
         dayList = new ArrayList<Day>();
-    }
-/*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-*/
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     /**
@@ -397,102 +372,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(email);
     }
 
-    // 구글 로그인 메소드
-    private void signIn() {
-        Intent signInIntent = client.getSignInIntent();
-        startActivityForResult(signInIntent, SIGN_IN);
-    }
+    // 구글 드라이브 API - 구글 로그인 화면 연결 메소드
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == DRIVE_SIGN_IN) {
+//            if (resultCode == Activity.RESULT_OK && data != null) {
+//                handleSignInResult(data);
+//            }
+//        }
+//    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == SIGN_IN) {   // 구글 로그인
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account.getIdToken());   // 구글 계정 권한 부여
-            } catch (ApiException e) {
-                Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_LONG);
-            }
-        }
-
-        if (requestCode == DRIVE_SIGN_IN) {
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                handleSignInResult(data);
-            }
-        }
-    }
-
-    private void handleSignInResult(Intent result) {
-        GoogleSignIn.getSignedInAccountFromIntent(result)
-                .addOnSuccessListener(googleAccount -> {
-                    GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE));
-                    credential.setSelectedAccount(googleAccount.getAccount());
-
-                    Drive googleDriverService = new Drive.Builder(
-                            AndroidHttp.newCompatibleTransport(),
-                            new GsonFactory(),
-                            credential)
-                            .setApplicationName("Drive API Migration")
-                            .build();
-
-                    driveServiceHelper = new DriveServiceHelper(googleDriverService);
-
-                    Toast.makeText(MainActivity.this, "로그인 성공!", Toast.LENGTH_LONG);
-                    createFile();
-                })
-                .addOnFailureListener(exception -> Toast.makeText(MainActivity.this, exception + "", Toast.LENGTH_LONG));
-    }
-
-    private void createFile() {
-        if (driveServiceHelper != null) {
-            Log.d("###", "Creating a file.");
-
-            driveServiceHelper.createFile()
-                    .addOnSuccessListener(new OnSuccessListener<String>() {
-                        @Override
-                        public void onSuccess(String s) {
-                            Toast.makeText(MainActivity.this, "백업 성공!", Toast.LENGTH_LONG);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(MainActivity.this, "백업 실패!", Toast.LENGTH_LONG);
-                        }
-                    });
-        }
-    }
-
-    // 구글 계정을 파이어베이스에 등록한 뒤, 토큰을 반환하는 메소드
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful())
-                        {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                            Log.i("GOOGLE##", "Signed in ");
-                        }
-                        else {
-                            Log.i("GOOGLE##", "Sign Failed ");
-                        }
-                    }
-                });
-    }
-
-    // 로그인 성공 후, 사이드바 헤더 변경 메소드
-    private void updateUI(FirebaseUser user) {
-        String userName = user.getDisplayName();
-        Uri userImage = user.getPhotoUrl();
-
-        tv_profile.setText(userName + " 님, 환영합니다!");
-        Glide.with(this).load(userImage).circleCrop().into(iv_profile);
-    }
+    // 구글 드라이브 API - 로그인 처리 메소드
+//    private void handleSignInResult(Intent result) {
+//        GoogleSignIn.getSignedInAccountFromIntent(result)
+//                .addOnSuccessListener(googleAccount -> {
+//                    GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE));
+//                    credential.setSelectedAccount(googleAccount.getAccount());
+//
+//                    Drive googleDriverService = new Drive.Builder(
+//                            AndroidHttp.newCompatibleTransport(),
+//                            new GsonFactory(),
+//                            credential)
+//                            .setApplicationName("Drive API Migration")
+//                            .build();
+//
+//                    driveServiceHelper = new DriveServiceHelper(googleDriverService);
+//
+//                    Toast.makeText(MainActivity.this, "로그인 성공!", Toast.LENGTH_LONG);
+//                    createFile();
+//                })
+//                .addOnFailureListener(exception -> Toast.makeText(MainActivity.this, exception + "", Toast.LENGTH_LONG));
+//    }
+//
+    // 구글 드라이브 API - 백업 메소드
+//    private void createFile() {
+//        if (driveServiceHelper != null) {
+//            Log.d("###", "Creating a file.");
+//
+//            driveServiceHelper.createFile()
+//                    .addOnSuccessListener(new OnSuccessListener<String>() {
+//                        @Override
+//                        public void onSuccess(String s) {
+//                            Toast.makeText(MainActivity.this, "백업 성공!", Toast.LENGTH_LONG);
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Toast.makeText(MainActivity.this, "백업 실패!", Toast.LENGTH_LONG);
+//                        }
+//                    });
+//        }
+//    }
 
     // 기기 별 기준 해상도를 계산
     public void getStandardSize() {
@@ -512,6 +445,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return  size;
     }
 
+    // 화면 전환 이후에도 달력 상태를 유지하도록 함
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -520,6 +454,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         outState.putInt("month", mCal.get(Calendar.MONTH));
     }
 
+    // 데이터베이스 백업에 필요한 권한 요청
     PermissionListener permissionListener = new PermissionListener() {
         @Override
         public void onPermissionGranted() {
