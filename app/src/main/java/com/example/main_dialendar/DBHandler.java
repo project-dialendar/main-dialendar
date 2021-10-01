@@ -8,10 +8,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.text.Editable;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
+
+import javax.annotation.Nullable;
 
 public class DBHandler {
 
@@ -31,68 +35,80 @@ public class DBHandler {
         return new DBHandler(context);
     }
 
-    // CRUD = ISUD (SQL)
+    /* CRUD = ISUD (SQL) */
 
-    public void insert(String date, String diary, ImageView imageView) {
+    /**
+     * insert
+     * @param date
+     * @param diary
+     * @param imageView
+     */
+    public void insert(String date, String diary, byte[] imageView) {
         Log.d(TAG, "insert");
 
         // 쓰기모드로 열기
         myDB = myHelper.getWritableDatabase();
 
-        /*
-         Create a new map of values, where column names are the keys
-         (컬럼이름, 데이터)
-        */
+        // Create a new map of values, where column names are the keys
+        // (컬럼이름, 데이터)
         ContentValues cv = new ContentValues();
         cv.put(_DATE, date);
         cv.put(COLUMN_DIARY, diary);
-        cv.put(COLUMN_IMAGE, getImage(imageView));
+        cv.put(COLUMN_IMAGE, imageView);
 
         // Insert the new row, returning the primary key value of the new row
-        myDB.insert(TABLE_NAME, null, cv);
+        Long newPrimaryKey = myDB.insert(TABLE_NAME, null, cv);
 
     }
 
     /**
-     * 이게 안되네...
+     * select
+     * @param date
+     * @return
+     */
+    public Cursor select(String date) {
+        Log.d(TAG, "select");
+
+        myDB = myHelper.getReadableDatabase();
+//        Cursor c = myDB.query(TABLE_NAME,
+//                null,   // the array of columns. pass null to get all
+//                date,
+//                null,
+//                null,   // don't group the rows
+//                null,   // don't filter by row groups
+//                null    // sort order
+//        );
+        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + _DATE + " = ?;";
+        Cursor c = myDB.rawQuery(sql, new String[]{date});
+        return c;
+    }
+
+    /**
+     * update
+     * @param date
      * @param diary
      */
-//    public Cursor select(String date) {
-//        Log.d(TAG, "select");
-//
-//        myDB = myHelper.getReadableDatabase();
-////        Cursor c = myDB.query(TABLE_NAME,
-////                null,   // the array of columns. pass null to get all
-////                date,
-////                null,
-////                null,   // don't group the rows
-////                null,   // don't filter by row groups
-////                null    // sort order
-////        );
-//        String sql = "SELECT * FROM " + TABLE_NAME +
-//                " WHERE " + _DATE + " = '" + date +
-//                "';";
-//        Cursor c = myDB.rawQuery(sql, null);
-//        return c;
-//    }
-
-    public void update(String diary) {
+    public void updateTxt(String date, Editable diary) {
         Log.d(TAG, "update diary");
 
         myDB = myHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_DIARY, diary);
+        cv.put(COLUMN_DIARY, String.valueOf(diary));
 
-        int count = myDB.update(
+        int updatetedRows = myDB.update(
                 TABLE_NAME,
                 cv,
-                null,
-                null);
+                _DATE + "=?", // "date=?"
+                new String[]{date});
     }
 
-    // overriding update image
-    public void update(byte[] image) {
+    /**
+     * update Image
+     * @param date
+     * @param image
+     */
+    public void updateImg(String date, byte[] image) {
         Log.d(TAG, "update image");
 
         myDB = myHelper.getWritableDatabase();
@@ -100,13 +116,17 @@ public class DBHandler {
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_IMAGE, image);
 
-        int count = myDB.update(
+        int updatetedRows = myDB.update(
                 TABLE_NAME,
                 cv,
-                null,
-                null);
+                _DATE + "=?", // "date=?"
+                new String[] {date});
     }
 
+    /**
+     * delete
+     * @param date
+     */
     public void delete(String date) {
         Log.d(TAG, "delete");
 
@@ -116,11 +136,15 @@ public class DBHandler {
                 new String[]{date});
     }
 
+    /**
+     * DB close
+     */
     public void close() {
         myHelper.close();
         myDB.close();
     }
 
+    /* 이미지뷰 위젯에서 이미지 바이트코드 추출 */
     private byte[] getImage(ImageView image) {
         Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
