@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.google.firebase:firebase-firestore:22.1.2'
+    implementation 'androidx.room:room-runtime:2.2.6'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -45,6 +46,7 @@ dependencies {
     // glide 라이브러리 추가 - 참고: https://github.com/bumptech/glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    annotationProcessor 'androidx.room:room-compiler:2.2.6'
 
     // db 확인
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
