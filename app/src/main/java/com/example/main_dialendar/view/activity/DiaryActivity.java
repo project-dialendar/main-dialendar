@@ -1,11 +1,10 @@
 package com.example.main_dialendar.view.activity;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,12 +16,13 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.bumptech.glide.Glide;
-import com.example.main_dialendar.DBHandler;
-//import com.bumptech.glide.Glide;
-import com.example.main_dialendar.DBHelper;
 import com.example.main_dialendar.R;
+import com.example.main_dialendar.database.Diary;
+import com.example.main_dialendar.database.DiaryDao;
+import com.example.main_dialendar.database.DiaryDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -31,26 +31,35 @@ import java.util.Date;
 
 public class DiaryActivity extends AppCompatActivity {
 
-    // 이미지 불러올때 필요한 변수
-    private static final int REQUEST_CODE = 0;
-
-    // 위젯
-    private ImageView btn_diary_options, btn_diary_photo, btn_save_back;
+    /* 위젯 */
+    private ImageView btn_diary_options;
+    private ImageView btn_diary_photo;
+    private ImageView btn_save_back;
     private TextView tv_diary_date;
     private EditText et_diary;
     private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd.");
 
-    // 데이터베이스
-    private DBHandler dbHandler;
-    private static boolean dataExist = Boolean.parseBoolean(null);
+    /* 데이터베이스 */
+    private DiaryDao mDiaryDao;
+    private static Diary diaryRecord;
+
+    /* 이미지 */
+    private static final int REQUEST_CODE = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary);
 
-        // 데이터 베이스 연결
-        dbHandler = DBHandler.open(DiaryActivity.this);
+        /* 데이터베이스 생성 */
+        DiaryDatabase database = Room.databaseBuilder(
+                getApplicationContext(),
+                DiaryDatabase.class,
+                "dialendar_db")                   // db name :스키마
+                .fallbackToDestructiveMigration()       // 스키마(database) 버전 변경 가능
+                .allowMainThreadQueries()               // Main Thread에서 DB의 IO(입출력)를 가능하게 함
+                .build();
+        mDiaryDao = database.diaryDao();                  // 인터페이스 객체 할당
 
         // 위젯 정의
         btn_diary_options = findViewById(R.id.btn_diary_options);
@@ -60,6 +69,7 @@ public class DiaryActivity extends AppCompatActivity {
         tv_diary_date = findViewById(R.id.tv_diary_date);
         et_diary = findViewById(R.id.et_diary);
 
+        // 일기 날짜 세팅
         Intent diaryIntent = getIntent();
         boolean isToday = diaryIntent.getBooleanExtra("today", true);
         if (isToday)
@@ -72,16 +82,25 @@ public class DiaryActivity extends AppCompatActivity {
         // 이미지 버튼 -> 갤러리에서 사진 불러오기
         btn_diary_photo.setOnClickListener(v -> pickFromGallery());
 
-        // 달력 화면으로 나가면서 저장
-        btn_save_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // db save
-                //if
-                dbHandler.insert(tv_diary_date.getText().toString(), et_diary.getText().toString(), btn_diary_photo);
-                finish();
+        // 해당 날짜에 레코드가 존재하는지 확인
+        diaryRecord = isExist();
+
+        // 레코드 존재하면 화면에 보이게
+        if (diaryRecord != null) {
+            et_diary.setText(diaryRecord.getText());
+            btn_diary_photo.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
+        }
+
+        // Main Activity로 나가면서 저장
+        btn_save_back.setOnClickListener(v -> {
+            if (diaryRecord == null) {
+                insertRecord();
+            } else { // 기존 레코드 존재
+                updateRecord();
             }
+            finish(); // 액티비티 종료
         });
+
 
         // 옵션 1.일기삭제 2. 공유
         btn_diary_options.setOnClickListener(new View.OnClickListener() {
@@ -97,11 +116,16 @@ public class DiaryActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.share_diary:
-                                // 한 장의 폴라로이드 같은 이미지로 공유
+                                // 1. 한 장의 폴라로이드 같은 이미지로 공유
 
                             case R.id.delete_diary:
-                                // db delete //v
-                                dbHandler.delete(tv_diary_date.toString());
+                                // 2. 일기 삭제
+                                Diary deleteRecord = new Diary();
+                                deleteRecord.setDate(tv_diary_date.getText().toString());
+
+                                mDiaryDao.deleteDiary(deleteRecord);
+
+                                finish(); // 액티비티 종료
                         }
                         return true;
                     }
@@ -110,32 +134,41 @@ public class DiaryActivity extends AppCompatActivity {
                 popupMenu.show();
             }
         });
-
     }
 
+
     /**
-     * 이거 넣으면 앱 강종
+     * 뒤로가기 버튼
+     * 뒤로가기 버튼으로 diaryActivity 나가도 저장
      */
-//    protected void onStart() {
-//        super.onStart();
-//        if (!dataExist) {
-//            // 데이터베이스에서 날짜에 해당하는 데이터 읽어 화면에 보여주기
-//            Cursor c = dbHandler.select(tv_diary_date.getText().toString());
-//            if (c != null) {
-//                et_diary.setText(c.getExtras().getCharSequence(COLUMN_DIARY));
-//                Glide.with(getApplicationContext()).load(c.getBlob(c.getColumnIndex(COLUMN_IMAGE))).override(400, 400).into(btn_diary_photo);
-//            }
-//            c.close();
-//        }
-//
-//    }
-
-
     @Override
-    protected void onStop() {
-        // 데이터베이스 해제
-        super.onStop();
-        dbHandler.close();
+    public void onBackPressed() {
+        super.onBackPressed();
+        diaryRecord = isExist();
+
+        if (diaryRecord == null) {
+            insertRecord();
+        } else {
+            updateRecord();
+        }
+        finish();
+    }
+
+    private void insertRecord() {
+        Diary insertRecord = new Diary();
+        insertRecord.setDate(tv_diary_date.getText().toString());
+        insertRecord.setText(et_diary.getText().toString());
+        insertRecord.setImage(getImageInByte(btn_diary_photo));
+
+        mDiaryDao.insertDiary(insertRecord);
+    }
+    private void updateRecord() {
+        Diary updateRecord = new Diary();
+        updateRecord.setDate(tv_diary_date.getText().toString());
+        updateRecord.setText(et_diary.getText().toString());
+        updateRecord.setImage(getImageInByte(btn_diary_photo));
+
+        mDiaryDao.updateDiary(updateRecord);
     }
 
     /***
@@ -148,7 +181,7 @@ public class DiaryActivity extends AppCompatActivity {
     }
 
     /***
-     * 사진 불러오기
+     * 갤러리에서 사진 가져오는 메소드
      */
     private void pickFromGallery() {
         Intent intent = new Intent();
@@ -163,29 +196,72 @@ public class DiaryActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
-                    InputStream in = getContentResolver().openInputStream(data.getData());
+                    diaryRecord = isExist();
 
+                    /* 이미지뷰에 이미지 넣기 */
+                    InputStream in = getContentResolver().openInputStream(data.getData());
                     Bitmap img = BitmapFactory.decodeStream(in);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    img.compress(Bitmap.CompressFormat.PNG, 0, stream);
                     byte[] bytes = stream.toByteArray();
-                    dbHandler.update(bytes);
-                    in.close();
+                    Glide.with(getApplicationContext())
+                            .load(img)
+                            .centerCrop()
+                            .into(btn_diary_photo);
 
-                    Glide.with(getApplicationContext()).load(img).override(400, 400).into(btn_diary_photo);
 
-//                    btn_diary_photo.setImageBitmap(img);
+                    if (diaryRecord == null) {
+                        Diary insertRecord = new Diary();
+                        insertRecord.setDate(tv_diary_date.getText().toString());
+                        insertRecord.setText(et_diary.getText().toString());
+                        insertRecord.setImage(bytes);
+
+                        mDiaryDao.insertDiary(insertRecord);
+                    } else { // 기존 레코드 존재
+                        Diary updateRecord = new Diary();
+                        updateRecord.setDate(tv_diary_date.getText().toString());
+                        updateRecord.setText(et_diary.getText().toString());
+                        updateRecord.setImage(bytes);
+
+                        mDiaryDao.updateDiary(updateRecord);
+                    }
                 } catch (Exception e) {
 
                 }
-//                Glide.with(getApplicationContext()).load(data.getData()).override(400, 400).into(btn_diary_photo);
-
-//                // 데이터베이스에 이미지만 업데이트
-//                dbHandler.update(data.getData());
-
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    /**
+     * ImageView -> bitmap -> byte array 추출
+     *
+     * @param image ImageView
+     * @return byte array
+     */
+    private byte[] getImageInByte(ImageView image) {
+        Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos);
+        byte[] imageInByte = baos.toByteArray();
+        return imageInByte;
+    }
+    /**
+     * convert from byte array to bitmap
+     * @param image byte array
+     * @return bitmap image
+     */
+    public static Bitmap getImageInBitmap(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
+    }
+
+    /**
+     * 해당 날짜에 레코드가 존재하는지 확인
+     * @return Diary (object)
+     */
+    public Diary isExist() {
+        Diary diary = mDiaryDao.findByDate(tv_diary_date.getText().toString());
+        return diary;
     }
 }
