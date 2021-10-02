@@ -243,7 +243,7 @@ public class DiaryActivity extends AppCompatActivity {
     private byte[] getImageInByte(ImageView image) {
         Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] imageInByte = baos.toByteArray();
         return imageInByte;
     }

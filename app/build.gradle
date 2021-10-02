@@ -27,9 +27,27 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
+=======
+=======
+>>>>>>> Stashed changes
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     }
 }
 
@@ -49,7 +67,15 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     // google drive
+=======
+// google drive
+>>>>>>> Stashed changes
+=======
+// google drive
+>>>>>>> Stashed changes
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.http-client:google-http-client-gson:1.26.0'
     implementation('com.google.api-client:google-api-client-android:1.26.0') {
@@ -59,7 +85,15 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     // glide 라이브러리 추가 - 참고: https://github.com/bumptech/glide
+=======
+// glide 라이브러리 추가 - 참고: https://github.com/bumptech/glide
+>>>>>>> Stashed changes
+=======
+// glide 라이브러리 추가 - 참고: https://github.com/bumptech/glide
+>>>>>>> Stashed changes
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     annotationProcessor 'androidx.room:room-compiler:2.2.6'
