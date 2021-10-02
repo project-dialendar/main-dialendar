@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -33,6 +34,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.main_dialendar.BuildConfig;
+import com.example.main_dialendar.DBHandler;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.adapter.CalendarAdapter;
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 상단 툴바 설정
         setToolbar();
+
     }
 
     private void setToolbar() {
