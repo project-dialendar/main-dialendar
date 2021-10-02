@@ -1,6 +1,10 @@
 package com.example.main_dialendar.view.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -14,10 +18,14 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.example.main_dialendar.DBHandler;
 //import com.bumptech.glide.Glide;
 import com.example.main_dialendar.DBHelper;
 import com.example.main_dialendar.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -32,6 +40,9 @@ public class DiaryActivity extends AppCompatActivity {
     private EditText et_diary;
     private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd.");
 
+    // 데이터베이스
+    private DBHandler dbHandler;
+    private static boolean dataExist = Boolean.parseBoolean(null);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,11 +50,7 @@ public class DiaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_diary);
 
         // 데이터 베이스 연결
-        DBHelper dbHelper;
-        SQLiteDatabase db;
-        dbHelper = new DBHelper(DiaryActivity.this);
-        db = dbHelper.getWritableDatabase();
-        //dbHelper.onCreate(db);
+        dbHandler = DBHandler.open(DiaryActivity.this);
 
         // 위젯 정의
         btn_diary_options = findViewById(R.id.btn_diary_options);
@@ -70,6 +77,8 @@ public class DiaryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // db save
+                //if
+                dbHandler.insert(tv_diary_date.getText().toString(), et_diary.getText().toString(), btn_diary_photo);
                 finish();
             }
         });
@@ -86,11 +95,13 @@ public class DiaryActivity extends AppCompatActivity {
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
+                        switch (menuItem.getItemId()) {
                             case R.id.share_diary:
-                                // db read and make share image
+                                // 한 장의 폴라로이드 같은 이미지로 공유
+
                             case R.id.delete_diary:
-                                // db delete
+                                // db delete //v
+                                dbHandler.delete(tv_diary_date.toString());
                         }
                         return true;
                     }
@@ -101,10 +112,35 @@ public class DiaryActivity extends AppCompatActivity {
         });
 
     }
-  
+
+    /**
+     * 이거 넣으면 앱 강종
+     */
+//    protected void onStart() {
+//        super.onStart();
+//        if (!dataExist) {
+//            // 데이터베이스에서 날짜에 해당하는 데이터 읽어 화면에 보여주기
+//            Cursor c = dbHandler.select(tv_diary_date.getText().toString());
+//            if (c != null) {
+//                et_diary.setText(c.getExtras().getCharSequence(COLUMN_DIARY));
+//                Glide.with(getApplicationContext()).load(c.getBlob(c.getColumnIndex(COLUMN_IMAGE))).override(400, 400).into(btn_diary_photo);
+//            }
+//            c.close();
+//        }
+//
+//    }
+
+
+    @Override
+    protected void onStop() {
+        // 데이터베이스 해제
+        super.onStop();
+        dbHandler.close();
+    }
+
     /***
-    * 현재 시간 반환 메소드
-    */
+     * 현재 시간 반환 메소드
+     */
     private String getTime() {
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -114,11 +150,11 @@ public class DiaryActivity extends AppCompatActivity {
     /***
      * 사진 불러오기
      */
-    private void pickFromGallery(){
+    private void pickFromGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,REQUEST_CODE);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
@@ -126,17 +162,27 @@ public class DiaryActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-//                try {
-//                    InputStream in = getContentResolver().openInputStream(data.getData());
-//
-//                    Bitmap img = BitmapFactory.decodeStream(in);
-//                    in.close();
-//
+                try {
+                    InputStream in = getContentResolver().openInputStream(data.getData());
+
+                    Bitmap img = BitmapFactory.decodeStream(in);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    img.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] bytes = stream.toByteArray();
+                    dbHandler.update(bytes);
+                    in.close();
+
+                    Glide.with(getApplicationContext()).load(img).override(400, 400).into(btn_diary_photo);
+
 //                    btn_diary_photo.setImageBitmap(img);
-//                } catch (Exception e) {
-//
-//                }
-                //Glide.with(getApplicationContext()).load(data.getData()).override(400, 400).into(btn_diary_photo);
+                } catch (Exception e) {
+
+                }
+//                Glide.with(getApplicationContext()).load(data.getData()).override(400, 400).into(btn_diary_photo);
+
+//                // 데이터베이스에 이미지만 업데이트
+//                dbHandler.update(data.getData());
+
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
