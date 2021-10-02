@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/login"
-            android:icon="@drawable/img_login"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:title="구글 로그인" />
-        <item
             android:id="@+id/setting"
             android:icon="@drawable/img_setting"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"

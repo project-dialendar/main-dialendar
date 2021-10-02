@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="textSize_tab">18sp</dimen>
+    <dimen name="textSize_phone">12sp</dimen>
+    <dimen name="textSmallSize_tab">18sp</dimen>
+    <dimen name="textSmallSize_phone">10sp</dimen>
+    <dimen name="gridWidth_tab">108dp</dimen>
+    <dimen name="gridHeight_tab">36dp</dimen>
+    <dimen name="gridWidth_phone">72dp</dimen>
+    <dimen name="gridHeight_phone">20dp</dimen>
+</resources>

@@ -23,7 +23,7 @@
         android:minWidth="48dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline_right"
         app:layout_constraintTop_toTopOf="@+id/guideline_top"
-        app:srcCompat="@drawable/btn_writing_options" />
+        app:srcCompat="@drawable/btn_option" />
 
     <ImageView
         android:id="@+id/btn_diary_photo"

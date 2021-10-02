@@ -38,7 +38,7 @@ public class DiaryActivity extends AppCompatActivity {
     private ImageView btn_diary_options, btn_diary_photo, btn_save_back;
     private TextView tv_diary_date;
     private EditText et_diary;
-    private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd. hh:mm");
+    private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd.");
 
     // 데이터베이스
     private DBHandler dbHandler;
