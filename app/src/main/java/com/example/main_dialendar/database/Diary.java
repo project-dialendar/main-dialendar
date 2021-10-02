@@ -1,5 +1,6 @@
 package com.example.main_dialendar.database;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -7,12 +8,22 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Diary {
 
+    /**
+     * date 날짜 (주요키)
+     * text 일기내용
+     * image 일기사진
+     */
     @PrimaryKey
+    @NonNull
     private String date;
 
     private String text;
 
-    private byte[] imageView;
+    private byte[] image;
+
+    public Diary() {
+        date = "";
+    }
 
     public String getDate() {
         return date;
@@ -30,11 +41,11 @@ public class Diary {
         this.text = text;
     }
 
-    public byte[] getImageView() {
-        return imageView;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setImageView(byte[] imageView) {
-        this.imageView = imageView;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

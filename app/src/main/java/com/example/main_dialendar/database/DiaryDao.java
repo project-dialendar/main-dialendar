@@ -27,6 +27,6 @@ public interface DiaryDao {
     void deleteDiary(Diary diary);
 
     /* 조회 */
-    @Query("SELECT * FROM Diary WHERE date LIKE :_date")
-    Diary findByDate(String _date);
+    @Query("SELECT * FROM Diary WHERE date LIKE :date")
+    Diary findByDate(String date);
 }
