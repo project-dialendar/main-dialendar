@@ -192,8 +192,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // bundle에 저장되어 있는 데이터 가져오기
         if(savedInstanceState != null) {
-            mCal.set(Calendar.YEAR, savedInstanceState.getInt("year"));
-            mCal.set(Calendar.MONTH, savedInstanceState.getInt("month"));
+            mCal.set(savedInstanceState.getInt("year"), savedInstanceState.getInt("month"), 1);
         }
         else
             mCal.set(Calendar.DAY_OF_MONTH, 1);
@@ -307,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btn_year :
                 YearPickerDialog dialog = new YearPickerDialog();
-                dialog.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                //dialog.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setListener(dateSetListener);
                 dialog.show(getSupportFragmentManager(), "YearPickerTest");
                 break;
