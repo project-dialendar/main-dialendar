@@ -99,9 +99,14 @@ public class CalendarAdapter extends BaseAdapter {
 
             // 해당 날짜에 레코드가 존재하는지 확인
             Diary diaryRecord = mDiaryDao.findByDate(date);
-            if (diaryRecord != null) { // 이미지 삽입
+            try {// 이미지 삽입
                 holder.iv_item.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
+            } catch (NullPointerException e) {
+
             }
+//            if (diaryRecord.getImage() != null) {
+//                holder.iv_item.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
+//            }
 
             holder.iv_item.setClipToOutline(true);
 
