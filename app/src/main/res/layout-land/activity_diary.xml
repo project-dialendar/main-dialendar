@@ -67,6 +67,7 @@
             app:layout_constraintBottom_toTopOf="@id/guideline_bottom"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
             app:layout_constraintTop_toBottomOf="@+id/ll_date"
+            android:background="@drawable/round_bg_border"
             app:srcCompat="@drawable/empty_photo" />
 
         <LinearLayout
