@@ -41,7 +41,7 @@ public class DiaryActivity extends AppCompatActivity {
 
     /* 데이터베이스 */
     private DiaryDao mDiaryDao;
-    private static Diary diaryRecord;
+    private Diary diaryRecord;
 
     /* 이미지 */
     private static final int REQUEST_CODE = 0;
@@ -52,13 +52,7 @@ public class DiaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_diary);
 
         /* 데이터베이스 생성 */
-        DiaryDatabase database = Room.databaseBuilder(
-                getApplicationContext(),
-                DiaryDatabase.class,
-                "dialendar_db")                   // db name :스키마
-                .fallbackToDestructiveMigration()       // 스키마(database) 버전 변경 가능
-                .allowMainThreadQueries()               // Main Thread에서 DB의 IO(입출력)를 가능하게 함
-                .build();
+        DiaryDatabase database = DiaryDatabase.getInstance(this);
         mDiaryDao = database.diaryDao();                  // 인터페이스 객체 할당
 
         // 위젯 정의
@@ -202,7 +196,7 @@ public class DiaryActivity extends AppCompatActivity {
                     InputStream in = getContentResolver().openInputStream(data.getData());
                     Bitmap img = BitmapFactory.decodeStream(in);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    img.compress(Bitmap.CompressFormat.PNG, 0, stream);
+                    img.compress(Bitmap.CompressFormat.JPEG, 80, stream);
                     byte[] bytes = stream.toByteArray();
                     Glide.with(getApplicationContext())
                             .load(img)
@@ -243,7 +237,7 @@ public class DiaryActivity extends AppCompatActivity {
     private byte[] getImageInByte(ImageView image) {
         Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         byte[] imageInByte = baos.toByteArray();
         return imageInByte;
     }
