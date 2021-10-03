@@ -88,10 +88,14 @@ public class CalendarAdapter extends BaseAdapter {
         if(day != null) {
             holder.tv_item.setText(day.getDay());
             if(day.isInMonth()){
-                if(position % 7 == 0)
+                if(position % 7 == 0){
                     holder.tv_item.setTextColor(Color.parseColor("#C40000"));
-                else
+                    holder.iv_item.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }
+                else{
                     holder.tv_item.setTextColor(Color.BLACK);
+                    holder.iv_item.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                }
             }
             else{
                 holder.tv_item.setTextColor(Color.GRAY);

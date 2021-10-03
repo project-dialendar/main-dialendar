@@ -194,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(savedInstanceState != null) {
             mCal.set(Calendar.YEAR, savedInstanceState.getInt("year"));
             mCal.set(Calendar.MONTH, savedInstanceState.getInt("month"));
+            mCal.set(Calendar.DAY_OF_MONTH, 1);
         }
         else
             mCal.set(Calendar.DAY_OF_MONTH, 1);
@@ -307,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btn_year :
                 YearPickerDialog dialog = new YearPickerDialog();
-                dialog.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                //dialog.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setListener(dateSetListener);
                 dialog.show(getSupportFragmentManager(), "YearPickerTest");
                 break;
