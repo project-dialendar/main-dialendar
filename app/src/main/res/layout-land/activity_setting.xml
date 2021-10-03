@@ -4,19 +4,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--상단 툴바-->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:background="#FCFCFC"
         android:minHeight="?attr/actionBarSize">
 
         <TextView
+            android:id="@+id/tv_diary_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="설 정"
-            android:layout_gravity="center"/>
+            android:fontFamily="@font/maruburittf"
+            android:letterSpacing="0.2"
+            android:textSize="@dimen/textSize_phone"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:text="설 정" />
 
     </androidx.appcompat.widget.Toolbar>
 
