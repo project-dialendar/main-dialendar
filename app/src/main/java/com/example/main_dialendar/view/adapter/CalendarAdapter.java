@@ -3,6 +3,8 @@ package com.example.main_dialendar.view.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.view.Display;
@@ -13,6 +15,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.main_dialendar.database.Diary;
+import com.example.main_dialendar.database.DiaryDao;
+import com.example.main_dialendar.database.DiaryDatabase;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.activity.DiaryActivity;
@@ -36,6 +41,9 @@ public class CalendarAdapter extends BaseAdapter {
     int year;
     int month;
 
+    /* 데이터베이스 */
+    private DiaryDao mDiaryDao;
+
     /**
      * 생성자
      *
@@ -47,7 +55,7 @@ public class CalendarAdapter extends BaseAdapter {
         this.year = year;
         this.month = month;
         this.list = list;
-        this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
@@ -72,20 +80,42 @@ public class CalendarAdapter extends BaseAdapter {
 
         ViewHolder holder = null;
 
-        if(convertView == null) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day.getDay()));
+        // 날짜 스트링 생성
+        String date = mFormat.format(cal.getTime());
+        /* 데이터베이스 생성 */
+        DiaryDatabase database = DiaryDatabase.getInstance(context);
+        mDiaryDao = database.diaryDao();                  // 인터페이스 객체 할당
+
+        if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_calendar_gridview, null);
 
             holder = new ViewHolder();
-            holder.tv_item = (TextView)convertView.findViewById(R.id.tv_date);
-            holder.iv_item = (ImageView)convertView.findViewById(R.id.iv_date);
+            holder.tv_item = (TextView) convertView.findViewById(R.id.tv_date);
+            holder.iv_item = (ImageView) convertView.findViewById(R.id.iv_date);
+
+            // 해당 날짜에 레코드가 존재하는지 확인
+            Diary diaryRecord = mDiaryDao.findByDate(date);
+            try {// 이미지 삽입
+                holder.iv_item.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
+            } catch (NullPointerException e) {
+
+            }
+//            if (diaryRecord.getImage() != null) {
+//                holder.iv_item.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
+//            }
+
             holder.iv_item.setClipToOutline(true);
 
             convertView.setTag(holder);
         } else {
-            holder = (ViewHolder)convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        if(day != null) {
+        if (day != null) {
             holder.tv_item.setText(day.getDay());
             if(day.isInMonth()){
                 if(position % 7 == 0){
@@ -105,12 +135,12 @@ public class CalendarAdapter extends BaseAdapter {
         holder.iv_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.YEAR, year);
-                cal.set(Calendar.MONTH, month);
-                cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day.getDay()));
-
-                String date = mFormat.format(cal.getTime());
+//                Calendar cal = Calendar.getInstance();
+//                cal.set(Calendar.YEAR, year);
+//                cal.set(Calendar.MONTH, month);
+//                cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day.getDay()));
+//
+//                String date = mFormat.format(cal.getTime());
                 Intent intent = new Intent(context, DiaryActivity.class);
                 intent.putExtra("today", false);
                 intent.putExtra("date", date);
@@ -126,5 +156,12 @@ public class CalendarAdapter extends BaseAdapter {
         ImageView iv_item;
     }
 
-
+    /**
+     * convert from byte array to bitmap
+     * @param image byte array
+     * @return bitmap image
+     */
+    public static Bitmap getImageInBitmap(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
+    }
 }
