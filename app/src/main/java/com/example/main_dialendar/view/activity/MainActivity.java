@@ -192,9 +192,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // bundle에 저장되어 있는 데이터 가져오기
         if(savedInstanceState != null) {
-            mCal.set(Calendar.YEAR, savedInstanceState.getInt("year"));
-            mCal.set(Calendar.MONTH, savedInstanceState.getInt("month"));
-            mCal.set(Calendar.DAY_OF_MONTH, 1);
+            mCal.set(savedInstanceState.getInt("year"), savedInstanceState.getInt("month"), 1);
         }
         else
             mCal.set(Calendar.DAY_OF_MONTH, 1);
