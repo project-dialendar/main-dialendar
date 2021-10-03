@@ -12,6 +12,7 @@ public class Diary {
      * date 날짜 (주요키)
      * text 일기내용
      * image 일기사진
+     * imageNullCheck 사진 존재 여부
      */
     @PrimaryKey
     @NonNull
@@ -21,8 +22,11 @@ public class Diary {
 
     private byte[] image;
 
+    private int imageNullCheck; // [null : 0], [image exist : 1]
+
     public Diary() {
         date = "";
+        imageNullCheck = 0;
     }
 
     public String getDate() {
@@ -47,5 +51,13 @@ public class Diary {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public int getImageNullCheck() {
+        return imageNullCheck;
+    }
+
+    public void setImageNullCheck(int imageNullCheck) {
+        this.imageNullCheck = imageNullCheck;
     }
 }

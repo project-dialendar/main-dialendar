@@ -19,13 +19,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-import java.util.Collections;
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 

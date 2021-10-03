@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import com.bumptech.glide.Glide;
 import com.example.main_dialendar.R;
@@ -41,7 +40,7 @@ public class DiaryActivity extends AppCompatActivity {
 
     /* 데이터베이스 */
     private DiaryDao mDiaryDao;
-    private Diary diaryRecord;
+    private int imageNullCheck;
 
     /* 이미지 */
     private static final int REQUEST_CODE = 0;
@@ -77,13 +76,20 @@ public class DiaryActivity extends AppCompatActivity {
         btn_diary_photo.setOnClickListener(v -> pickFromGallery());
 
         // 해당 날짜에 레코드가 존재하는지 확인
-        diaryRecord = isExist();
+        Diary diaryRecord = isExist();
 
         // 레코드 존재하면 화면에 보이게
-        if (diaryRecord != null) {
+        try {
             et_diary.setText(diaryRecord.getText());
             btn_diary_photo.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
+            imageNullCheck = diaryRecord.getImageNullCheck();
+        } catch (NullPointerException e) {
+
         }
+//        if (diaryRecord != null) {
+//            et_diary.setText(diaryRecord.getText());
+//            btn_diary_photo.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
+//        }
 
         // Main Activity로 나가면서 저장
         btn_save_back.setOnClickListener(v -> {
@@ -138,7 +144,7 @@ public class DiaryActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        diaryRecord = isExist();
+        Diary diaryRecord = isExist();
 
         if (diaryRecord == null) {
             insertRecord();
@@ -146,23 +152,6 @@ public class DiaryActivity extends AppCompatActivity {
             updateRecord();
         }
         finish();
-    }
-
-    private void insertRecord() {
-        Diary insertRecord = new Diary();
-        insertRecord.setDate(tv_diary_date.getText().toString());
-        insertRecord.setText(et_diary.getText().toString());
-        insertRecord.setImage(getImageInByte(btn_diary_photo));
-
-        mDiaryDao.insertDiary(insertRecord);
-    }
-    private void updateRecord() {
-        Diary updateRecord = new Diary();
-        updateRecord.setDate(tv_diary_date.getText().toString());
-        updateRecord.setText(et_diary.getText().toString());
-        updateRecord.setImage(getImageInByte(btn_diary_photo));
-
-        mDiaryDao.updateDiary(updateRecord);
     }
 
     /***
@@ -190,7 +179,7 @@ public class DiaryActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
-                    diaryRecord = isExist();
+                    Diary diaryRecord = isExist();
 
                     /* 이미지뷰에 이미지 넣기 */
                     InputStream in = getContentResolver().openInputStream(data.getData());
@@ -203,12 +192,12 @@ public class DiaryActivity extends AppCompatActivity {
                             .centerCrop()
                             .into(btn_diary_photo);
 
-
                     if (diaryRecord == null) {
                         Diary insertRecord = new Diary();
                         insertRecord.setDate(tv_diary_date.getText().toString());
                         insertRecord.setText(et_diary.getText().toString());
                         insertRecord.setImage(bytes);
+                        insertRecord.setImageNullCheck(1);
 
                         mDiaryDao.insertDiary(insertRecord);
                     } else { // 기존 레코드 존재
@@ -216,9 +205,11 @@ public class DiaryActivity extends AppCompatActivity {
                         updateRecord.setDate(tv_diary_date.getText().toString());
                         updateRecord.setText(et_diary.getText().toString());
                         updateRecord.setImage(bytes);
+                        updateRecord.setImageNullCheck(1);
 
                         mDiaryDao.updateDiary(updateRecord);
                     }
+
                 } catch (Exception e) {
 
                 }
@@ -241,8 +232,10 @@ public class DiaryActivity extends AppCompatActivity {
         byte[] imageInByte = baos.toByteArray();
         return imageInByte;
     }
+
     /**
      * convert from byte array to bitmap
+     *
      * @param image byte array
      * @return bitmap image
      */
@@ -252,10 +245,34 @@ public class DiaryActivity extends AppCompatActivity {
 
     /**
      * 해당 날짜에 레코드가 존재하는지 확인
+     *
      * @return Diary (object)
      */
     public Diary isExist() {
         Diary diary = mDiaryDao.findByDate(tv_diary_date.getText().toString());
         return diary;
+    }
+
+    /**
+     * 데이터베이스 삽입, 수정 메소드
+     */
+    private void insertRecord() {
+        Diary insertRecord = new Diary();
+        insertRecord.setDate(tv_diary_date.getText().toString());
+        insertRecord.setText(et_diary.getText().toString());
+        if (imageNullCheck == 1) {
+            insertRecord.setImage(getImageInByte(btn_diary_photo));
+        }
+        mDiaryDao.insertDiary(insertRecord);
+    }
+
+    private void updateRecord() {
+        Diary updateRecord = new Diary();
+        updateRecord.setDate(tv_diary_date.getText().toString());
+        updateRecord.setText(et_diary.getText().toString());
+        if (imageNullCheck == 1) {
+            updateRecord.setImage(getImageInByte(btn_diary_photo));
+        }
+        mDiaryDao.updateDiary(updateRecord);
     }
 }

@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Diary.class}, version = 1, exportSchema = false)
+@Database(entities = {Diary.class}, version = 2, exportSchema = false)
 public abstract class DiaryDatabase extends RoomDatabase {
 
     public abstract DiaryDao diaryDao();
@@ -25,7 +25,7 @@ public abstract class DiaryDatabase extends RoomDatabase {
                     context.getApplicationContext(),
                     DiaryDatabase.class,
                     "dialendar_db")                   // db name :스키마
-//                    .fallbackToDestructiveMigration()       // 스키마(database) 버전 변경 가능
+                    .fallbackToDestructiveMigration()       // 스키마(database) 버전 변경 가능
                     .allowMainThreadQueries()               // Main Thread에서 DB의 IO(입출력)를 가능하게 함. 이건 혼자 만들고 실행해볼때.
                     .build();
         }
