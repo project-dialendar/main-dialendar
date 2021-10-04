@@ -25,6 +25,7 @@ import com.example.main_dialendar.database.DiaryDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -37,6 +38,9 @@ public class DiaryActivity extends AppCompatActivity {
     private TextView tv_diary_date;
     private EditText et_diary;
     private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd.");
+    private SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    Date d;
 
     /* 데이터베이스 */
     private DiaryDao mDiaryDao;
@@ -64,11 +68,19 @@ public class DiaryActivity extends AppCompatActivity {
 
         // 일기 날짜 세팅
         Intent diaryIntent = getIntent();
+        d = new Date(System.currentTimeMillis());
+
         boolean isToday = diaryIntent.getBooleanExtra("today", true);
-        if (isToday)
-            tv_diary_date.setText(getTime());
+        if (isToday){
+            tv_diary_date.setText(mFormat.format(d));
+        }
         else {
             String date = diaryIntent.getStringExtra("date");
+            try {
+                d = mFormat.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             tv_diary_date.setText(date);
         }
 
@@ -121,7 +133,7 @@ public class DiaryActivity extends AppCompatActivity {
                             case R.id.delete_diary:
                                 // 2. 일기 삭제
                                 Diary deleteRecord = new Diary();
-                                deleteRecord.setDate(tv_diary_date.getText().toString());
+                                deleteRecord.setDate(dbFormat.format(d));
 
                                 mDiaryDao.deleteDiary(deleteRecord);
 
@@ -155,15 +167,6 @@ public class DiaryActivity extends AppCompatActivity {
     }
 
     /***
-     * 현재 시간 반환 메소드
-     */
-    private String getTime() {
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        return mFormat.format(date);
-    }
-
-    /***
      * 갤러리에서 사진 가져오는 메소드
      */
     private void pickFromGallery() {
@@ -194,7 +197,7 @@ public class DiaryActivity extends AppCompatActivity {
 
                     if (diaryRecord == null) {
                         Diary insertRecord = new Diary();
-                        insertRecord.setDate(tv_diary_date.getText().toString());
+                        insertRecord.setDate(dbFormat.format(d));
                         insertRecord.setText(et_diary.getText().toString());
                         insertRecord.setImage(bytes);
                         insertRecord.setImageNullCheck(1);
@@ -202,7 +205,7 @@ public class DiaryActivity extends AppCompatActivity {
                         mDiaryDao.insertDiary(insertRecord);
                     } else { // 기존 레코드 존재
                         Diary updateRecord = new Diary();
-                        updateRecord.setDate(tv_diary_date.getText().toString());
+                        updateRecord.setDate(dbFormat.format(d));
                         updateRecord.setText(et_diary.getText().toString());
                         updateRecord.setImage(bytes);
                         updateRecord.setImageNullCheck(1);
@@ -249,7 +252,7 @@ public class DiaryActivity extends AppCompatActivity {
      * @return Diary (object)
      */
     public Diary isExist() {
-        Diary diary = mDiaryDao.findByDate(tv_diary_date.getText().toString());
+        Diary diary = mDiaryDao.findByDate(dbFormat.format(d));
         return diary;
     }
 
@@ -258,7 +261,7 @@ public class DiaryActivity extends AppCompatActivity {
      */
     private void insertRecord() {
         Diary insertRecord = new Diary();
-        insertRecord.setDate(tv_diary_date.getText().toString());
+        insertRecord.setDate(dbFormat.format(d));
         insertRecord.setText(et_diary.getText().toString());
         if (imageNullCheck == 1) {
             insertRecord.setImage(getImageInByte(btn_diary_photo));
@@ -268,7 +271,7 @@ public class DiaryActivity extends AppCompatActivity {
 
     private void updateRecord() {
         Diary updateRecord = new Diary();
-        updateRecord.setDate(tv_diary_date.getText().toString());
+        updateRecord.setDate(dbFormat.format(d));
         updateRecord.setText(et_diary.getText().toString());
         if (imageNullCheck == 1) {
             updateRecord.setImage(getImageInByte(btn_diary_photo));

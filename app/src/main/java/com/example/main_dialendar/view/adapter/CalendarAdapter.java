@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ public class CalendarAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
 
     private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd.");
+    private SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     int year;
     int month;
@@ -86,6 +88,7 @@ public class CalendarAdapter extends BaseAdapter {
         cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day.getDay()));
         // 날짜 스트링 생성
         String date = mFormat.format(cal.getTime());
+        String dbDate = dbFormat.format(cal.getTime());
         /* 데이터베이스 생성 */
         DiaryDatabase database = DiaryDatabase.getInstance(context);
         mDiaryDao = database.diaryDao();                  // 인터페이스 객체 할당
@@ -98,7 +101,8 @@ public class CalendarAdapter extends BaseAdapter {
             holder.iv_item = (ImageView) convertView.findViewById(R.id.iv_date);
 
             // 해당 날짜에 레코드가 존재하는지 확인
-            Diary diaryRecord = mDiaryDao.findByDate(date);
+            Diary diaryRecord = mDiaryDao.findByDate(dbDate);
+
             try {// 이미지 삽입
                 holder.iv_item.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
             } catch (NullPointerException e) {
