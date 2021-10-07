@@ -89,9 +89,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
                 try {
                     holder.iv_item.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
                 }
-                catch (NullPointerException e ) {
-                    holder.iv_item.setImageBitmap(getImageInBitmap(null));
-                }
+                catch (NullPointerException e ) { }
                 holder.iv_item.setClipToOutline(true);
 
                 if (position % 7 == 0) {
