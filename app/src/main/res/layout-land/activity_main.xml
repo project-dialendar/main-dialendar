@@ -109,8 +109,8 @@
                         android:verticalSpacing="10dp"
                         tools:listitem="@layout/item_calendar_day_of_week" />
 
-                    <GridView
-                        android:id="@+id/gv_month"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="2dp"

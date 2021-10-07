@@ -36,6 +36,7 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingActivity.this, MainActivity.class));
+                finish();
             }
         });
     }
