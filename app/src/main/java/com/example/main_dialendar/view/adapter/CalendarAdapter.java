@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
         // 캘린더 세팅
         this.cal.set(Calendar.YEAR, year);
         this.cal.set(Calendar.MONTH, month);
+        Log.e("Calendar", dbFormat.format(cal.getTime())+"");
 
         // DB 세팅
         this.database = DiaryDatabase.getInstance(context);
@@ -77,7 +79,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
         Day day = list.get(position);
 
         // 날짜 스트링 생성
-        String date = getDate(day.getDay(), false);
         String dbDate = getDate(day.getDay(), true);
 
         // 해당 날짜에 레코드가 존재하는지 확인

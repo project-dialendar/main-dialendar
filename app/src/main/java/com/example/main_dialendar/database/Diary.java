@@ -4,8 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import lombok.Getter;
+import lombok.Setter;
+
 // table name = "diary"
 @Entity
+@Getter
+@Setter
 public class Diary {
 
     /**
@@ -22,42 +27,7 @@ public class Diary {
 
     private byte[] image;
 
-    private int imageNullCheck; // [null : 0], [image exist : 1]
-
     public Diary() {
         date = "";
-        imageNullCheck = 0;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-    public int getImageNullCheck() {
-        return imageNullCheck;
-    }
-
-    public void setImageNullCheck(int imageNullCheck) {
-        this.imageNullCheck = imageNullCheck;
     }
 }
