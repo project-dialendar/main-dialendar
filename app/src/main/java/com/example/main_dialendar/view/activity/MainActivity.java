@@ -194,6 +194,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getCalendar(mCal);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCal.set(Calendar.DAY_OF_MONTH, 1);
+        getCalendar(mCal);
+    }
+
     // 구글 드라이브 API - 드라이브 접속 전에 구글 로그인 요청
 //    private void requestSignIn() {
 //        GoogleSignInOptions signInOptions =

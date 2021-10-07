@@ -60,7 +60,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
         // 캘린더 세팅
         this.cal.set(Calendar.YEAR, year);
         this.cal.set(Calendar.MONTH, month);
-        Log.e("Calendar", dbFormat.format(cal.getTime())+"");
 
         // DB 세팅
         this.database = DiaryDatabase.getInstance(context);

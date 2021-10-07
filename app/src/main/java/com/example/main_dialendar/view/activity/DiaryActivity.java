@@ -43,7 +43,6 @@ public class DiaryActivity extends AppCompatActivity {
 
     /* 데이터베이스 */
     private DiaryDao mDiaryDao;
-    private int imageNullCheck;
     DiaryDatabase database;
 
     /* 이미지 */
@@ -93,7 +92,6 @@ public class DiaryActivity extends AppCompatActivity {
         try {
             et_diary.setText(diaryRecord.getText());
             btn_diary_photo.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
-            imageNullCheck = diaryRecord.getImageNullCheck();
         } catch (NullPointerException e) {
 
         }
