@@ -77,23 +77,23 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Day day = list.get(position);
 
-        // 날짜 스트링 생성
-        String dbDate = getDate(day.getDay(), true);
-
-        // 해당 날짜에 레코드가 존재하는지 확인
-        Diary diaryRecord = mDiaryDao.findByDate(dbDate);
-
-        if (day.isInMonth()) {
-            try {// 이미지 삽입
-                holder.iv_item.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
-            } catch (NullPointerException e) { }
-            holder.iv_item.setClipToOutline(true);
-        }
-
-
         if (day != null) {
             holder.tv_item.setText(day.getDay());
-            if (day.isInMonth()) {
+            if (day.isInMonth() == true) {
+                // 날짜 스트링 생성
+                String dbDate = getDate(day.getDay(), true);
+
+                // 해당 날짜에 레코드가 존재하는지 확인
+                Diary diaryRecord = mDiaryDao.findByDate(dbDate);
+
+                try {
+                    holder.iv_item.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
+                }
+                catch (NullPointerException e ) {
+                    holder.iv_item.setImageBitmap(getImageInBitmap(null));
+                }
+                holder.iv_item.setClipToOutline(true);
+
                 if (position % 7 == 0) {
                     holder.tv_item.setTextColor(Color.parseColor("#C40000"));
                     holder.iv_item.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -105,6 +105,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
                 holder.isInMonth = false;
                 holder.tv_item.setTextColor(Color.GRAY);
                 holder.iv_item.setBackgroundColor(Color.parseColor("#e8e8e8"));
+                holder.iv_item.setImageBitmap(null);
             }
         }
     }
