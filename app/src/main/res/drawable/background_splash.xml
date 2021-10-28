@@ -6,7 +6,7 @@
         android:right="200dp">
 
         <bitmap
-            android:src="@drawable/bg_splash"
+            android:src="@drawable/bg_splash_small"
             android:gravity="center"/>
     </item>
 </layer-list>

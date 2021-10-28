@@ -14,7 +14,7 @@
     <ImageView
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@drawable/img_logo"
+        android:src="@drawable/bg_splash"
         android:layout_gravity="center"/>
 
 </LinearLayout>

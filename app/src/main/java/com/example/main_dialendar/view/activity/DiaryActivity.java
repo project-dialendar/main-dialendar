@@ -25,6 +25,7 @@ import com.example.main_dialendar.database.DiaryDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -36,14 +37,18 @@ public class DiaryActivity extends AppCompatActivity {
     private ImageView btn_save_back;
     private TextView tv_diary_date;
     private EditText et_diary;
+
     private SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd.");
+    private SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     /* 데이터베이스 */
     private DiaryDao mDiaryDao;
-    private int imageNullCheck;
+    DiaryDatabase database;
 
     /* 이미지 */
     private static final int REQUEST_CODE = 0;
+
+    Date date = new Date();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,7 +56,7 @@ public class DiaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_diary);
 
         /* 데이터베이스 생성 */
-        DiaryDatabase database = DiaryDatabase.getInstance(this);
+        database = DiaryDatabase.getInstance(this);
         mDiaryDao = database.diaryDao();                  // 인터페이스 객체 할당
 
         // 위젯 정의
@@ -68,8 +73,13 @@ public class DiaryActivity extends AppCompatActivity {
         if (isToday)
             tv_diary_date.setText(getTime());
         else {
-            String date = diaryIntent.getStringExtra("date");
-            tv_diary_date.setText(date);
+            String tv_date = diaryIntent.getStringExtra("date");
+            tv_diary_date.setText(tv_date);
+            try {
+                date = mFormat.parse(tv_date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         // 이미지 버튼 -> 갤러리에서 사진 불러오기
@@ -82,7 +92,6 @@ public class DiaryActivity extends AppCompatActivity {
         try {
             et_diary.setText(diaryRecord.getText());
             btn_diary_photo.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
-            imageNullCheck = diaryRecord.getImageNullCheck();
         } catch (NullPointerException e) {
 
         }
@@ -159,7 +168,7 @@ public class DiaryActivity extends AppCompatActivity {
      */
     private String getTime() {
         long now = System.currentTimeMillis();
-        Date date = new Date(now);
+        date = new Date(now);
         return mFormat.format(date);
     }
 
@@ -191,28 +200,7 @@ public class DiaryActivity extends AppCompatActivity {
                             .load(img)
                             .centerCrop()
                             .into(btn_diary_photo);
-
-                    if (diaryRecord == null) {
-                        Diary insertRecord = new Diary();
-                        insertRecord.setDate(tv_diary_date.getText().toString());
-                        insertRecord.setText(et_diary.getText().toString());
-                        insertRecord.setImage(bytes);
-                        insertRecord.setImageNullCheck(1);
-
-                        mDiaryDao.insertDiary(insertRecord);
-                    } else { // 기존 레코드 존재
-                        Diary updateRecord = new Diary();
-                        updateRecord.setDate(tv_diary_date.getText().toString());
-                        updateRecord.setText(et_diary.getText().toString());
-                        updateRecord.setImage(bytes);
-                        updateRecord.setImageNullCheck(1);
-
-                        mDiaryDao.updateDiary(updateRecord);
-                    }
-
-                } catch (Exception e) {
-
-                }
+                } catch (Exception e) { }
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
@@ -249,7 +237,7 @@ public class DiaryActivity extends AppCompatActivity {
      * @return Diary (object)
      */
     public Diary isExist() {
-        Diary diary = mDiaryDao.findByDate(tv_diary_date.getText().toString());
+        Diary diary = mDiaryDao.findByDate(dbFormat.format(date));
         return diary;
     }
 
@@ -258,21 +246,23 @@ public class DiaryActivity extends AppCompatActivity {
      */
     private void insertRecord() {
         Diary insertRecord = new Diary();
-        insertRecord.setDate(tv_diary_date.getText().toString());
+        insertRecord.setDate(dbFormat.format(date));
         insertRecord.setText(et_diary.getText().toString());
-        if (imageNullCheck == 1) {
+        if(btn_diary_photo.getDrawable() == null)
+            insertRecord.setImage(null);
+        else
             insertRecord.setImage(getImageInByte(btn_diary_photo));
-        }
         mDiaryDao.insertDiary(insertRecord);
     }
 
     private void updateRecord() {
         Diary updateRecord = new Diary();
-        updateRecord.setDate(tv_diary_date.getText().toString());
+        updateRecord.setDate(dbFormat.format(date));
         updateRecord.setText(et_diary.getText().toString());
-        if (imageNullCheck == 1) {
+        if(btn_diary_photo.getDrawable() == null)
+            updateRecord.setImage(null);
+        else
             updateRecord.setImage(getImageInByte(btn_diary_photo));
-        }
         mDiaryDao.updateDiary(updateRecord);
     }
 }

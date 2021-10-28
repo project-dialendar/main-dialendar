@@ -34,6 +34,8 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.main_dialendar.BuildConfig;
 import com.example.main_dialendar.model.Day;
@@ -49,15 +51,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, CalendarAdapter.ItemClickListener {
 
     // 월/요일 텍스트뷰
     private TextView tv_month;
-    private TextView tv_date;
 
     // 년도, 글쓰기 버튼
     private LinearLayout ll_year;
@@ -67,8 +70,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // 사이드바 레이아웃
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private ImageView iv_profile;
-    private TextView tv_profile;
 
     DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -82,14 +83,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // 그리드뷰 어댑터
     private CalendarAdapter calendarAdapter;
     private WeekAdapter day_of_weekGridAdapter;
-    private int cellSize = 0;
 
     // 요일 리스트
     private ArrayList<Day> dayList;
     private ArrayList<String> day_of_weekList;
 
     // 그리드뷰
-    private GridView gv_month;
+    private RecyclerView rv_month;
     private GridView gv_day_of_week;
 
     // 캘린더 변수
@@ -109,15 +109,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 접속한 기기의 해상도 확인
-        getStandardSize();
-
         tv_month = findViewById(R.id.tv_month);
-        tv_month.setTextSize((float) (standardSize_X/7));
 
-        tv_date = findViewById(R.id.tv_date);
-
-        gv_month = findViewById(R.id.gv_month);
+        rv_month = findViewById(R.id.rv_month);
+        rv_month.setLayoutManager(new GridLayoutManager(this, 7));
         gv_day_of_week = findViewById(R.id.gv_day_of_week);
 
         ll_year = findViewById(R.id.btn_year);
@@ -196,6 +191,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else
             mCal.set(Calendar.DAY_OF_MONTH, 1);
+        getCalendar(mCal);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCal.set(Calendar.DAY_OF_MONTH, 1);
         getCalendar(mCal);
     }
 
@@ -297,7 +299,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initCalendarAdapter() {
         calendarAdapter = new CalendarAdapter(this, mCal.get(Calendar.YEAR), mCal.get(Calendar.MONTH), dayList);
-        gv_month.setAdapter(calendarAdapter);
+        calendarAdapter.setClickListener(this);
+        rv_month.setAdapter(calendarAdapter);
     }
 
     // onClick Listener
@@ -316,6 +319,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    @Override
+    public void onItemClick(View view, String day, boolean isInMonth) {
+        Calendar itemCal = mCal;
+        itemCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
+        String date = new SimpleDateFormat("yyyy.MM.dd.").format(itemCal.getTime());
+
+        Log.e("Date", date+"");
+        if (isInMonth) {
+            Intent intent = new Intent(MainActivity.this, DiaryActivity.class);
+            intent.putExtra("today", false);
+            intent.putExtra("date", date);
+            startActivity(intent);
+        }
+    }
+
 
 
     @Override
@@ -400,24 +419,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    });
 //        }
 //    }
-
-    // 기기 별 기준 해상도를 계산
-    public void getStandardSize() {
-        Point ScreenSize = getScreenSize(this);
-        density  = getResources().getDisplayMetrics().density;
-
-        standardSize_X = (int) (ScreenSize.x / density);
-        standardSize_Y = (int) (ScreenSize.y / density);
-    }
-
-    // 기기 별 해상도 반환
-    public Point getScreenSize(Activity activity) {
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-
-        return  size;
-    }
 
     // 화면 전환 이후에도 달력 상태를 유지하도록 함
     @Override
