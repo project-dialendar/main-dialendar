@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -22,8 +23,11 @@ import com.example.main_dialendar.R;
 import com.example.main_dialendar.database.Diary;
 import com.example.main_dialendar.database.DiaryDao;
 import com.example.main_dialendar.database.DiaryDatabase;
+import com.example.main_dialendar.view.dialog.CaptureDialog;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -126,6 +130,8 @@ public class DiaryActivity extends AppCompatActivity {
                         switch (menuItem.getItemId()) {
                             case R.id.share_diary:
                                 // 1. 한 장의 폴라로이드 같은 이미지로 공유
+                                CaptureDialog captureDialog = new CaptureDialog(DiaryActivity.this);
+                                captureDialog.callCaptureDialog(tv_diary_date);
 
                             case R.id.delete_diary:
                                 // 2. 일기 삭제
@@ -223,7 +229,6 @@ public class DiaryActivity extends AppCompatActivity {
 
     /**
      * convert from byte array to bitmap
-     *
      * @param image byte array
      * @return bitmap image
      */
@@ -233,7 +238,6 @@ public class DiaryActivity extends AppCompatActivity {
 
     /**
      * 해당 날짜에 레코드가 존재하는지 확인
-     *
      * @return Diary (object)
      */
     public Diary isExist() {
