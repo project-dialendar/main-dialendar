@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.main_dialendar.database.Diary;
@@ -21,6 +22,7 @@ import com.example.main_dialendar.database.DiaryDatabase;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.activity.DiaryActivity;
+import com.example.main_dialendar.view.activity.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -93,16 +95,16 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
                 holder.iv_item.setClipToOutline(true);
 
                 if (position % 7 == 0) {
-                    holder.tv_item.setTextColor(Color.parseColor("#C40000"));
-                    holder.iv_item.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    holder.tv_item.setTextColor(ContextCompat.getColor(MainActivity.context, R.color.red));
+                    holder.iv_item.setBackgroundColor(ContextCompat.getColor(MainActivity.context, R.color.bg_calendar));
                 } else {
-                    holder.tv_item.setTextColor(Color.BLACK);
-                    holder.iv_item.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    holder.tv_item.setTextColor(ContextCompat.getColor(MainActivity.context, R.color.textColor));
+                    holder.iv_item.setBackgroundColor(ContextCompat.getColor(MainActivity.context, R.color.bg_calendar));
                 }
             } else {
                 holder.isInMonth = false;
-                holder.tv_item.setTextColor(Color.GRAY);
-                holder.iv_item.setBackgroundColor(Color.parseColor("#e8e8e8"));
+                holder.tv_item.setTextColor(ContextCompat.getColor(MainActivity.context, R.color.textColor_out));
+                holder.iv_item.setBackgroundColor(ContextCompat.getColor(MainActivity.context, R.color.bg_calendar_out));
                 holder.iv_item.setImageBitmap(null);
             }
         }

@@ -5,39 +5,33 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Environment;
 import android.util.Log;
-import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.main_dialendar.BuildConfig;
+import com.example.main_dialendar.util.ThemeUtil;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.adapter.CalendarAdapter;
@@ -51,7 +45,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -95,19 +88,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // 캘린더 변수
     private Calendar mCal;
 
+    public static Context context;
+
     // 구글 드라이브 상수 & 변수
 //    private static final int DRIVE_SIGN_IN = 9002;
 //    GoogleSignInClient client;
 //    DriveServiceHelper driveServiceHelper;
 
-    // 기기 별 기준 사이즈와 해상도
-    int standardSize_X, standardSize_Y;
-    float density;
+    // 다크 모드 설정
+    String themeColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        context = getApplicationContext();
 
         tv_month = findViewById(R.id.tv_month);
 
@@ -192,6 +188,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else
             mCal.set(Calendar.DAY_OF_MONTH, 1);
         getCalendar(mCal);
+
+        setThemeMode();
+    }
+
+    private void setThemeMode() {
+        themeColor = ThemeUtil.modLoad(getApplicationContext());
+        ThemeUtil.applyTheme(themeColor);
     }
 
     @Override
@@ -218,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayShowCustomEnabled(true);    // 커스터마이징을 위해 필요
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);      // 툴바 메뉴 버튼 생성
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_sidebar); // 메뉴 버튼 모양 설정
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(context, R.color.background)));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //gridview_day_of_week에 요일 리스트 표시

@@ -1,4 +1,4 @@
-package com.example.main_dialendar;
+package com.example.main_dialendar.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

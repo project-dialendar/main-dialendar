@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
     <color name="red">#C40000</color>
-    <color name="grey">#DFDFDF</color>
+    <color name="background">#FCFCFC</color>
+    <color name="bg_calendar">#FFFFFFFF</color>
+    <color name="bg_calendar_out">#e8e8e8</color>
+    <color name="monthColor">#000000</color>
+    <color name="textColor">#FF000000</color>
+    <color name="textColor_out">#494949</color>
+    <color name="lineColor">#E3E3E3</color>
 </resources>

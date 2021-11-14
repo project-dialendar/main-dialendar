@@ -12,6 +12,9 @@ import android.widget.BaseAdapter;
 import androidx.annotation.Nullable;
 
 import com.example.main_dialendar.R;
+import com.example.main_dialendar.util.ThemeUtil;
+import com.example.main_dialendar.view.activity.MainActivity;
+import com.example.main_dialendar.view.activity.SettingActivity;
 
 /**
  * 실제 설정 목록을 보여주는 프레그먼트 (PreferenceFragment 사용)
@@ -35,7 +38,8 @@ public class SettingPreferenceFragment extends PreferenceFragment {
     SwitchPreference lockPreference;
 
     // 다크 모드 설정
-    SwitchPreference darkmodePreference;
+    ListPreference darkmodePreference;
+    String themeColor;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +51,7 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         fontPreference = (ListPreference)findPreference("font_list");
         messagePreference = (SwitchPreference)findPreference("message");
         lockPreference = (SwitchPreference)findPreference("lock");
-        darkmodePreference = (SwitchPreference)findPreference("darkmode");
+        darkmodePreference = (ListPreference)findPreference("darkmode");
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -71,8 +75,8 @@ public class SettingPreferenceFragment extends PreferenceFragment {
             lockPreference.setSummary("사용");
         }
 
-        if(prefs.getBoolean("darkmode", false)) {
-            darkmodePreference.setSummary("사용");
+        if(!prefs.getString("darkmode", "").equals("")) {
+            darkmodePreference.setSummary(prefs.getString("darkmode", "Default"));
         }
 
         // 리스너 연결
@@ -97,6 +101,7 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
             if (key.equals("font_list")) {
 
+
             }
 
             if (key.equals("message")) {
@@ -107,10 +112,21 @@ public class SettingPreferenceFragment extends PreferenceFragment {
             }
 
             if (key.equals("darkmode")) {
-                if (prefs.getBoolean("darkmode", false))
-                    darkmodePreference.setSummary("사용");
-                else
-                    darkmodePreference.setSummary("사용 안 함");
+                if (prefs.getString("darkmode", "").equals("Dark")) {
+                    darkmodePreference.setSummary("Dark");
+                    themeColor = ThemeUtil.DARK_MODE;
+                }
+                else if (prefs.getString("darkmode", "").equals("Light")){
+                    darkmodePreference.setSummary("Light");
+                    themeColor = ThemeUtil.LIGHT_MODE;
+                }
+                else {
+                    darkmodePreference.setSummary("Default");
+                    themeColor = ThemeUtil.DEFAULT_MODE;
+                }
+
+                ThemeUtil.applyTheme(themeColor);
+                ThemeUtil.modSave(SettingActivity.context, themeColor);
             }
 
             if (key.equals("lock")) {

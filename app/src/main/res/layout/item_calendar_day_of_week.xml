@@ -16,7 +16,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="DAY"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:textStyle="bold"
             android:fontFamily="@font/maruburittf"
             android:textSize="@dimen/textSize_phone"/>

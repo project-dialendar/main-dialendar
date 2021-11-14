@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/round_bg_border"
-    >
+    android:background="@color/background">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,7 +12,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@font/maruburittf"
         android:textSize="18sp"
-        android:textColor="@color/black"
+        android:textColor="@color/textColor"
         android:textStyle="bold"
         android:layout_gravity="center" />
 
@@ -27,7 +27,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,10 +39,7 @@
                 android:id="@+id/picker_year"
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
-                android:layout_margin="10dp"
-                >
-            </NumberPicker>
-
+                android:layout_margin="10dp"></NumberPicker>
         </LinearLayout>
 
         <LinearLayout
@@ -63,12 +59,9 @@
                 android:id="@+id/picker_month"
                 android:layout_width="wrap_content"
                 android:layout_height="150dp"
-                android:layout_margin="10dp"
-                >
+                android:layout_margin="10dp">
             </NumberPicker>
-
         </LinearLayout>
-
     </LinearLayout>
 
 
@@ -88,11 +81,9 @@
             android:layout_marginBottom="30dp"
             android:text="확인"
             android:textSize="18sp"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:fontFamily="@font/maruburittf"
             android:gravity="center"
-            android:textAllCaps="false"
-            />
-
+            android:textAllCaps="false" />
     </LinearLayout>
 </LinearLayout>

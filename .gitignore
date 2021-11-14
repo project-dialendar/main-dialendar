@@ -31,3 +31,4 @@ app/build.gradle
 .idea/runConfigurations.xml
 *.xml
 app/build.gradle
+.idea/misc.xml

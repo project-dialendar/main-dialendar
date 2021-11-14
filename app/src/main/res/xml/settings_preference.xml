@@ -19,7 +19,7 @@
                 android:entryValues="@array/array_memo"
                 android:key="memo_list"
                 android:summary="메모지"
-               android:title="메모지 설정"
+                android:title="메모지 설정"
                 android:dependency="memo"/>
 
         </PreferenceScreen>
@@ -45,10 +45,12 @@
             android:summary="사용 안 함"/>
 
         <!-- 다크 모드 설정-->
-        <SwitchPreference
+        <ListPreference
+            android:entries="@array/array_darkmode"
+            android:entryValues="@array/array_darkmode"
             android:key="darkmode"
             android:title="다크 모드"
-            android:summary="사용 안 함"/>
+            android:summary="Default"/>
 
     </PreferenceCategory>
 

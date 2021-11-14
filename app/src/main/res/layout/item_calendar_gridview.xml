@@ -26,7 +26,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="00"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:fontFamily="@font/maruburittf"
             android:textSize="@dimen/textSize_phone" />
 

@@ -1,4 +1,4 @@
-package com.example.main_dialendar;
+package com.example.main_dialendar.util;
 
 import android.content.ContentResolver;
 import android.content.Intent;
