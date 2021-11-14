@@ -130,7 +130,7 @@ public class DiaryActivity extends AppCompatActivity {
                             case R.id.delete_diary:
                                 // 2. 일기 삭제
                                 Diary deleteRecord = new Diary();
-                                deleteRecord.setDate(tv_diary_date.getText().toString());
+                                deleteRecord.setDate(dbFormat.format(date));
 
                                 mDiaryDao.deleteDiary(deleteRecord);
 
