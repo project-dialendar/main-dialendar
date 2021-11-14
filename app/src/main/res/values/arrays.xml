@@ -11,4 +11,10 @@
         <item>체크리스트</item>
         <item>사진</item>
     </string-array>
+
+    <string-array name="array_darkmode">
+        <item>Default</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
 </resources>

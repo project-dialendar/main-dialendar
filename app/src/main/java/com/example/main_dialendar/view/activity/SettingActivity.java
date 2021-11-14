@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -25,10 +26,14 @@ public class SettingActivity extends AppCompatActivity {
 
     Button btn_back;
 
+    public static Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        context = getApplicationContext();
 
         btn_back = findViewById(R.id.btn_back);
 
@@ -39,5 +44,7 @@ public class SettingActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
     }
 }

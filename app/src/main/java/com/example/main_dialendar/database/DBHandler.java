@@ -1,6 +1,6 @@
-package com.example.main_dialendar;
+package com.example.main_dialendar.database;
 
-import static com.example.main_dialendar.DBHelper.*;
+import static com.example.main_dialendar.database.DBHelper.*;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,12 +10,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.Editable;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
-
-import javax.annotation.Nullable;
 
 public class DBHandler {
 

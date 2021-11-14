@@ -9,7 +9,8 @@
     android:paddingRight="20dp"
     android:paddingTop="40dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@color/background">
 
     <ImageView
         android:layout_width="64dp"
