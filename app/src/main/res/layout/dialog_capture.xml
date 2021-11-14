@@ -7,8 +7,8 @@
 
     <LinearLayout
         android:id="@+id/capture_target_Layout"
-        android:layout_width="408dp"
-        android:layout_height="638dp"
+        android:layout_width="239dp"
+        android:layout_height="442dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
@@ -23,12 +23,12 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="20dp"
             android:text="2021.11.11"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         <ImageView
             android:id="@+id/iv_captrue_image"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="276dp"
             android:paddingHorizontal="20dp"
             app:srcCompat="@drawable/empty_photo" />
 
@@ -38,12 +38,12 @@
             android:layout_height="match_parent"
             android:paddingHorizontal="20dp"
             android:text="My diary"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="404dp"
-        android:layout_height="56dp"
+        android:layout_width="207dp"
+        android:layout_height="0dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:orientation="horizontal"
