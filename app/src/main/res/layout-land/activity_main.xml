@@ -85,7 +85,7 @@
                     android:fontFamily="@font/tway_sky"
                     android:gravity="center"
                     android:text="0"
-                    android:textColor="@color/monthColor"
+                    android:textColor="@color/black"
                     android:textSize="120sp" />
 
                 <LinearLayout

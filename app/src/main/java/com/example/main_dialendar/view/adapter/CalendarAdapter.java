@@ -23,6 +23,7 @@ import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.activity.DiaryActivity;
 import com.example.main_dialendar.view.activity.MainActivity;
+import com.example.main_dialendar.view.fragment.SettingPreferenceFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -96,15 +97,15 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
 
                 if (position % 7 == 0) {
                     holder.tv_item.setTextColor(ContextCompat.getColor(MainActivity.context, R.color.red));
-                    holder.iv_item.setBackgroundColor(ContextCompat.getColor(MainActivity.context, R.color.bg_calendar));
-                } else {
-                    holder.tv_item.setTextColor(ContextCompat.getColor(MainActivity.context, R.color.textColor));
-                    holder.iv_item.setBackgroundColor(ContextCompat.getColor(MainActivity.context, R.color.bg_calendar));
                 }
+
             } else {
                 holder.isInMonth = false;
-                holder.tv_item.setTextColor(ContextCompat.getColor(MainActivity.context, R.color.textColor_out));
-                holder.iv_item.setBackgroundColor(ContextCompat.getColor(MainActivity.context, R.color.bg_calendar_out));
+                holder.tv_item.setVisibility(View.INVISIBLE);
+                holder.iv_item.setVisibility(View.INVISIBLE);
+
+                //holder.tv_item.setTextColor(ContextCompat.getColor(MainActivity.context, R.color.textColor_out));
+                //holder.iv_item.setBackgroundColor(ContextCompat.getColor(MainActivity.context, R.color.bg_calendar_out));
                 holder.iv_item.setImageBitmap(null);
             }
         }

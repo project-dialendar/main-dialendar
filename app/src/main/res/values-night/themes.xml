@@ -1,17 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.Maindialendar" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/bg_calendar</item>
+        <item name="colorPrimaryDark">@color/bg_calendar_out</item>
+        <item name="colorAccent">@color/red</item>
+        <item name="colorSecondary">@color/lineColor</item>
+        <item name="backgroundColor">@color/background</item>
+        <item name="android:textColor">@color/textColor_out</item>
+        <item name="android:textColorPrimary">@color/textColor</item>
 
 
         <item name="android:statusBarColor">@color/black</item>
-        <!-- Customize your theme here. -->
 
         <!-- title delete-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
-        <!-- Customize your theme here. -->
-
-
     </style>
 </resources>

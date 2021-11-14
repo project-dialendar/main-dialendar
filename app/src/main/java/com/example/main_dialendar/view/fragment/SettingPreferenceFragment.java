@@ -22,7 +22,7 @@ import com.example.main_dialendar.view.activity.SettingActivity;
 public class SettingPreferenceFragment extends PreferenceFragment {
 
     // 로컬 저장
-    SharedPreferences prefs;
+    public static SharedPreferences prefs;
 
     // 메모지 설정
     PreferenceScreen memoScreen;
