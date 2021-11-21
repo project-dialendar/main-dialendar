@@ -12,9 +12,8 @@ import android.widget.BaseAdapter;
 import androidx.annotation.Nullable;
 
 import com.example.main_dialendar.R;
-import com.example.main_dialendar.util.ThemeUtil;
+import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.util.setting.SharedPrefManager;
-import com.example.main_dialendar.view.activity.MainActivity;
 import com.example.main_dialendar.view.activity.SettingActivity;
 
 /**

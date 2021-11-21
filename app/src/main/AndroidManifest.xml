@@ -20,9 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Maindialendar">
         <activity
-            android:name=".view.activity.LockActivity"
-            android:exported="true" />
-        <activity
             android:name=".view.activity.SettingActivity"
             android:screenOrientation="landscape"></activity>
         <activity
@@ -42,6 +39,11 @@
         <activity
             android:name=".view.activity.DiaryActivity"
             android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".view.activity.LockActivity"
+            android:exported="true"></activity>
+        <receiver android:name=".util.lock.ScreenReceiver"></receiver>
+        <service android:name=".util.lock.ScreenService"></service>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.main_dialendar.util;
+package com.example.main_dialendar.util.theme;
 
 import android.content.Context;
 import android.content.SharedPreferences;
