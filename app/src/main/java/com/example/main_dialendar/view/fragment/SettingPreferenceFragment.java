@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.util.ThemeUtil;
+import com.example.main_dialendar.util.setting.SharedPrefManager;
 import com.example.main_dialendar.view.activity.MainActivity;
 import com.example.main_dialendar.view.activity.SettingActivity;
 
@@ -23,6 +24,8 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
     // 로컬 저장
     public static SharedPreferences prefs;
+
+    SharedPrefManager mSharedPrefs;
 
     // 메모지 설정
     PreferenceScreen memoScreen;
@@ -46,6 +49,7 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.settings_preference);  // xml 파일과 연동
+        mSharedPrefs = SharedPrefManager.getInstance(SettingActivity.context);
         memoScreen = (PreferenceScreen) findPreference("memo_screen");
         memoPreference = (ListPreference)findPreference("memo_list");
         fontPreference = (ListPreference)findPreference("font_list");
@@ -64,7 +68,7 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         }
 
         if(!prefs.getString("font_list", "").equals("")) {
-            fontPreference.setSummary(prefs.getString("memo_list", "굴림"));
+            fontPreference.setSummary(prefs.getString("memo_list", "Maruburi"));
         }
 
         if(!prefs.getBoolean("message", false)) {
@@ -100,8 +104,18 @@ public class SettingPreferenceFragment extends PreferenceFragment {
             }
 
             if (key.equals("font_list")) {
+                if (prefs.getString("font_list", "").equals("Maruburi")) {
+                    //
+                }
+                else if (prefs.getString("font_list", "").equals("Default")){
+                    //
+                }
+                else {
+                    // add
+                }
 
-
+                fontPreference.setSummary(prefs.getString("font_list", "Maruburi"));
+                mSharedPrefs.setFont(prefs.getString("font_list", "Maruburi"));
             }
 
             if (key.equals("message")) {
@@ -130,10 +144,15 @@ public class SettingPreferenceFragment extends PreferenceFragment {
             }
 
             if (key.equals("lock")) {
-                if (prefs.getBoolean("lock", false))
+                if (prefs.getBoolean("lock", false)) {
                     lockPreference.setSummary("사용");
-                else
+                    mSharedPrefs.setLockOn(true);
+
+                }
+                else{
                     lockPreference.setSummary("사용 안 함");
+                    mSharedPrefs.setLockOn(false);
+                }
             }
 
             // 2 deqth PreferenceScreen 내부에서 발생한 설정 내용을 적용시키기 위함
