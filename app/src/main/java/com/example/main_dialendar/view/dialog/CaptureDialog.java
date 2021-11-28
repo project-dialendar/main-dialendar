@@ -3,6 +3,7 @@ package com.example.main_dialendar.view.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Debug;
 import android.os.Environment;
 import android.util.Log;
@@ -12,12 +13,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.activity.MediaScanner;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Date;
 
 public class CaptureDialog {
     private Context context;
@@ -27,12 +30,13 @@ public class CaptureDialog {
     }
 
     // 호출할 다이얼로그 함수 정의
-    public void callCaptureDialog(final TextView main_label) {
+    public void callCaptureDialog(String date) {
 
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_capture);
         dialog.show();
+        Log.i(TAG,"캡쳐 다이얼로그 호출 성공");
 
         final LinearLayout capture_target_Layout = (LinearLayout) dialog.findViewById(R.id.capture_target_Layout);
         final TextView tv_capture_date = (TextView) dialog.findViewById(R.id.tv_capture_date);
@@ -42,8 +46,33 @@ public class CaptureDialog {
         final Button btn_capture_cancel = (Button) dialog.findViewById(R.id.btn_capture_cancel);
         final Button btn_capture_this = (Button) dialog.findViewById(R.id.btn_capture_this);
 
-        Log.i(TAG,"캡쳐 다이얼로그 호출 성공");
+        String title = date;
+
+        btn_capture_this.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // '일기 저장' 버튼
+                Request_Capture(capture_target_Layout, title);
+                Toast.makeText(context,"일기를 저장했습니다.",Toast.LENGTH_SHORT).show();
+
+                // 커스텀 다이얼로그 종료
+                dialog.dismiss();
+            }
+        });
+
+        btn_capture_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // '캡쳐 취소' 버튼
+                Toast.makeText(context,"캡쳐를 취소했습니다.",Toast.LENGTH_SHORT).show();
+
+                // 커스텀 다이얼로그 종료
+                dialog.dismiss();
+            }
+        });
+
     }
+
 
     /**
      * 부분 영역 캡쳐 메소드
