@@ -3,8 +3,7 @@ package com.example.main_dialendar.view.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.os.Debug;
+import android.media.Image;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.example.main_dialendar.view.activity.MediaScanner;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Date;
 
 public class CaptureDialog {
     private Context context;
@@ -30,8 +28,9 @@ public class CaptureDialog {
     }
 
     // 호출할 다이얼로그 함수 정의
-    public void callCaptureDialog(String date) {
+    public void callCaptureDialog(String date, Bitmap diary_image, String diary_text) {
 
+        // 다이얼로그 호출
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_capture);
@@ -47,6 +46,10 @@ public class CaptureDialog {
         final Button btn_capture_this = (Button) dialog.findViewById(R.id.btn_capture_this);
 
         String title = date;
+
+        tv_capture_date.setText(date);
+        iv_captrue_image.setImageBitmap(diary_image);
+        tv_capture_diary.setText(diary_text);
 
         btn_capture_this.setOnClickListener(new View.OnClickListener() {
             @Override
