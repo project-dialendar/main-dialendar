@@ -30,8 +30,10 @@
         <entry key="..\:/main-dialendar/app/src/main/res/layout/activity_diary.xml" value="0.22" />
         <entry key="..\:/main-dialendar/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/main-dialendar/app/src/main/res/layout/activity_setting.xml" value="0.1" />
+        <entry key="..\:/main-dialendar/app/src/main/res/layout/dialog_capture.xml" value="0.4466666666666667" />
         <entry key="..\:/main-dialendar/app/src/main/res/layout/dialog_writing.xml" value="0.16666666666666666" />
         <entry key="..\:/main-dialendar/app/src/main/res/layout/dialog_writing_options.xml" value="0.1" />
+        <entry key="..\:/main-dialendar/app/src/main/res/layout/dialog_year.xml" value="0.17395833333333333" />
         <entry key="..\:/main-dialendar/app/src/main/res/layout/item_calendar_day_of_week.xml" value="0.1" />
         <entry key="..\:/main-dialendar/app/src/main/res/layout/item_navigation.xml" value="0.1" />
         <entry key="..\:/main-dialendar/app/src/main/res/menu/nav_menu.xml" value="0.18102564102564103" />
@@ -48,7 +50,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.1206286836935167" />
+        <option name="scale" value="0.3333333333333333" />
       </ProjectState>
     </option>
   </component>
