@@ -7,8 +7,8 @@
 
     <LinearLayout
         android:id="@+id/capture_target_Layout"
-        android:layout_width="239dp"
-        android:layout_height="442dp"
+        android:layout_width="208dp"
+        android:layout_height="327dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
@@ -27,8 +27,8 @@
 
         <ImageView
             android:id="@+id/iv_captrue_image"
-            android:layout_width="wrap_content"
-            android:layout_height="276dp"
+            android:layout_width="match_parent"
+            android:layout_height="208dp"
             android:paddingHorizontal="20dp"
             app:srcCompat="@drawable/empty_photo" />
 
@@ -42,14 +42,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="207dp"
-        android:layout_height="0dp"
+        android:layout_width="309dp"
+        android:layout_height="51dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/capture_target_Layout">
 
         <Button
             android:id="@+id/btn_capture_cancel"
