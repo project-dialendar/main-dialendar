@@ -1,5 +1,6 @@
 package com.example.main_dialendar.view.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.util.setting.SharedPrefManager;
+import com.example.main_dialendar.view.activity.LockActivity;
 import com.example.main_dialendar.view.activity.SettingActivity;
 
 /**
@@ -147,6 +149,9 @@ public class SettingPreferenceFragment extends PreferenceFragment {
                     lockPreference.setSummary("사용");
                     mSharedPrefs.setLockOn(true);
 
+                    Intent intent = new Intent(SettingActivity.context, LockActivity.class);
+                    intent.putExtra("lock", 0);
+                    startActivity(intent);
                 }
                 else{
                     lockPreference.setSummary("사용 안 함");

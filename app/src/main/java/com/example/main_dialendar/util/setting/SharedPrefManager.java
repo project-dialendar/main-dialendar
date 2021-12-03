@@ -6,13 +6,14 @@ import android.content.SharedPreferences;
 public class SharedPrefManager {
 
     private static SharedPrefManager mInstance;
-    private static final String SHARED_PREFS_FILE_NAME = "Dialendar";
-
     private static SharedPreferences mSharedPrefs;
     private static SharedPreferences.Editor mEdit;
 
+    private static final String SHARED_PREFS_FILE_NAME = "Dialendar";
+
     private static final String FONT_KEY = "Maruburi";
     private static final String LOCK_KEY = "LockOnOff";
+    private static final String PW_KEY = "Password";
 
     public SharedPrefManager(Context context) {
         mSharedPrefs = context.getSharedPreferences(
@@ -45,6 +46,13 @@ public class SharedPrefManager {
     public boolean getLockOff() {
         return mSharedPrefs.getBoolean(LOCK_KEY, false);
     }
+
+    public void setPassword(int pw) {
+        mEdit.putInt(PW_KEY, pw);
+        mEdit.commit();
+    }
+
+    public int getPassword() { return mSharedPrefs.getInt(PW_KEY, -1); }
 
     // clear
     public static void destroyPref() {
