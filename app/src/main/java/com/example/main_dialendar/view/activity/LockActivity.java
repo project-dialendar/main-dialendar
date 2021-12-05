@@ -81,6 +81,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         }
 
+
         int flag = getIntent().getIntExtra("lock", 1);
         if (flag == 0) {
             pw = new Stack<>();

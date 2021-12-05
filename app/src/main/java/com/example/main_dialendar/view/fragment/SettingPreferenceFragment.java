@@ -13,8 +13,8 @@ import android.widget.BaseAdapter;
 import androidx.annotation.Nullable;
 
 import com.example.main_dialendar.R;
-import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.util.setting.SharedPrefManager;
+import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.view.activity.LockActivity;
 import com.example.main_dialendar.view.activity.SettingActivity;
 
@@ -24,9 +24,8 @@ import com.example.main_dialendar.view.activity.SettingActivity;
 public class SettingPreferenceFragment extends PreferenceFragment {
 
     // 로컬 저장
-    public static SharedPreferences prefs;
-
-    SharedPrefManager mSharedPrefs;
+    public static SharedPreferences localPrefs;
+    SharedPrefManager prefManager;
 
     // 메모지 설정
     PreferenceScreen memoScreen;
@@ -50,7 +49,8 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.settings_preference);  // xml 파일과 연동
-        mSharedPrefs = SharedPrefManager.getInstance(SettingActivity.context);
+
+        // 변수 세팅
         memoScreen = (PreferenceScreen) findPreference("memo_screen");
         memoPreference = (ListPreference)findPreference("memo_list");
         fontPreference = (ListPreference)findPreference("font_list");
@@ -58,109 +58,125 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         lockPreference = (SwitchPreference)findPreference("lock");
         darkmodePreference = (ListPreference)findPreference("darkmode");
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        // sharedPreferences 연결
+        prefManager = SharedPrefManager.getInstance(getActivity());
+        localPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         // 디폴트 값 설정
-        if(prefs.getBoolean("memo", false)) {
-            memoScreen.setSummary("사용");
-        }
-        if(!prefs.getString("memo_list", "").equals("")) {
-            memoPreference.setSummary(prefs.getString("memo_list", "메모지"));
-        }
-
-        if(!prefs.getString("font_list", "").equals("")) {
-            fontPreference.setSummary(prefs.getString("memo_list", "Maruburi"));
-        }
-
-        if(!prefs.getBoolean("message", false)) {
-            messagePreference.setSummary("사용");
-        }
-
-        if(prefs.getBoolean("lock", false)) {
-            lockPreference.setSummary("사용");
-        }
-
-        if(!prefs.getString("darkmode", "").equals("")) {
-            darkmodePreference.setSummary(prefs.getString("darkmode", "Default"));
-        }
+        setDefaultInPrefs();
 
         // 리스너 연결
-        prefs.registerOnSharedPreferenceChangeListener(prefListener);
+        localPrefs.registerOnSharedPreferenceChangeListener(prefListener);
     }
 
-    // 설정 리스트에서 사용되는 리스너 (아직 구현 x)
+    // 디폴트 값 설정
+    private void setDefaultInPrefs() {
+        if(localPrefs.getBoolean("memo", false))
+            memoScreen.setSummary("사용");
+
+        if(!localPrefs.getString("memo_list", "").equals(""))
+            memoPreference.setSummary(localPrefs.getString("memo_list", "메모지"));
+
+        if(!localPrefs.getString("font_list", "").equals(""))
+            fontPreference.setSummary(localPrefs.getString("memo_list", "Maruburi"));
+
+        if(!localPrefs.getBoolean("message", false))
+            messagePreference.setSummary("사용");
+
+        if(localPrefs.getBoolean("lock", false))
+            lockPreference.setSummary("사용");
+
+        if(!localPrefs.getString("darkmode", "").equals(""))
+            darkmodePreference.setSummary(localPrefs.getString("darkmode", "Default"));
+    }
+
+    // 설정 리스트에서 사용되는 리스너
     SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
+            // 곧 삭제할 코드
             if (key.equals("memo")) {
-                if (prefs.getBoolean("memo", false))
+                if (localPrefs.getBoolean("memo", false))
                     memoScreen.setSummary("사용");
                 else
                     memoScreen.setSummary("사용 안 함");
             }
 
             if (key.equals("memo_list")) {
-
+                //?
             }
 
-            if (key.equals("font_list")) {
-                if (prefs.getString("font_list", "").equals("Maruburi")) {
-                    //
-                }
-                else if (prefs.getString("font_list", "").equals("Default")){
-                    //
-                }
-                else {
-                    // add
-                }
+            if (key.equals("font_list"))
+                setFont();
 
-                fontPreference.setSummary(prefs.getString("font_list", "Maruburi"));
-                mSharedPrefs.setFont(prefs.getString("font_list", "Maruburi"));
-            }
+            if (key.equals("message"))
+                setMessage();
 
-            if (key.equals("message")) {
-                if (prefs.getBoolean("message", false))
-                    messagePreference.setSummary("사용");
-                else
-                    messagePreference.setSummary("사용 안 함");
-            }
+            if (key.equals("darkmode"))
+                setDarkmode();
 
-            if (key.equals("darkmode")) {
-                if (prefs.getString("darkmode", "").equals("Dark")) {
-                    darkmodePreference.setSummary("Dark");
-                    themeColor = ThemeUtil.DARK_MODE;
-                }
-                else if (prefs.getString("darkmode", "").equals("Light")){
-                    darkmodePreference.setSummary("Light");
-                    themeColor = ThemeUtil.LIGHT_MODE;
-                }
-                else {
-                    darkmodePreference.setSummary("Default");
-                    themeColor = ThemeUtil.DEFAULT_MODE;
-                }
-
-                ThemeUtil.applyTheme(themeColor);
-                ThemeUtil.modSave(SettingActivity.context, themeColor);
-            }
-
-            if (key.equals("lock")) {
-                if (prefs.getBoolean("lock", false)) {
-                    lockPreference.setSummary("사용");
-                    mSharedPrefs.setLockOn(true);
-
-                    Intent intent = new Intent(SettingActivity.context, LockActivity.class);
-                    intent.putExtra("lock", 0);
-                    startActivity(intent);
-                }
-                else{
-                    lockPreference.setSummary("사용 안 함");
-                    mSharedPrefs.setLockOn(false);
-                }
-            }
+            if (key.equals("lock"))
+                setLockmode();
 
             // 2 deqth PreferenceScreen 내부에서 발생한 설정 내용을 적용시키기 위함
             ((BaseAdapter) getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
         }
     };
+
+    // 폰트 선택 리스너
+    private void setFont() {
+        if (localPrefs.getString("font_list", "").equals("Maruburi")) {
+            //
+        }
+        else if (localPrefs.getString("font_list", "").equals("Default")){
+            //
+        }
+        else {
+            // add
+        }
+
+        fontPreference.setSummary(localPrefs.getString("font_list", "Maruburi"));
+        prefManager.setFont(localPrefs.getString("font_list", "Maruburi"));
+    }
+
+    // 메시지 허용 리스너
+    private void setMessage() {
+        if (localPrefs.getBoolean("message", false))
+            messagePreference.setSummary("사용");
+        else
+            messagePreference.setSummary("사용 안 함");
+    }
+
+    // 다크모드 설정 리스너
+    private void setDarkmode() {
+        if (localPrefs.getString("darkmode", "Default").equals("Dark"))
+            themeColor = ThemeUtil.DARK_MODE;
+        else if (localPrefs.getString("darkmode", "Default").equals("Light"))
+            themeColor = ThemeUtil.LIGHT_MODE;
+        else
+            themeColor = ThemeUtil.DEFAULT_MODE;
+
+        ThemeUtil.applyTheme(themeColor);
+        ThemeUtil.modSave(SettingActivity.context, themeColor);
+
+        darkmodePreference.setSummary(localPrefs.getString("darkmode", "Default"));
+        prefManager.setDarkmode(localPrefs.getString("darkmode", "Default"));
+    }
+
+    // 잠금모드 설정 리스너
+    private void setLockmode() {
+        if (localPrefs.getBoolean("lock", false)) {
+            lockPreference.setSummary("사용");
+            prefManager.setLockOn(true);
+
+            Intent intent = new Intent(SettingActivity.context, LockActivity.class);
+            intent.putExtra("lock", 0);
+            startActivity(intent);
+        }
+        else{
+            lockPreference.setSummary("사용 안 함");
+            prefManager.setLockOn(false);
+        }
+    }
 }

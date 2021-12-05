@@ -41,7 +41,8 @@
             android:screenOrientation="landscape"></activity>
         <activity
             android:name=".view.activity.LockActivity"
-            android:exported="true"></activity>
+            android:exported="true"
+            android:screenOrientation="landscape"></activity>
         <receiver android:name=".util.lock.ScreenReceiver"></receiver>
         <service android:name=".util.lock.ScreenService"></service>
     </application>

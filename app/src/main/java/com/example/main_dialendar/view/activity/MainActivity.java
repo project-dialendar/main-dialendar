@@ -57,20 +57,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tv_year;
     private ImageButton btn_write;
 
+    // 년도 버튼 클릭 이벤트 리스너
+    DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month);
+            setCalendarView(calendar);
+        }
+    };
+
     // 사이드바 레이아웃
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
-    DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            mCal.set(Calendar.YEAR, year);
-            mCal.set(Calendar.MONTH, month);
-            getCalendar(mCal);
-        }
-    };
-    
-    // 그리드뷰 어댑터
+    // 캘린더뷰 어댑터
     private CalendarAdapter calendarAdapter;
     private WeekAdapter day_of_weekGridAdapter;
 
@@ -83,23 +84,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GridView gv_day_of_week;
 
     // 캘린더 변수
-    private Calendar mCal;
+    private Calendar calendar;
+
+    // 다크 모드 설정
+    private String themeColor;
 
     public static Context context;
 
-    // 구글 드라이브 상수 & 변수
-//    private static final int DRIVE_SIGN_IN = 9002;
-//    GoogleSignInClient client;
-//    DriveServiceHelper driveServiceHelper;
-
-    // 다크 모드 설정
-    String themeColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 변수 세팅
         context = getApplicationContext();
 
         tv_month = findViewById(R.id.tv_month);
@@ -118,15 +116,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
 
-//        // 구글 로그인 옵션 설정
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.google_default_web_client_id))
-//                .requestEmail()
-//                .build();
-
-//        client = GoogleSignIn.getClient(this, gso);
-//        mAuth = FirebaseAuth.getInstance();
-
+        // 드로어바 메뉴 세팅
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -137,34 +127,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                         break;
                     case (R.id.backup) :
-                        //requestSignIn();
-                        TedPermission.with(MainActivity.this)
-                                .setPermissionListener(permissionListener)
-                                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-                                .check();
+                        createBackupFile();
                         break;
-//                    case (R.id.restore) :
-//                        try {
-//                            File sd = Environment.getExternalStorageDirectory();
-//                            File data = Environment.getDataDirectory();
-//
-//                            if (sd.canWrite()) {
-//                                File currentDB = new File(sd, "/Download/dialendar.db");
-//                                File restoreDB = new File(data, "/data/com.example.main_dialendar/databases/dialendar.db");
-//
-//                                FileChannel src = new FileInputStream(currentDB).getChannel();
-//                                FileChannel dst = new FileOutputStream(restoreDB).getChannel();
-//                                dst.transferFrom(src, 0, src.size());
-//
-//                                src.close();
-//                                dst.close();
-//                                Toast.makeText(MainActivity.this,"복원을 성공했습니다.", Toast.LENGTH_LONG).show();
-//                            }
-//                        } catch (Exception e) {
-//                            Toast.makeText(MainActivity.this,"복원을 실패했습니다.", Toast.LENGTH_LONG).show();
-//                        }
-//                        break;
                     case (R.id.mail) :
                         sendEmailToAdmin("[일력 문의사항]", new String[]{"apps@gmail.com"});
                         break;
@@ -175,20 +139,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 상단 툴바 설정
         setToolbar();
+        
+        // 캘린더뷰 생성
+        setCalendarView(getCalendar(savedInstanceState));
 
-        mCal = Calendar.getInstance();
-
-        // bundle에 저장되어 있는 데이터 가져오기
-        if(savedInstanceState != null) {
-            mCal.set(savedInstanceState.getInt("year"), savedInstanceState.getInt("month"), 1);
-        }
-        else
-            mCal.set(Calendar.DAY_OF_MONTH, 1);
-        getCalendar(mCal);
-
+        // darkmode setting
         setThemeMode();
     }
 
+    // 캘린더 인스턴스 생성 또는 불러오기
+    private Calendar getCalendar(Bundle savedInstanceState) {
+
+        // 캘린더 인스턴스 생성
+        calendar = Calendar.getInstance();
+
+        // bundle에 저장되어 있는 데이터 가져오기
+        if(savedInstanceState != null) {
+            calendar.set(savedInstanceState.getInt("year"), savedInstanceState.getInt("month"), 1);
+        }
+        else
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        return calendar;
+    }
+
+    // 다크모드 여부에 따라 테마 설정
     private void setThemeMode() {
         themeColor = ThemeUtil.modLoad(getApplicationContext());
         ThemeUtil.applyTheme(themeColor);
@@ -197,22 +172,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        mCal.set(Calendar.DAY_OF_MONTH, 1);
-        getCalendar(mCal);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        setCalendarView(calendar);
     }
 
-    // 구글 드라이브 API - 드라이브 접속 전에 구글 로그인 요청
-//    private void requestSignIn() {
-//        GoogleSignInOptions signInOptions =
-//                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestEmail()
-//                .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
-//                .build();
-//        GoogleSignInClient client = GoogleSignIn.getClient(this, signInOptions);
-//
-//        startActivityForResult(client.getSignInIntent(), DRIVE_SIGN_IN);
-//    }
-
+    // 툴바 설정
     private void setToolbar() {
         setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayShowCustomEnabled(true);    // 커스터마이징을 위해 필요
@@ -241,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 달력 세팅
      * @param calendar
      */
-    private void getCalendar(Calendar calendar) {
+    private void setCalendarView(Calendar calendar) {
         int lastMonthStartDay;
         int dayOfMonth;
         int thisMonthLastDay;
@@ -264,8 +228,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lastMonthStartDay -= (dayOfMonth-1)-1;
 
         // 년월 표시
-        tv_month.setText((mCal.get(Calendar.MONTH)+1)+"");
-        tv_year.setText(mCal.get(Calendar.YEAR)+"");
+        tv_month.setText((this.calendar.get(Calendar.MONTH)+1)+"");
+        tv_year.setText(this.calendar.get(Calendar.YEAR)+"");
 
         Day day;
         Log.e("DayOfMonth", dayOfMonth+"");
@@ -297,8 +261,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initCalendarAdapter();
     }
 
+    // 캘린더뷰 어댑터 초기화
     private void initCalendarAdapter() {
-        calendarAdapter = new CalendarAdapter(this, mCal.get(Calendar.YEAR), mCal.get(Calendar.MONTH), dayList);
+        calendarAdapter = new CalendarAdapter(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), dayList);
         calendarAdapter.setClickListener(this);
         rv_month.setAdapter(calendarAdapter);
     }
@@ -320,9 +285,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    // 캘린더뷰 아이템 클릭 리스너
     @Override
     public void onItemClick(View view, String day, boolean isInMonth) {
-        Calendar itemCal = mCal;
+        Calendar itemCal = calendar;
         itemCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
         String date = new SimpleDateFormat("yyyy.MM.dd.").format(itemCal.getTime());
 
@@ -337,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+    // 드로어바 클릭 리스너
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -365,68 +332,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(email);
     }
 
-    // 구글 드라이브 API - 구글 로그인 화면 연결 메소드
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == DRIVE_SIGN_IN) {
-//            if (resultCode == Activity.RESULT_OK && data != null) {
-//                handleSignInResult(data);
-//            }
-//        }
-//    }
-
-    // 구글 드라이브 API - 로그인 처리 메소드
-//    private void handleSignInResult(Intent result) {
-//        GoogleSignIn.getSignedInAccountFromIntent(result)
-//                .addOnSuccessListener(googleAccount -> {
-//                    GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE));
-//                    credential.setSelectedAccount(googleAccount.getAccount());
-//
-//                    Drive googleDriverService = new Drive.Builder(
-//                            AndroidHttp.newCompatibleTransport(),
-//                            new GsonFactory(),
-//                            credential)
-//                            .setApplicationName("Drive API Migration")
-//                            .build();
-//
-//                    driveServiceHelper = new DriveServiceHelper(googleDriverService);
-//
-//                    Toast.makeText(MainActivity.this, "로그인 성공!", Toast.LENGTH_LONG);
-//                    createFile();
-//                })
-//                .addOnFailureListener(exception -> Toast.makeText(MainActivity.this, exception + "", Toast.LENGTH_LONG));
-//    }
-//
-    // 구글 드라이브 API - 백업 메소드
-//    private void createFile() {
-//        if (driveServiceHelper != null) {
-//            Log.d("###", "Creating a file.");
-//
-//            driveServiceHelper.createFile()
-//                    .addOnSuccessListener(new OnSuccessListener<String>() {
-//                        @Override
-//                        public void onSuccess(String s) {
-//                            Toast.makeText(MainActivity.this, "백업 성공!", Toast.LENGTH_LONG);
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Toast.makeText(MainActivity.this, "백업 실패!", Toast.LENGTH_LONG);
-//                        }
-//                    });
-//        }
-//    }
-
-    // 화면 전환 이후에도 달력 상태를 유지하도록 함
+    // 화면 전환 이후에도 달력 상태를 유지
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt("year", mCal.get(Calendar.YEAR));
-        outState.putInt("month", mCal.get(Calendar.MONTH));
+        outState.putInt("year", calendar.get(Calendar.YEAR));
+        outState.putInt("month", calendar.get(Calendar.MONTH));
+    }
+
+    // 백업 파일 생성
+    private void createBackupFile() {
+        //requestSignIn();
+        TedPermission.with(MainActivity.this)
+                .setPermissionListener(permissionListener)
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+                .check();
     }
 
     // 데이터베이스 백업에 필요한 권한 요청
