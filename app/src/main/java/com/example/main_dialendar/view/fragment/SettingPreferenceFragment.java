@@ -171,7 +171,7 @@ public class SettingPreferenceFragment extends PreferenceFragment {
             prefManager.setLockOn(true);
 
             Intent intent = new Intent(SettingActivity.context, LockActivity.class);
-            intent.putExtra("lock", 0);
+            intent.putExtra("lock", 10000);
             startActivity(intent);
         }
         else{

@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.util.setting.SharedPrefManager;
@@ -28,18 +31,29 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     Button btn_9;
     Button btn_delete;
 
+    ImageView iv_password1;
+    ImageView iv_password2;
+    ImageView iv_password3;
+    ImageView iv_password4;
+
     TextView tv_password;
 
     SharedPrefManager mSharedPref;
 
-    int cnt = 0;
+    int flag, cnt = 0;
     Stack<Integer> pw;
+
+    private static final int SETTING_FIRST = 10000;
+    private static final int SETTING_SECOND = 10001;
+    private static final int LOCKMODE = 10002;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lock);
 
+        // 변수 설정
         mSharedPref = SharedPrefManager.getInstance(getApplicationContext());
 
         btn_0 = findViewById(R.id.btn_0);
@@ -75,53 +89,25 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         btn_delete = findViewById(R.id.btn_delete);
         btn_delete.setOnClickListener(this);
 
+        iv_password1 = findViewById(R.id.iv_password1);
+        iv_password2 = findViewById(R.id.iv_password2);
+        iv_password3 = findViewById(R.id.iv_password3);
+        iv_password4 = findViewById(R.id.iv_password4);
+
         tv_password = findViewById(R.id.tv_password);
 
-        if (mSharedPref.getLockOff()) {
+        flag = getIntent().getIntExtra("lock", LOCKMODE);
+        pw = new Stack<>();
+
+        // 화면이 꺼질 때마다 액티비티 실행
+        if (mSharedPref.getLockOff())
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        }
-
-
-        int flag = getIntent().getIntExtra("lock", 1);
-        if (flag == 0) {
-            pw = new Stack<>();
-            if (cnt == 4) {
-                // pw 저장
-                int num = 0;
-                for (int i = 0; i < 4; i++) num += pw.pop() * Math.pow(10, i);
-                mSharedPref.setPassword(num);
-
-                // 화면 전환 (초기화)
-                tv_password.setText("한번 더 입력해주세요!");
-                cnt = 0;
-                flag = 1;
-
-            }
-        } else if (flag == 1) {
-            if (cnt == 4) {
-                int num = 0;
-                for (int i = 0; i < 4; i++) num += pw.pop() * Math.pow(10, i);
-                if (num == mSharedPref.getPassword()) {
-                    // pw 설정 완료
-                    // 되돌아가기
-                    finish();
-                }
-            } else {
-                // 일반 잠금 모드
-                if (cnt == 4) {
-                    int num = 0;
-                    for (int i = 0; i < 4; i++) num += pw.pop() * Math.pow(10, i);
-                    if (num == mSharedPref.getPassword()) {
-                        startActivity(new Intent(LockActivity.this, MainActivity.class));
-                    }
-                }
-            }
-        }
     }
 
     @Override
     public void onClick(View view) {
         Button btn = (Button) view;
+
         if (view == btn_delete && cnt > 0) {
             cnt--;
             pw.pop();
@@ -129,6 +115,73 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         else if (cnt < 4) {
             cnt++;
             pw.add(Integer.parseInt(btn.getText().toString()));
+
+            if (cnt == 4) checkPassword();
+        }
+
+        changeIvPassword();
+    }
+
+    // 비밀번호 4자리 입력이 끝난 뒤 확인 절차
+    private void checkPassword() {
+
+        int num = 0;
+        for (int i = 0; i < 4; i++) num += pw.pop() * Math.pow(10, i);
+
+        switch(flag) {
+            case SETTING_FIRST:
+                mSharedPref.setPassword(num);
+
+                // 화면 전환 (초기화)
+                tv_password.setText("한번 더 입력해주세요!");
+                cnt = 0;
+                flag = SETTING_SECOND;
+                break;
+
+            case SETTING_SECOND:
+                if (num == mSharedPref.getPassword()) {
+                    Toast.makeText(getApplicationContext(), "비밀번호 설정을 완료했습니다.", Toast.LENGTH_LONG);
+                    finish();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG);
+                    cnt = 0;
+                }
+                break;
+
+            case LOCKMODE:
+                if (num == mSharedPref.getPassword()) {
+                    startActivity(new Intent(LockActivity.this, MainActivity.class));
+                }
+                break;
         }
     }
+
+    // 비밀번호 숫자 입력할 때마다 이미지뷰 변경
+    private void changeIvPassword() {
+        switch (cnt) {
+            case 0:
+                iv_password1.setImageResource(R.drawable.ic_baseline_password_blank);
+                iv_password2.setImageResource(R.drawable.ic_baseline_password_blank);
+                iv_password3.setImageResource(R.drawable.ic_baseline_password_blank);
+                iv_password4.setImageResource(R.drawable.ic_baseline_password_blank);
+                break;
+            case 1:
+                iv_password1.setImageResource(R.drawable.ic_baseline_password_fill);
+                iv_password2.setImageResource(R.drawable.ic_baseline_password_blank);
+                break;
+            case 2:
+                iv_password2.setImageResource(R.drawable.ic_baseline_password_fill);
+                iv_password3.setImageResource(R.drawable.ic_baseline_password_blank);
+                break;
+            case 3:
+                iv_password3.setImageResource(R.drawable.ic_baseline_password_fill);
+                iv_password4.setImageResource(R.drawable.ic_baseline_password_blank);
+                break;
+            case 4:
+                iv_password4.setImageResource(R.drawable.ic_baseline_password_fill);
+                break;
+        }
+    }
+
 }
