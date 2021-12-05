@@ -42,8 +42,8 @@ public class CaptureDialog {
         final ImageView iv_captrue_image = (ImageView) dialog.findViewById(R.id.iv_captrue_image);
         final TextView tv_capture_diary = (TextView) dialog.findViewById(R.id.tv_capture_diary);
 
-        final Button btn_capture_cancel = (Button) dialog.findViewById(R.id.btn_capture_cancel);
-        final Button btn_capture_this = (Button) dialog.findViewById(R.id.btn_capture_this);
+        final TextView btn_capture_cancel = (TextView) dialog.findViewById(R.id.btn_capture_cancel);
+        final TextView btn_capture_this = (TextView) dialog.findViewById(R.id.btn_capture_this);
 
         String title = date;
 
@@ -79,10 +79,10 @@ public class CaptureDialog {
 
     /**
      * 부분 영역 캡쳐 메소드
-     * @param view
-     * @param title
+     * @param view 갭쳐할 뷰 지정
+     * @param filename 저장힐 파일 이름
      */
-    public void Request_Capture(View view, String title){
+    public void Request_Capture(View view, String filename){
         if(view==null){ //Null Point Exception ERROR 방지
             System.out.println("::::ERROR:::: view == NULL");
             return;
@@ -104,7 +104,7 @@ public class CaptureDialog {
         String Str_Path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/DCIM/Camera/"; //저장 경로 (String Type 변수)
 
         try{
-            fos = new FileOutputStream(Str_Path+title+".jpg"); // 경로 + 제목 + .jpg로 FileOutputStream Setting
+            fos = new FileOutputStream(Str_Path+filename+".jpg"); // 경로 + 제목 + .jpg로 FileOutputStream Setting
             bitmap.compress(Bitmap.CompressFormat.JPEG,80,fos);
         }catch (Exception e){
             e.printStackTrace();
@@ -114,7 +114,7 @@ public class CaptureDialog {
         MediaScanner ms = MediaScanner.newInstance(context);
 
         try { // TODO : 미디어 스캔
-            ms.mediaScanning(Str_Path + title + ".jpg");
+            ms.mediaScanning(Str_Path + filename + ".jpg");
         }catch (Exception e) {
             e.printStackTrace();
             System.out.println("::::ERROR:::: "+e);

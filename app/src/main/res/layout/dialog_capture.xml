@@ -7,29 +7,32 @@
 
     <LinearLayout
         android:id="@+id/capture_target_Layout"
-        android:layout_width="208dp"
-        android:layout_height="327dp"
+        android:layout_width="191dp"
+        android:layout_height="279dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/background">
 
         <TextView
             android:id="@+id/tv_capture_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="20dp"
-            android:text="2021.11.11"
+            android:text="yyyy.mm.dd."
+            android:fontFamily="@font/maruburittf"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         <ImageView
             android:id="@+id/iv_captrue_image"
-            android:layout_width="match_parent"
-            android:layout_height="208dp"
-            android:paddingHorizontal="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="177dp"
+            android:padding="20dp"
+            android:scaleType="fitXY"
             app:srcCompat="@drawable/empty_photo" />
 
         <TextView
@@ -38,12 +41,14 @@
             android:layout_height="match_parent"
             android:paddingHorizontal="20dp"
             android:text="My diary"
+            android:fontFamily="@font/maruburittf"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="309dp"
-        android:layout_height="51dp"
+        android:id="@+id/button_Layout"
+        android:layout_width="211dp"
+        android:layout_height="34dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:orientation="horizontal"
@@ -51,18 +56,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/capture_target_Layout">
 
-        <Button
+        <TextView
             android:id="@+id/btn_capture_cancel"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="캡쳐 취소" />
+            android:gravity="center"
+            android:text="캡쳐 취소"
+            android:fontFamily="@font/maruburittf" />
 
-        <Button
+        <TextView
             android:id="@+id/btn_capture_this"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="일기 저장" />
+            android:gravity="center"
+            android:text="일기 저장"
+            android:fontFamily="@font/maruburittf" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
