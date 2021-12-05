@@ -132,7 +132,7 @@ public class DiaryActivity extends AppCompatActivity {
                                 // 1. 한 장의 폴라로이드 같은 이미지로 공유
                                 CaptureDialog captureDialog = new CaptureDialog(DiaryActivity.this);
                                 captureDialog.callCaptureDialog(
-                                        dbFormat.format(date),
+                                        mFormat.format(date),
                                         getImageInBitmap(diaryRecord.getImage()),
                                         diaryRecord.getText());
                                 break;
