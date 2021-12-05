@@ -14,6 +14,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // 메인 화면으로 이동
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
