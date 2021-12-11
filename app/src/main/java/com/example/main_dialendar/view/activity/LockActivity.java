@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.main_dialendar.R;
+import com.example.main_dialendar.util.lock.ScreenService;
 import com.example.main_dialendar.util.setting.SharedPrefManager;
 
 import java.util.Stack;
@@ -45,7 +45,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int SETTING_FIRST = 10000;
     private static final int SETTING_SECOND = 10001;
-    private static final int LOCKMODE = 10002;
+
+    private static final int LOCKMODE_ON = 10002;
+    private static final int LOCKMODE_OFF = 99999;
 
 
     @Override
@@ -96,65 +98,92 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         tv_password = findViewById(R.id.tv_password);
 
-        flag = getIntent().getIntExtra("lock", LOCKMODE);
-        pw = new Stack<>();
+        // 잠금화면으로 설정
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
-        // 화면이 꺼질 때마다 액티비티 실행
-        if (mSharedPref.getLockOff())
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        flag = getIntent().getIntExtra("lock", LOCKMODE_ON);
+        pw = new Stack<>();
     }
 
     @Override
     public void onClick(View view) {
         Button btn = (Button) view;
 
-        if (view == btn_delete && cnt > 0) {
-            cnt--;
-            pw.pop();
-        }
+        if (btn == btn_delete && cnt > 0) deletePassword();
         else if (cnt < 4) {
-            cnt++;
-            pw.add(Integer.parseInt(btn.getText().toString()));
-
-            if (cnt == 4) checkPassword();
+            int input = Integer.parseInt(btn.getText().toString());
+            addPassword(input);
         }
 
         changeIvPassword();
     }
 
-    // 비밀번호 4자리 입력이 끝난 뒤 확인 절차
-    private void checkPassword() {
+    private void addPassword(int num) {
+        cnt++;
+        pw.add(num);
 
-        int num = 0;
-        for (int i = 0; i < 4; i++) num += pw.pop() * Math.pow(10, i);
+        if (cnt == 4) checkPassword();
+    }
+
+    private void deletePassword() {
+        cnt--;
+        pw.pop();
+    }
+
+    // 비밀번호 확인 절차
+    private void checkPassword() {
+        int input = 0;
+        for (int i = 0; i < 4; i++) input += pw.pop() * Math.pow(10, i);
 
         switch(flag) {
             case SETTING_FIRST:
-                mSharedPref.setPassword(num);
-
-                // 화면 전환 (초기화)
-                tv_password.setText("한번 더 입력해주세요!");
-                cnt = 0;
-                flag = SETTING_SECOND;
+                readFirstPassword(input);
                 break;
-
             case SETTING_SECOND:
-                if (num == mSharedPref.getPassword()) {
-                    Toast.makeText(getApplicationContext(), "비밀번호 설정을 완료했습니다.", Toast.LENGTH_LONG);
-                    finish();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG);
-                    cnt = 0;
-                }
+                readSecondPassword(input);
                 break;
 
-            case LOCKMODE:
-                if (num == mSharedPref.getPassword()) {
-                    startActivity(new Intent(LockActivity.this, MainActivity.class));
-                }
+            case LOCKMODE_ON:
+                if (input == mSharedPref.getPassword()) finish();
+                else failToOpen();
                 break;
+
+            case LOCKMODE_OFF:
+                if (input == mSharedPref.getPassword()) setLockmodeOff();
+                else failToOpen();
         }
+    }
+
+    private void readFirstPassword(int input) {
+        mSharedPref.setPassword(input);
+
+        tv_password.setText("한번 더 입력해주세요!");
+        cnt = 0;
+        flag = SETTING_SECOND;
+    }
+
+    private void readSecondPassword(int input) {
+        if (input == mSharedPref.getPassword()) {
+            Toast.makeText(LockActivity.this, "비밀번호 설정을 완료했습니다.", Toast.LENGTH_LONG);
+            setLockmodeOn();
+            finish();
+        }
+        else failToOpen();
+    }
+
+    private void setLockmodeOn() {
+        Intent lockService = new Intent(getApplicationContext(), ScreenService.class);
+        startService(lockService);
+    }
+
+    private void setLockmodeOff() {
+        Intent lockService = new Intent(getApplicationContext(), ScreenService.class);
+        stopService(lockService);
+    }
+
+    private void failToOpen() {
+        Toast.makeText(LockActivity.this, "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG);
+        cnt = 0;
     }
 
     // 비밀번호 숫자 입력할 때마다 이미지뷰 변경
@@ -183,5 +212,4 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
-
 }
