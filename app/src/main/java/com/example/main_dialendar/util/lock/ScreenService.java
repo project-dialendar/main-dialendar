@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 
-import androidx.annotation.Nullable;
-
 // LockActivity를 실행
 public class ScreenService extends Service {
 
-    private ScreenReceiver mReceiver = null;
+    private ScreenReceiver receiver = null;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -20,9 +18,9 @@ public class ScreenService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mReceiver = new ScreenReceiver();
+        receiver = new ScreenReceiver();
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(mReceiver, filter);
+        registerReceiver(receiver, filter);
     }
 
     @Override
@@ -30,10 +28,10 @@ public class ScreenService extends Service {
         super.onStartCommand(intent, flags, startId);
         if (intent != null) {
             if (intent.getAction() == null) {
-                if (mReceiver == null) {
-                    mReceiver = new ScreenReceiver();
+                if (receiver == null) {
+                    receiver = new ScreenReceiver();
                     IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
-                    registerReceiver(mReceiver, filter);
+                    registerReceiver(receiver, filter);
                 }
             }
         }
@@ -43,8 +41,8 @@ public class ScreenService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mReceiver != null) {
-            unregisterReceiver(mReceiver);
+        if (receiver != null) {
+            unregisterReceiver(receiver);
         }
     }
 }
