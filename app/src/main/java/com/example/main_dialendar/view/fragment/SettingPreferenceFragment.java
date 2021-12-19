@@ -80,10 +80,14 @@ public class SettingPreferenceFragment extends PreferenceFragment {
     };
 
     private void setMessage() {
-        if (localPrefs.getBoolean("message", false))
+        if (localPrefs.getBoolean("message", false)) {
             messagePreference.setSummary("사용");
-        else
+            prefManager.setMessageOn(true);
+        }
+        else {
             messagePreference.setSummary("사용 안 함");
+            prefManager.setMessageOn(false);
+        }
     }
 
     private void setDarkmode() {

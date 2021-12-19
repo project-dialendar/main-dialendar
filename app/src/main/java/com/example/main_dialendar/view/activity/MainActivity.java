@@ -302,8 +302,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-
     // 드로어바 클릭 리스너
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -317,12 +315,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-    /**
-     * Intent.ACTION_SEND로 이메일 보내기
-     * @param title
-     * @param receiver
-     */
     public void sendEmailToAdmin(String title, String[] receiver) {
         Intent email = new Intent(Intent.ACTION_SEND);
         email.putExtra(Intent.EXTRA_EMAIL, receiver);
@@ -333,7 +325,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(email);
     }
 
-    // 화면 전환 이후에도 달력 상태를 유지
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);

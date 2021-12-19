@@ -43,7 +43,14 @@
             android:exported="true"
             android:screenOrientation="landscape"></activity>
         <receiver android:name=".util.lock.ScreenReceiver"></receiver>
+
         <service android:name=".util.lock.ScreenService"></service>
+        <service android:name=".util.message.FcmService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
