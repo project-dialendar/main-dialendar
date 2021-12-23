@@ -8,6 +8,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.widget.BaseAdapter;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,8 @@ import com.example.main_dialendar.util.setting.SharedPrefManager;
 import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.view.activity.LockActivity;
 import com.example.main_dialendar.view.activity.SettingActivity;
+import com.example.main_dialendar.view.dialog.TimePickerDialog;
+import com.example.main_dialendar.view.dialog.YearPickerDialog;
 
 /**
  * 설정 목록을 보여주는 프레그먼트
@@ -81,8 +84,11 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
     private void setMessage() {
         if (localPrefs.getBoolean("message", false)) {
+            showMessageDialog();
+
             messagePreference.setSummary("사용");
             prefManager.setMessageOn(true);
+
         }
         else {
             messagePreference.setSummary("사용 안 함");
@@ -116,6 +122,14 @@ public class SettingPreferenceFragment extends PreferenceFragment {
             prefManager.setLockOn(false);
             moveToLockActivity(LOCKMODE_OFF);
         }
+    }
+
+    private void showMessageDialog() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity());
+        timePickerDialog.setCanceledOnTouchOutside(false);
+        timePickerDialog.setCancelable(true);
+        timePickerDialog.show();
+
     }
 
     private void moveToLockActivity(int mode) {

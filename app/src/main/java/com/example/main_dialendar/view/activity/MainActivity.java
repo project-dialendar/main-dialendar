@@ -274,10 +274,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_year :
-                YearPickerDialog dialog = new YearPickerDialog();
+                YearPickerDialog dialog = new YearPickerDialog(getApplicationContext());
                 //dialog.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setListener(dateSetListener);
-                dialog.show(getSupportFragmentManager(), "YearPickerTest");
+                dialog.show();
                 break;
 
             case R.id.btn_write :

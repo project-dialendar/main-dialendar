@@ -4,26 +4,20 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.main_dialendar.R;
 
 import java.util.Calendar;
 
-public class YearPickerDialog extends DialogFragment {
+public class YearPickerDialog extends Dialog implements View.OnClickListener{
 
     private static final int MAX_YEAR = 2030;
     private static final int MIN_YEAR = 1980;
@@ -31,43 +25,46 @@ public class YearPickerDialog extends DialogFragment {
     private DatePickerDialog.OnDateSetListener listener;
     public Calendar cal = Calendar.getInstance();
 
+    TextView btn_ok;
+    NumberPicker yearPicker;
+    NumberPicker monthPicker;
+
+    public YearPickerDialog(@NonNull Context context) {
+        super(context);
+    }
+
     public void setListener(DatePickerDialog.OnDateSetListener listener){
         this.listener = listener;
     }
 
-    TextView btn_ok;
-
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.dialog_yearpicker);
 
-        View dialog = inflater.inflate(R.layout.dialog_year, null);
+        yearPicker = findViewById(R.id.picker_year);
+        monthPicker = findViewById(R.id.picker_month);
 
-        btn_ok = dialog.findViewById(R.id.btn_ok);
+        btn_ok = findViewById(R.id.btn_ok);
+        btn_ok.setOnClickListener(this);
 
-        final NumberPicker yearPicker = (NumberPicker) dialog.findViewById(R.id.picker_year);
-        final NumberPicker monthPicker = (NumberPicker) dialog.findViewById(R.id.picker_month);
+        initPicker();
+    }
 
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onDateSet(null, yearPicker.getValue(), monthPicker.getValue()-1, 0);
-                YearPickerDialog.this.getDialog().cancel();
-            }
-        });
-
+    private void initPicker() {
         monthPicker.setMinValue(1);
         monthPicker.setMaxValue(12);
         monthPicker.setValue(cal.get(Calendar.MONTH) + 1);
 
-        int year = cal.get(Calendar.YEAR);
         yearPicker.setMinValue(MIN_YEAR);
         yearPicker.setMaxValue(MAX_YEAR);
-        yearPicker.setValue(year);
+        yearPicker.setValue(cal.get(Calendar.YEAR));
 
-        builder.setView(dialog);
+    }
 
-        return builder.create();
+    @Override
+    public void onClick(View view) {
+        listener.onDateSet(null, yearPicker.getValue(), monthPicker.getValue()-1, 0);
+        YearPickerDialog.this.cancel();
     }
 }
