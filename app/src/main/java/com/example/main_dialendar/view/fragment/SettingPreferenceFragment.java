@@ -2,6 +2,8 @@ package com.example.main_dialendar.view.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
@@ -37,6 +39,7 @@ public class SettingPreferenceFragment extends PreferenceFragment {
     private static final int LOCKMODE_OFF = 99999;
 
     String themeColor;
+    int messageHour = 20, messageMinute = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,10 +88,6 @@ public class SettingPreferenceFragment extends PreferenceFragment {
     private void setMessage() {
         if (localPrefs.getBoolean("message", false)) {
             showMessageDialog();
-
-            messagePreference.setSummary("사용");
-            prefManager.setMessageOn(true);
-
         }
         else {
             messagePreference.setSummary("사용 안 함");
@@ -126,6 +125,8 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
     private void showMessageDialog() {
         TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity());
+        timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        timePickerDialog.setListener(timeSetListener);
         timePickerDialog.setCanceledOnTouchOutside(false);
         timePickerDialog.setCancelable(true);
         timePickerDialog.show();
@@ -143,4 +144,21 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         intent.putExtra("lock", mode);
         startActivity(intent);
     }
+
+    android.app.TimePickerDialog.OnTimeSetListener timeSetListener = new android.app.TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+            // save message's hour and minute
+            messageHour = hour;
+            messageMinute = minute;
+
+            setMessagePrefOn();
+        }
+    };
+
+    private void setMessagePrefOn() {
+        messagePreference.setSummary("사용");
+        prefManager.setMessageOn(true, messageHour, messageMinute);
+    }
+
 }

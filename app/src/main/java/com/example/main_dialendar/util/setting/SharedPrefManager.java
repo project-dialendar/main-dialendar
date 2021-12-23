@@ -17,6 +17,8 @@ public class SharedPrefManager {
     private static final String PASSWORD_KEY = "Password";
     private static final String DARKMODE_KEY = "Darkmode";
     private static final String MESSAGE_KEY = "MessageOnOff";
+    private static final String MESSAGE_HOUR_KEY = "MessageHour";
+    private static final String MESSAGE_MINUTE_KEY = "MessageMinute";
 
     public SharedPrefManager(Context context) {
         sharedPreferences = context.getSharedPreferences(
@@ -71,10 +73,20 @@ public class SharedPrefManager {
         return sharedPreferences.getString(DARKMODE_KEY, "Default");
     }
 
+    public void setMessageOn(boolean value, int hour, int minute) {
+        editor.putBoolean(MESSAGE_KEY, value);
+        if (value) {
+            editor.putInt(MESSAGE_HOUR_KEY, hour);
+            editor.putInt(MESSAGE_MINUTE_KEY, minute);
+        }
+        editor.commit();
+    }
+
     public void setMessageOn(boolean value) {
         editor.putBoolean(MESSAGE_KEY, value);
         editor.commit();
     }
+
 
     public boolean getMessageOff() {
         return sharedPreferences.getBoolean(MESSAGE_KEY, false);

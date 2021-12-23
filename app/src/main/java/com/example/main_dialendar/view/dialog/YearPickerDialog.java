@@ -65,6 +65,6 @@ public class YearPickerDialog extends Dialog implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         listener.onDateSet(null, yearPicker.getValue(), monthPicker.getValue()-1, 0);
-        YearPickerDialog.this.cancel();
+        this.cancel();
     }
 }
