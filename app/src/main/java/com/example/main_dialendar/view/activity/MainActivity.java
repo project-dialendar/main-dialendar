@@ -9,6 +9,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -274,10 +276,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_year :
-                YearPickerDialog dialog = new YearPickerDialog();
-                //dialog.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                YearPickerDialog dialog = new YearPickerDialog(getApplicationContext());
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setListener(dateSetListener);
-                dialog.show(getSupportFragmentManager(), "YearPickerTest");
+                dialog.show();
                 break;
 
             case R.id.btn_write :
@@ -302,8 +304,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-
     // 드로어바 클릭 리스너
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -317,12 +317,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-    /**
-     * Intent.ACTION_SEND로 이메일 보내기
-     * @param title
-     * @param receiver
-     */
     public void sendEmailToAdmin(String title, String[] receiver) {
         Intent email = new Intent(Intent.ACTION_SEND);
         email.putExtra(Intent.EXTRA_EMAIL, receiver);
@@ -333,7 +327,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(email);
     }
 
-    // 화면 전환 이후에도 달력 상태를 유지
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);

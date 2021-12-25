@@ -43,7 +43,14 @@
             android:exported="true"
             android:screenOrientation="landscape"></activity>
         <receiver android:name=".util.lock.ScreenReceiver"></receiver>
+
         <service android:name=".util.lock.ScreenService"></service>
+        <receiver android:name=".util.message.MessageReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

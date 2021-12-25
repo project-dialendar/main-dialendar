@@ -12,19 +12,14 @@ public class SharedPrefManager {
 
     private static final String SHARED_PREFS_FILE_NAME = "Dialendar";
 
-    // 폰트
     private static final String FONT_KEY = "Maruburi";
-
-    // 잠금화면
     private static final String LOCK_KEY = "LockOnOff";
+    private static final String PASSWORD_KEY = "Password";
+    private static final String DARKMODE_KEY = "Darkmode";
+    private static final String MESSAGE_KEY = "MessageOnOff";
+    private static final String MESSAGE_HOUR_KEY = "MessageHour";
+    private static final String MESSAGE_MINUTE_KEY = "MessageMinute";
 
-    // 패스워드
-    private static final String PW_KEY = "Password";
-
-    // 다크모드
-    private static final String MODE_KEY = "Darkmode";
-
-    // manager 초기 세팅
     public SharedPrefManager(Context context) {
         sharedPreferences = context.getSharedPreferences(
                 SHARED_PREFS_FILE_NAME, Context.MODE_PRIVATE
@@ -61,23 +56,41 @@ public class SharedPrefManager {
 
 
     public void setPassword(int pw) {
-        editor.putInt(PW_KEY, pw);
+        editor.putInt(PASSWORD_KEY, pw);
         editor.commit();
     }
 
-    public int getPassword() { return sharedPreferences.getInt(PW_KEY, -1); }
+    public int getPassword() { return sharedPreferences.getInt(PASSWORD_KEY, -1); }
 
 
     public void setDarkmode(String mode) {
         // {Default, Light, Dark}
-        editor.putString(MODE_KEY, mode);
+        editor.putString(DARKMODE_KEY, mode);
         editor.commit();
     }
 
     public String getDarkmode() {
-        return sharedPreferences.getString(MODE_KEY, "Default");
+        return sharedPreferences.getString(DARKMODE_KEY, "Default");
     }
 
+    public void setMessageOn(boolean value, int hour, int minute) {
+        editor.putBoolean(MESSAGE_KEY, value);
+        if (value) {
+            editor.putInt(MESSAGE_HOUR_KEY, hour);
+            editor.putInt(MESSAGE_MINUTE_KEY, minute);
+        }
+        editor.commit();
+    }
+
+    public void setMessageOn(boolean value) {
+        editor.putBoolean(MESSAGE_KEY, value);
+        editor.commit();
+    }
+
+
+    public boolean getMessageOff() {
+        return sharedPreferences.getBoolean(MESSAGE_KEY, false);
+    }
 
     // clear
     public static void destroyPref() {

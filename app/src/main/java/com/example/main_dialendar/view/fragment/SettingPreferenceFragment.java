@@ -1,22 +1,34 @@
 package com.example.main_dialendar.view.fragment;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.widget.BaseAdapter;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.main_dialendar.R;
+import com.example.main_dialendar.util.message.MessageReceiver;
 import com.example.main_dialendar.util.setting.SharedPrefManager;
 import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.view.activity.LockActivity;
 import com.example.main_dialendar.view.activity.SettingActivity;
+import com.example.main_dialendar.view.dialog.TimePickerDialog;
+import com.example.main_dialendar.view.dialog.YearPickerDialog;
+
+import java.util.Calendar;
 
 /**
  * 설정 목록을 보여주는 프레그먼트
@@ -34,6 +46,7 @@ public class SettingPreferenceFragment extends PreferenceFragment {
     private static final int LOCKMODE_OFF = 99999;
 
     String themeColor;
+    int messageHour = 20, messageMinute = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,10 +93,13 @@ public class SettingPreferenceFragment extends PreferenceFragment {
     };
 
     private void setMessage() {
-        if (localPrefs.getBoolean("message", false))
-            messagePreference.setSummary("사용");
-        else
+        if (localPrefs.getBoolean("message", false)) {
+            showMessageDialog();
+        }
+        else {
             messagePreference.setSummary("사용 안 함");
+            prefManager.setMessageOn(false);
+        }
     }
 
     private void setDarkmode() {
@@ -114,6 +130,16 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         }
     }
 
+    private void showMessageDialog() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity());
+        timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        timePickerDialog.setListener(timeSetListener);
+        timePickerDialog.setCanceledOnTouchOutside(false);
+        timePickerDialog.setCancelable(true);
+        timePickerDialog.show();
+
+    }
+
     private void moveToLockActivity(int mode) {
         Intent intent;
 
@@ -124,5 +150,52 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
         intent.putExtra("lock", mode);
         startActivity(intent);
+    }
+
+    android.app.TimePickerDialog.OnTimeSetListener timeSetListener = new android.app.TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+            // save message's hour and minute
+            messageHour = hour;
+            messageMinute = minute;
+
+            setMessagePrefOn();
+        }
+    };
+
+    private void setMessagePrefOn() {
+        messagePreference.setSummary("사용");
+        prefManager.setMessageOn(true, messageHour, messageMinute);
+
+        startMessaging();
+    }
+
+    private void startMessaging() {
+        Calendar cal = createMessageTime();
+        startAlarmManager(cal);
+    }
+
+    private Calendar createMessageTime() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(Calendar.HOUR_OF_DAY, messageHour);
+        cal.set(Calendar.MINUTE, messageMinute);
+
+        if (cal.before(Calendar.getInstance()))
+            cal.add(Calendar.DATE, 1);
+        return cal;
+    }
+
+    private void startAlarmManager(Calendar cal) {
+        AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        if (alarmManager != null) {
+            Intent intent = new Intent(getActivity(), MessageReceiver.class);
+            PendingIntent messageIntent = PendingIntent.getBroadcast(getActivity(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, messageIntent);
+
+            Toast.makeText(getActivity(), "알림이 설정되었습니다.", Toast.LENGTH_LONG).show();
+        }
     }
 }
