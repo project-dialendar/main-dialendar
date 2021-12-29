@@ -12,10 +12,7 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
 import com.example.main_dialendar.R;
-import com.example.main_dialendar.util.setting.SharedPrefManager;
 import com.example.main_dialendar.view.activity.MainActivity;
-import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;
 
 public class MessageReceiver extends BroadcastReceiver {
     NotificationManager manager;
