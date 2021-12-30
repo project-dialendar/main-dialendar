@@ -144,7 +144,7 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         Intent intent;
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
-            intent = new Intent(getContext(), LockActivity.class);
+            intent = new Intent(getActivity(), LockActivity.class);
         else
             intent = new Intent(SettingActivity.context, LockActivity.class);
 

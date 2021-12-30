@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.activity.MainActivity;
 
+// 노티 메시지 수신 및 전송
 public class MessageReceiver extends BroadcastReceiver {
     NotificationManager manager;
     NotificationCompat.Builder builder;

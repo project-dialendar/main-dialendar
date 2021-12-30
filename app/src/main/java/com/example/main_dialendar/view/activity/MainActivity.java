@@ -107,7 +107,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_month = findViewById(R.id.tv_month);
 
         rv_month = findViewById(R.id.rv_month);
-        rv_month.setLayoutManager(new GridLayoutManager(this, 7));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 7);
+        rv_month.setLayoutManager(gridLayoutManager);
         gv_day_of_week = findViewById(R.id.gv_day_of_week);
 
         ll_year = findViewById(R.id.btn_year);

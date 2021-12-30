@@ -6,6 +6,7 @@ import android.os.Build;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
+// 다크모드 관리자
 public class ThemeUtil {
     public static final String LIGHT_MODE = "light";
     public static final String DARK_MODE = "dark";
