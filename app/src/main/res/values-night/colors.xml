@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="red">#C40000</color>
     <color name="background">#000000</color>
+    <color name="background_dialog">#252525</color>
     <color name="bg_calendar">#494949</color>
     <color name="bg_calendar_out">#333333</color>
     <color name="textColor">#FFFFFFFF</color>

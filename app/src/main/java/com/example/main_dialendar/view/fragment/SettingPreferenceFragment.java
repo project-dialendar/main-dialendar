@@ -94,6 +94,7 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
     private void setMessage() {
         if (localPrefs.getBoolean("message", false)) {
+            messagePreference.setSummary("사용");
             showMessageDialog();
         }
         else {
@@ -164,7 +165,6 @@ public class SettingPreferenceFragment extends PreferenceFragment {
     };
 
     private void setMessagePrefOn() {
-        messagePreference.setSummary("사용");
         prefManager.setMessageOn(true, messageHour, messageMinute);
 
         startMessaging();
