@@ -3,52 +3,69 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:minWidth="@dimen/customDialogWidth_tab"
+    android:minHeight="@dimen/customDialogHeight_tab">
 
     <LinearLayout
         android:id="@+id/capture_target_Layout"
-        android:layout_width="191dp"
-        android:layout_height="279dp"
+        android:layout_width="360dp"
+        android:layout_height="550dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
+        android:background="@color/background"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/background">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tv_capture_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
-            android:text="yyyy.mm.dd."
             android:fontFamily="@font/maruburittf"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+            android:paddingHorizontal="@dimen/paddingHorizontal_tab"
+            android:paddingTop="@dimen/paddingVertical_tab"
+            android:text="yyyy.mm.dd."
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="@dimen/textSize_tab" />
 
-        <ImageView
-            android:id="@+id/iv_captrue_image"
-            android:layout_width="wrap_content"
-            android:layout_height="177dp"
-            android:padding="20dp"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/empty_photo" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/paddingHorizontal_tab"
+            android:layout_marginTop="@dimen/paddingVertical_tab"
+            android:layout_weight="1"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:id="@+id/iv_captrue_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/empty_photo" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tv_capture_diary"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="20dp"
-            android:text="My diary"
+            android:layout_height="wrap_content"
+            android:minHeight="120dp"
             android:fontFamily="@font/maruburittf"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+            android:paddingHorizontal="@dimen/paddingHorizontal_tab"
+            android:text="My diary"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="@dimen/textSize_tab" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/button_Layout"
-        android:layout_width="211dp"
-        android:layout_height="34dp"
+        android:layout_width="360dp"
+        android:layout_height="48dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:orientation="horizontal"
@@ -61,17 +78,22 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@android:drawable/list_selector_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/maruburittf"
             android:gravity="center"
             android:text="캡쳐 취소"
-            android:fontFamily="@font/maruburittf" />
+            android:textSize="@dimen/textSmallSize_tab" />
 
         <TextView
             android:id="@+id/btn_capture_this"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:fontFamily="@font/maruburittf"
             android:gravity="center"
             android:text="일기 저장"
-            android:fontFamily="@font/maruburittf" />
+            android:textSize="@dimen/textSmallSize_tab" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
