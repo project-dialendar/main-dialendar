@@ -127,14 +127,24 @@ public class DiaryActivity extends AppCompatActivity {
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
+
                         switch (menuItem.getItemId()) {
                             case R.id.share_diary:
                                 // 1. 한 장의 폴라로이드 같은 이미지로 공유
                                 CaptureDialog captureDialog = new CaptureDialog(DiaryActivity.this);
-                                captureDialog.callCaptureDialog(
-                                        mFormat.format(date),
-                                        getImageInBitmap(diaryRecord.getImage()),
-                                        diaryRecord.getText());
+
+                                Diary diaryRecord = isExist();
+                                if (diaryRecord == null) {
+                                    Toast.makeText(
+                                            DiaryActivity.this,
+                                            "일기가 존재하지 않습니다.",
+                                            Toast.LENGTH_LONG).show();
+                                } else {
+                                    captureDialog.callCaptureDialog(
+                                            mFormat.format(date),
+                                            getImageInBitmap(diaryRecord.getImage()),
+                                            diaryRecord.getText());
+                                }
                                 break;
                             case R.id.delete_diary:
                                 // 2. 일기 삭제
@@ -209,7 +219,8 @@ public class DiaryActivity extends AppCompatActivity {
                             .load(img)
                             .centerCrop()
                             .into(btn_diary_photo);
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
@@ -232,6 +243,7 @@ public class DiaryActivity extends AppCompatActivity {
 
     /**
      * convert from byte array to bitmap
+     *
      * @param image byte array
      * @return bitmap image
      */
@@ -241,6 +253,7 @@ public class DiaryActivity extends AppCompatActivity {
 
     /**
      * 해당 날짜에 레코드가 존재하는지 확인
+     *
      * @return Diary (object)
      */
     public Diary isExist() {
@@ -255,7 +268,7 @@ public class DiaryActivity extends AppCompatActivity {
         Diary insertRecord = new Diary();
         insertRecord.setDate(dbFormat.format(date));
         insertRecord.setText(et_diary.getText().toString());
-        if(btn_diary_photo.getDrawable() == null)
+        if (btn_diary_photo.getDrawable() == null)
             insertRecord.setImage(null);
         else
             insertRecord.setImage(getImageInByte(btn_diary_photo));
@@ -266,7 +279,7 @@ public class DiaryActivity extends AppCompatActivity {
         Diary updateRecord = new Diary();
         updateRecord.setDate(dbFormat.format(date));
         updateRecord.setText(et_diary.getText().toString());
-        if(btn_diary_photo.getDrawable() == null)
+        if (btn_diary_photo.getDrawable() == null)
             updateRecord.setImage(null);
         else
             updateRecord.setImage(getImageInByte(btn_diary_photo));

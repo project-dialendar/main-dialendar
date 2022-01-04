@@ -47,10 +47,15 @@ public class CaptureDialog {
 
         String title = date;
 
-        tv_capture_date.setText(date);
-        iv_captrue_image.setImageBitmap(diary_image);
-        tv_capture_diary.setText(diary_text);
+        tv_capture_date.setText(" "+date);
+        if (diary_image != null) {
+            iv_captrue_image.setImageBitmap(diary_image);
+        }
+        if (diary_text != null) {
+            tv_capture_diary.setText(" "+diary_text);
+        }
 
+        btn_capture_this.setBackgroundResource(R.drawable.bg_day_of_week);
         btn_capture_this.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +68,7 @@ public class CaptureDialog {
             }
         });
 
+        btn_capture_cancel.setBackgroundResource(R.drawable.bg_day_of_week);
         btn_capture_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
