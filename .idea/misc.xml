@@ -9,6 +9,7 @@
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/drawable/ic_baseline_lock_open_24.xml" value="0.17777777777777778" />
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/drawable/ic_baseline_password_blank.xml" value="0.17777777777777778" />
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/drawable/ic_baseline_password_fill.xml" value="0.17777777777777778" />
+        <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/drawable/round_bg_border.xml" value="0.146875" />
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/font/font_family.xml" value="0.1574074074074074" />
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/layout-land/activity_diary.xml" value="0.264" />
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/layout-land/activity_lock.xml" value="0.264" />
@@ -24,7 +25,7 @@
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/layout/dialog_year.xml" value="0.2" />
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/layout/dialog_yearpicker.xml" value="0.1" />
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/layout/item_calendar_day_of_week.xml" value="0.1" />
-        <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/layout/item_calendar_gridview.xml" value="0.1" />
+        <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/layout/item_calendar_gridview.xml" value="0.536" />
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/layout/item_navigation.xml" value="0.1296875" />
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/layout/nav_header.xml" value="0.536" />
         <entry key="..\:/Users/admin/Documents/main-dialendar/app/src/main/res/menu/nav_menu.xml" value="0.24974358974358973" />

@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Maindialendar" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Maindialendar" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/bg_calendar</item>
         <item name="colorPrimaryDark">@color/bg_calendar_out</item>
         <item name="colorAccent">@color/red</item>
@@ -15,38 +15,5 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
-    <style name="Theme.Maruburi" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/bg_calendar</item>
-        <item name="colorPrimaryDark">@color/bg_calendar_out</item>
-        <item name="colorAccent">@color/red</item>
-        <item name="colorSecondary">@color/lineColor</item>
-        <item name="backgroundColor">@color/background</item>
-        <item name="android:textColor">@color/textColor_out</item>
-        <item name="android:textColorPrimary">@color/textColor</item>
-
-        <item name="android:statusBarColor">@color/black</item>
-
-        <!-- title delete-->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.Default" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/bg_calendar</item>
-        <item name="colorPrimaryDark">@color/bg_calendar_out</item>
-        <item name="colorAccent">@color/red</item>
-        <item name="colorSecondary">@color/lineColor</item>
-        <item name="backgroundColor">@color/background</item>
-        <item name="android:textColor">@color/textColor_out</item>
-        <item name="android:textColorPrimary">@color/textColor</item>
-
-        <item name="android:statusBarColor">@color/black</item>
-
-        <!-- title delete-->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
 
 </resources>
