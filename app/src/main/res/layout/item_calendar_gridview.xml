@@ -10,8 +10,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_width="@dimen/gridWidth_phone"
-        android:layout_height="@dimen/gridWidth_phone">
+        android:layout_width="@dimen/gridWidth_tab"
+        android:layout_height="@dimen/gridWidth_tab">
 
         <ImageView
             android:id="@+id/iv_date"
@@ -30,7 +30,7 @@
             android:text="00"
             android:textColor="@color/textColor"
             android:fontFamily="@font/maruburittf"
-            android:textSize="@dimen/textSize_phone" />
+            android:textSize="@dimen/textSize_tab" />
 
     </RelativeLayout>
 

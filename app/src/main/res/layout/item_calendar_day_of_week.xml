@@ -8,8 +8,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_width="@dimen/gridWidth_phone"
-        android:layout_height="@dimen/gridHeight_phone"
+        android:layout_width="@dimen/gridWidth_tab"
+        android:layout_height="@dimen/gridHeight_tab"
         android:background="@drawable/calendar_bg_border">
 
         <TextView
@@ -22,7 +22,7 @@
             android:textColor="@color/textColor"
             android:textStyle="bold"
             android:fontFamily="@font/maruburittf"
-            android:textSize="@dimen/textSize_phone"/>
+            android:textSize="@dimen/textSize_tab"/>
 
     </LinearLayout>
 

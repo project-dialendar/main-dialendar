@@ -2,11 +2,15 @@
 <resources>
     <dimen name="textSize_tab">18sp</dimen>
     <dimen name="textSize_phone">12sp</dimen>
-    <dimen name="textSmallSize_tab">18sp</dimen>
+    <dimen name="textSmallSize_tab">16sp</dimen>
     <dimen name="textSmallSize_phone">10sp</dimen>
     <dimen name="gridWidth_tab">108dp</dimen>
     <dimen name="gridHeight_tab">36dp</dimen>
     <dimen name="gridWidth_phone">72dp</dimen>
     <dimen name="gridHeight_phone">20dp</dimen>
+    <dimen name="customDialogWidth_tab">360dp</dimen>
+    <dimen name="customDialogHeight_tab">600dp</dimen>
+    <dimen name="paddingVertical_tab">40dp</dimen>
+    <dimen name="paddingHorizontal_tab">20dp</dimen>
     <dimen name="height_line">0.8dp</dimen>
 </resources>
