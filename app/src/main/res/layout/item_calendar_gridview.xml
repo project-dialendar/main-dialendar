@@ -7,7 +7,9 @@
 
     <RelativeLayout
         android:id="@+id/rl_date"
-        android:layout_margin="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_width="@dimen/gridWidth_phone"
         android:layout_height="@dimen/gridWidth_phone">
 

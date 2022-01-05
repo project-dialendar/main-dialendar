@@ -8,4 +8,5 @@
     <dimen name="gridHeight_tab">36dp</dimen>
     <dimen name="gridWidth_phone">72dp</dimen>
     <dimen name="gridHeight_phone">20dp</dimen>
+    <dimen name="height_line">0.8dp</dimen>
 </resources>
