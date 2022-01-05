@@ -15,9 +15,10 @@ import com.example.main_dialendar.R;
 
 public class TimePickerDialog extends Dialog implements View.OnClickListener{
 
-    private android.app.TimePickerDialog.OnTimeSetListener listener;
     public static int DEFAULT_HOUR = 20;
     public static int DEFAULT_MINUTE = 0;
+
+    private android.app.TimePickerDialog.OnTimeSetListener listener;
 
     TextView tv_ok;
     TimePicker timePicker;

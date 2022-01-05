@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="400dp"
+    android:layout_height="330dp"
     android:orientation="vertical"
-    android:background="@color/background">
+    android:padding="5dp"
+    android:background="@drawable/round_bg_border">
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,7 +12,7 @@
         android:text="날짜 선택"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/maruburittf"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@color/textColor"
         android:textStyle="bold"
         android:layout_gravity="center" />
@@ -64,26 +65,15 @@
         </LinearLayout>
     </LinearLayout>
 
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/btn_ok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal"
         android:layout_marginTop="20dp"
-        >
-
-        <TextView
-            android:id="@+id/btn_ok"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:text="확인"
-            android:textSize="18sp"
-            android:textColor="@color/textColor"
-            android:fontFamily="@font/maruburittf"
-            android:gravity="center"
-            android:textAllCaps="false" />
-    </LinearLayout>
+        android:text="확인"
+        android:textSize="14sp"
+        android:textColor="@color/textColor"
+        android:fontFamily="@font/maruburittf"
+        android:gravity="center"
+        android:letterSpacing="1" />
 </LinearLayout>
