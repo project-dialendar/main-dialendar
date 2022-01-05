@@ -35,6 +35,7 @@ import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.adapter.CalendarAdapter;
 import com.example.main_dialendar.view.adapter.WeekAdapter;
+import com.example.main_dialendar.view.dialog.BackupDialog;
 import com.example.main_dialendar.view.dialog.YearPickerDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.BuildConfig;
@@ -130,7 +131,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                         break;
                     case (R.id.backup) :
-                        createBackupFile();
+                        BackupDialog dialog = new BackupDialog(getApplicationContext());
+                        dialog.show();
+                        //createBackupFile();
                         break;
                     case (R.id.mail) :
                         sendEmailToAdmin("[일력 문의사항]", new String[]{"apps@gmail.com"});
