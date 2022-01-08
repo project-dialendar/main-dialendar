@@ -18,12 +18,14 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.main_dialendar.R;
+import com.example.main_dialendar.util.setting.SharedPrefManager;
 
 /**
  * 설정 화면 Activity
  */
 public class SettingActivity extends AppCompatActivity {
 
+    // 뒤로가기 버튼
     Button btn_back;
 
     public static Context context;
@@ -36,7 +38,6 @@ public class SettingActivity extends AppCompatActivity {
         context = getApplicationContext();
 
         btn_back = findViewById(R.id.btn_back);
-
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
