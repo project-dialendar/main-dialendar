@@ -29,15 +29,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.main_dialendar.BuildConfig;
 import com.example.main_dialendar.util.lock.ScreenService;
 import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.adapter.CalendarAdapter;
 import com.example.main_dialendar.view.adapter.WeekAdapter;
+import com.example.main_dialendar.view.dialog.TimePickerDialog;
 import com.example.main_dialendar.view.dialog.YearPickerDialog;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.BuildConfig;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -106,7 +107,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_month = findViewById(R.id.tv_month);
 
         rv_month = findViewById(R.id.rv_month);
-        rv_month.setLayoutManager(new GridLayoutManager(this, 7));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 7);
+        rv_month.setLayoutManager(gridLayoutManager);
         gv_day_of_week = findViewById(R.id.gv_day_of_week);
 
         ll_year = findViewById(R.id.btn_year);
@@ -276,10 +278,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_year :
-                YearPickerDialog dialog = new YearPickerDialog(getApplicationContext());
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.setListener(dateSetListener);
-                dialog.show();
+                showYearPickerDialog();
                 break;
 
             case R.id.btn_write :
@@ -302,6 +301,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             intent.putExtra("date", date);
             startActivity(intent);
         }
+    }
+
+    void showYearPickerDialog() {
+        YearPickerDialog dialog = new YearPickerDialog(MainActivity.this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setListener(dateSetListener);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 
     // 드로어바 클릭 리스너

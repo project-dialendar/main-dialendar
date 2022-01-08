@@ -42,7 +42,7 @@
     <LinearLayout
         android:id="@+id/line_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/height_line"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         android:background="@color/lineColor"
         android:layout_marginRight="15dp"

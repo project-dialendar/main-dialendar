@@ -44,11 +44,10 @@ public class YearPickerDialog extends Dialog implements View.OnClickListener{
 
         yearPicker = findViewById(R.id.picker_year);
         monthPicker = findViewById(R.id.picker_month);
+        initPicker();
 
         btn_ok = findViewById(R.id.btn_ok);
         btn_ok.setOnClickListener(this);
-
-        initPicker();
     }
 
     private void initPicker() {
