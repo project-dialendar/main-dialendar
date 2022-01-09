@@ -53,7 +53,6 @@ public class DiaryActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 0;
 
     Date date = new Date();
-    Diary diaryRecord = isExist();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,6 +85,7 @@ public class DiaryActivity extends AppCompatActivity {
         }
 
         /* 일기 레코드 불러오기 */
+        Diary diaryRecord = isExist();
         try {
             if (diaryRecord.getText() != null) {
                 et_diary.setText(diaryRecord.getText());
@@ -116,8 +116,8 @@ public class DiaryActivity extends AppCompatActivity {
                     case R.id.share_diary:
                         CaptureDialog captureDialog = new CaptureDialog(DiaryActivity.this);
 
-                        diaryRecord = isExist();
-                        if (diaryRecord == null) {
+                        Diary diaryRecord1 = isExist();
+                        if (diaryRecord1 == null) {
                             Toast.makeText(
                                     DiaryActivity.this,
                                     "일기가 존재하지 않습니다.",
@@ -125,8 +125,8 @@ public class DiaryActivity extends AppCompatActivity {
                         } else {
                             captureDialog.callCaptureDialog(
                                     mFormat.format(date),
-                                    getImageInBitmap(diaryRecord.getImage()),
-                                    diaryRecord.getText());
+                                    getImageInBitmap(diaryRecord1.getImage()),
+                                    diaryRecord1.getText());
                         }
                         break;
                     case R.id.delete_diary:
@@ -150,6 +150,7 @@ public class DiaryActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Diary diaryRecord = isExist();
         diaryRecord = isExist();
 
         if (diaryRecord == null) {
@@ -230,7 +231,8 @@ public class DiaryActivity extends AppCompatActivity {
      * 해당 날짜에 레코드가 존재하는지 확인
      */
     public Diary isExist() {
-        return mDiaryDao.findByDate(dbFormat.format(date));
+        Diary byDate = mDiaryDao.findByDate(dbFormat.format(date));
+        return byDate;
     }
 
     /**

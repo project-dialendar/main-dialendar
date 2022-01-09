@@ -58,7 +58,7 @@ public class CaptureDialog {
             tv_capture_diary.setText(" "+date+"의 일기");
         }
 
-        btn_capture_this.setBackgroundResource(R.drawable.bg_day_of_week);
+        btn_capture_this.setBackgroundResource(R.drawable.btn_capture);
         btn_capture_this.setOnClickListener(v -> {
             // '일기 저장' 버튼
             Request_Capture(capture_target_Layout, date);
@@ -67,7 +67,7 @@ public class CaptureDialog {
             dialog.dismiss();
         });
 
-        btn_capture_cancel.setBackgroundResource(R.drawable.bg_day_of_week);
+        btn_capture_cancel.setBackgroundResource(R.drawable.btn_capture);
         btn_capture_cancel.setOnClickListener(v -> {
             // '캡쳐 취소' 버튼
             Toast.makeText(context,"캡쳐를 취소했습니다.",Toast.LENGTH_SHORT).show();
