@@ -29,7 +29,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.main_dialendar.BuildConfig;
 import com.example.main_dialendar.util.lock.ScreenService;
 import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.model.Day;
@@ -40,6 +39,7 @@ import com.example.main_dialendar.view.dialog.BackupDialog;
 import com.example.main_dialendar.view.dialog.TimePickerDialog;
 import com.example.main_dialendar.view.dialog.YearPickerDialog;
 import com.google.android.material.navigation.NavigationView;
+import com.gun0912.tedpermission.BuildConfig;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
