@@ -29,16 +29,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.main_dialendar.BuildConfig;
 import com.example.main_dialendar.util.lock.ScreenService;
 import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.adapter.CalendarAdapter;
 import com.example.main_dialendar.view.adapter.WeekAdapter;
+import com.example.main_dialendar.view.dialog.BackupDialog;
 import com.example.main_dialendar.view.dialog.TimePickerDialog;
 import com.example.main_dialendar.view.dialog.YearPickerDialog;
 import com.google.android.material.navigation.NavigationView;
+import com.gun0912.tedpermission.BuildConfig;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -132,7 +133,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                         break;
                     case (R.id.backup) :
-                        createBackupFile();
+                        BackupDialog dialog = new BackupDialog(getApplicationContext());
+                        dialog.show();
+                        //createBackupFile();
                         break;
                     case (R.id.mail) :
                         sendEmailToAdmin("[일력 문의사항]", new String[]{"apps@gmail.com"});

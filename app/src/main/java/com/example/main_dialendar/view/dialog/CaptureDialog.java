@@ -3,6 +3,8 @@ package com.example.main_dialendar.view.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.os.Environment;
 import android.util.Log;
@@ -32,6 +34,7 @@ public class CaptureDialog {
 
         // 다이얼로그 호출
         final Dialog dialog = new Dialog(context);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_capture);
         dialog.show();
