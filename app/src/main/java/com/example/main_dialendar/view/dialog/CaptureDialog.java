@@ -29,7 +29,7 @@ public class CaptureDialog {
         this.context = context;
     }
 
-    // 호출할 다이얼로그 함수 정의
+    /* 호출할 다이얼로그 함수 정의 */
     public void callCaptureDialog(String date, Bitmap diary_image, String diary_text) {
 
         // 다이얼로그 호출
@@ -48,40 +48,38 @@ public class CaptureDialog {
         final TextView btn_capture_cancel = (TextView) dialog.findViewById(R.id.btn_capture_cancel);
         final TextView btn_capture_this = (TextView) dialog.findViewById(R.id.btn_capture_this);
 
-        String title = date;
+        tv_capture_date.setText(" "+date);
+        if (diary_image != null) {
+            iv_captrue_image.setImageBitmap(diary_image);
+        }
+        if (diary_text != null) {
+            tv_capture_diary.setText(" " + diary_text);
+        } else {
+            tv_capture_diary.setText(" "+date+"의 일기");
+        }
 
-        tv_capture_date.setText(date);
-        iv_captrue_image.setImageBitmap(diary_image);
-        tv_capture_diary.setText(diary_text);
+        btn_capture_this.setBackgroundResource(R.drawable.btn_capture);
+        btn_capture_this.setOnClickListener(v -> {
+            // '일기 저장' 버튼
+            Request_Capture(capture_target_Layout, date);
+            Toast.makeText(context,"일기를 저장했습니다.",Toast.LENGTH_SHORT).show();
 
-        btn_capture_this.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // '일기 저장' 버튼
-                Request_Capture(capture_target_Layout, title);
-                Toast.makeText(context,"일기를 저장했습니다.",Toast.LENGTH_SHORT).show();
-
-                // 커스텀 다이얼로그 종료
-                dialog.dismiss();
-            }
+            dialog.dismiss();
         });
 
-        btn_capture_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // '캡쳐 취소' 버튼
-                Toast.makeText(context,"캡쳐를 취소했습니다.",Toast.LENGTH_SHORT).show();
+        btn_capture_cancel.setBackgroundResource(R.drawable.btn_capture);
+        btn_capture_cancel.setOnClickListener(v -> {
+            // '캡쳐 취소' 버튼
+            Toast.makeText(context,"캡쳐를 취소했습니다.",Toast.LENGTH_SHORT).show();
 
-                // 커스텀 다이얼로그 종료
-                dialog.dismiss();
-            }
+            dialog.dismiss();
         });
 
     }
 
 
     /**
-     * 부분 영역 캡쳐 메소드
+     * 부분 영역 캡쳐 (https://hongdroid.tistory.com/6)
      * @param view 갭쳐할 뷰 지정
      * @param filename 저장힐 파일 이름
      */
@@ -100,7 +98,7 @@ public class CaptureDialog {
         File uploadFolder = Environment.getExternalStoragePublicDirectory("/DCIM/Camera/"); //저장 경로 (File Type형 변수)
 
         if (!uploadFolder.exists()) { //만약 경로에 폴더가 없다면
-            uploadFolder.mkdir(); //폴더 생성
+            uploadFolder.mkdir();
         }
 
         /* 파일 저장 */
@@ -113,7 +111,7 @@ public class CaptureDialog {
             e.printStackTrace();
         }
 
-        //캡쳐 파일 미디어 스캔 (https://hongdroid.tistory.com/7)
+        /* 캡쳐 파일 미디어 스캔 (https://hongdroid.tistory.com/7) */
         MediaScanner ms = MediaScanner.newInstance(context);
 
         try { // TODO : 미디어 스캔
@@ -122,7 +120,6 @@ public class CaptureDialog {
             e.printStackTrace();
             System.out.println("::::ERROR:::: "+e);
         }
-
     }
 }
 
