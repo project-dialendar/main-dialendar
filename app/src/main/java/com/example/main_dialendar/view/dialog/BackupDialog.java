@@ -128,13 +128,14 @@ public class BackupDialog extends Dialog implements View.OnClickListener {
 
             src.close();
             dst.close();
-            Toast.makeText(getContext(), from + "백업 성공", Toast.LENGTH_LONG);
+            Toast.makeText(getContext(), from + "백업 성공", Toast.LENGTH_LONG).show();
             Log.i("###", from + "backup success");
             cancel();
 
         }
-        Toast.makeText(getContext(), from + "백업 실패 in try", Toast.LENGTH_LONG);
-
+        else {
+            Toast.makeText(getContext(), from + "백업 실패 in try", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void restoreEachFile(String from, String to) throws IOException {
@@ -156,6 +157,8 @@ public class BackupDialog extends Dialog implements View.OnClickListener {
             Log.i("###", "restore success");
             cancel();
         }
-        Toast.makeText(getContext(), from + ": 복구 실패 in try", Toast.LENGTH_LONG).show();
+        else {
+            Toast.makeText(getContext(), from + ": 복구 실패 in try", Toast.LENGTH_LONG).show();
+        }
     }
 }

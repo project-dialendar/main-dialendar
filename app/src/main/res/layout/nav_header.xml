@@ -13,9 +13,9 @@
     android:background="@color/background">
 
     <ImageView
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:src="@drawable/bg_splash"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/bg_splash_small"
         android:layout_gravity="center"/>
 
 </LinearLayout>
