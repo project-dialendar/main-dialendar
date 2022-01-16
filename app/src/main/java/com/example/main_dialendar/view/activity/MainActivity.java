@@ -31,7 +31,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.main_dialendar.util.backup.DriveServiceHelper;
 import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
@@ -107,8 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String themeColor;
 
     public static Context context;
-
-    private DriveServiceHelper mDriveServiceHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
