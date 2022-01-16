@@ -117,16 +117,39 @@ public class DiaryActivity extends AppCompatActivity {
                         CaptureDialog captureDialog = new CaptureDialog(DiaryActivity.this);
 
                         Diary diaryRecord1 = isExist();
-                        if (diaryRecord1 == null) {
+                        if (diaryRecord1 == null) { // 날짜에 일기가 없음
                             Toast.makeText(
                                     DiaryActivity.this,
                                     "일기가 존재하지 않습니다.",
                                     Toast.LENGTH_LONG).show();
                         } else {
-                            captureDialog.callCaptureDialog(
-                                    mFormat.format(date),
-                                    getImageInBitmap(diaryRecord1.getImage()),
-                                    diaryRecord1.getText());
+                            if (diaryRecord1.getText().matches("")) {
+                                if (diaryRecord1.getImage() == null) { // 일기 내용, 사진 없음
+                                    Toast.makeText(
+                                            DiaryActivity.this,
+                                            "일기가 존재하지 않습니다.",
+                                            Toast.LENGTH_LONG).show();
+                                }else { // 사진만 있음
+                                    captureDialog.callCaptureDialog(
+                                            mFormat.format(date),
+                                            getImageInBitmap(diaryRecord1.getImage()),
+                                            null
+                                    );
+                                }
+                            } else {
+                                if (diaryRecord1.getImage() == null) { // 내용만 있음
+                                    captureDialog.callCaptureDialog(
+                                            mFormat.format(date),
+                                            null,
+                                            diaryRecord1.getText()
+                                    );
+                                }else { // 일기 내용, 사진 다 있음
+                                    captureDialog.callCaptureDialog(
+                                            mFormat.format(date),
+                                            getImageInBitmap(diaryRecord1.getImage()),
+                                            diaryRecord1.getText());
+                                }
+                            }
                         }
                         break;
                     case R.id.delete_diary:
@@ -231,8 +254,7 @@ public class DiaryActivity extends AppCompatActivity {
      * 해당 날짜에 레코드가 존재하는지 확인
      */
     public Diary isExist() {
-        Diary byDate = mDiaryDao.findByDate(dbFormat.format(date));
-        return byDate;
+        return mDiaryDao.findByDate(dbFormat.format(date));
     }
 
     /**
