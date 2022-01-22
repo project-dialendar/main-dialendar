@@ -6,15 +6,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,28 +40,13 @@ import com.example.main_dialendar.view.adapter.CalendarAdapter;
 import com.example.main_dialendar.view.adapter.WeekAdapter;
 import com.example.main_dialendar.view.dialog.BackupDialog;
 import com.example.main_dialendar.view.dialog.YearPickerDialog;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.material.navigation.NavigationView;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
-import com.gun0912.tedpermission.BuildConfig;
 import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
+import com.gun0912.tedpermission.normal.TedPermission;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, CalendarAdapter.ItemClickListener {
@@ -143,12 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                         break;
                     case (R.id.backup):
-                        BackupDialog dialog = new BackupDialog(MainActivity.this);
-                        dialog.setCanceledOnTouchOutside(true);
-                        dialog.setCancelable(true);
-                        dialog.show();
-
-                        //createBackupFile();
+                        checkBackupPermission();
                         break;
                     case (R.id.mail):
                         sendEmailToAdmin("[일력 문의사항]", new String[]{"apps@gmail.com"});
@@ -341,11 +323,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void checkBackupPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                try {
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    intent.addCategory("android.intent.category.DEFAULT");
+                    intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
+                    startActivityForResult(intent, 300);
+                } catch (Exception e) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    startActivityForResult(intent, 300);
+                }
+            } else {
+                moveToBackupDialog();
+            }
+        }
+        else {
+            TedPermission.create()
+                    .setPermissionListener(permissionListener)
+                    .setRationaleMessage("[설정] - [권한] 에서 모든 파일에 대한 액세스 권한을 허용해주세요.")
+                    .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                    .setPermissions(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+                    .check();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 300) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager())
+                    moveToBackupDialog();
+                else
+                    finish();
+            }
+        }
+    }
+
+    PermissionListener permissionListener = new PermissionListener() {
+        @Override
+        public void onPermissionGranted() {
+            moveToBackupDialog();
+        }
+
+        @Override
+        public void onPermissionDenied(List<String> deniedPermissions) {
+            Toast.makeText(context, "접근이 거부되었습니다. 권한을 허용해주세요.", Toast.LENGTH_LONG);
+        }
+    };
+
+    private void moveToBackupDialog() {
+        BackupDialog dialog = new BackupDialog(MainActivity.this);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
     public void sendEmailToAdmin(String title, String[] receiver) {
         Intent email = new Intent(Intent.ACTION_SEND);
         email.putExtra(Intent.EXTRA_EMAIL, receiver);
         email.putExtra(Intent.EXTRA_SUBJECT, title);
-        email.putExtra(Intent.EXTRA_TEXT, "앱 버전(AppVersion):" + BuildConfig.VERSION_NAME +
+        email.putExtra(Intent.EXTRA_TEXT, "앱 버전(AppVersion):" +
                 "\n기기명(Device): \n안드로이드 OS(Android OS): \n내용(Content): \n");
         email.setType("message/rfc822");
         startActivity(email);
