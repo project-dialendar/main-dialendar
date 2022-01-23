@@ -3,12 +3,10 @@ package com.example.main_dialendar.view.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,7 +37,7 @@ public class CaptureDialog {
 
         final LinearLayout capture_target_Layout = (LinearLayout) dialog.findViewById(R.id.capture_target_Layout);
         final TextView tv_capture_date = (TextView) dialog.findViewById(R.id.tv_capture_date);
-        final ImageView iv_captrue_image = (ImageView) dialog.findViewById(R.id.iv_captrue_image);
+        final ImageView iv_captrue_image = (ImageView) dialog.findViewById(R.id.iv_capture_image);
         final TextView tv_capture_diary = (TextView) dialog.findViewById(R.id.tv_capture_diary);
 
         final TextView btn_capture_cancel = (TextView) dialog.findViewById(R.id.btn_capture_cancel);

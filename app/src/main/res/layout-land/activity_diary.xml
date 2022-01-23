@@ -64,14 +64,17 @@
             android:layout_height="match_parent"
             android:layout_margin="16dp"
             android:layout_weight="1"
+            android:background="@color/background"
             app:cardCornerRadius="24dp"
             app:cardElevation="0dp">
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/btn_diary_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:background="@drawable/empty_photo" />
+            app:srcCompat="@drawable/empty_photo"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedCorner"
+            />
 
         </androidx.cardview.widget.CardView>
 

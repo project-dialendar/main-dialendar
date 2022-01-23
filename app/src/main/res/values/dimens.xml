@@ -13,4 +13,5 @@
     <dimen name="paddingVertical_tab">40dp</dimen>
     <dimen name="paddingHorizontal_tab">20dp</dimen>
     <dimen name="height_line">0.8dp</dimen>
+    <dimen name="cornerRadius">20dp</dimen>
 </resources>
