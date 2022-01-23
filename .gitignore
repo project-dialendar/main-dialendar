@@ -23,12 +23,10 @@ app/.idea/runConfigurations.xml
 app/.idea/vcs.xml
 app/.idea/workspace.xml
 app/build.gradle
-*.xml
 .idea/compiler.xml
 .idea/misc.xml
 .idea/runConfigurations.xml
 app/build.gradle
 .idea/runConfigurations.xml
-*.xml
 app/build.gradle
 .idea/misc.xml
