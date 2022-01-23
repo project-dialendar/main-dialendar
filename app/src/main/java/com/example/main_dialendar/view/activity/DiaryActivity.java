@@ -61,17 +61,15 @@ public class DiaryActivity extends AppCompatActivity {
 
         /* 데이터베이스 생성 */
         database = DiaryDatabase.getInstance(this);
-        mDiaryDao = database.diaryDao();                  // 인터페이스 객체 할당
+        mDiaryDao = database.diaryDao();
 
-        // 위젯 정의
         btn_diary_options = findViewById(R.id.btn_diary_options);
         btn_diary_photo = findViewById(R.id.btn_diary_photo);
         btn_save_back = findViewById(R.id.btn_save_back);
-
         tv_diary_date = findViewById(R.id.tv_diary_date);
         et_diary = findViewById(R.id.et_diary);
 
-        // 일기 날짜 세팅
+        /* 일기 날짜 세팅 */
         Intent diaryIntent = getIntent();
         boolean isToday = diaryIntent.getBooleanExtra("today", true);
         if (isToday)
@@ -86,83 +84,97 @@ public class DiaryActivity extends AppCompatActivity {
             }
         }
 
-        // 이미지 버튼 -> 갤러리에서 사진 불러오기
+        /* 일기 레코드 불러오기 */
+        Diary diaryRecord = isExist();
+        try {
+            if (diaryRecord.getText() != null) {
+                et_diary.setText(diaryRecord.getText());
+            }
+            if (diaryRecord.getImage() != null) {
+                btn_diary_photo.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
+            }
+        } catch (NullPointerException e) {
+        }
+
         btn_diary_photo.setOnClickListener(v -> pickFromGallery());
 
-        // 해당 날짜에 레코드가 존재하는지 확인
-        Diary diaryRecord = isExist();
-
-        // 레코드 존재하면 화면에 보이게
-        try {
-            et_diary.setText(diaryRecord.getText());
-            btn_diary_photo.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
-        } catch (NullPointerException e) {
-
-        }
-//        if (diaryRecord != null) {
-//            et_diary.setText(diaryRecord.getText());
-//            btn_diary_photo.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
-//        }
-
-        // Main Activity로 나가면서 저장
         btn_save_back.setOnClickListener(v -> {
             if (diaryRecord == null) {
                 insertRecord();
-            } else { // 기존 레코드 존재
+            } else {
                 updateRecord();
             }
-            finish(); // 액티비티 종료
+            finish();
         });
 
+        btn_diary_options.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(DiaryActivity.this, btn_diary_options);
 
-        // 옵션 1.일기삭제 2. 공유
-        btn_diary_options.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Initializing the popup menu and giving the reference as current context
-                PopupMenu popupMenu = new PopupMenu(DiaryActivity.this, btn_diary_options);
+            popupMenu.getMenuInflater().inflate(R.menu.option_menu, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(menuItem -> {
+                switch (menuItem.getItemId()) {
+                    case R.id.share_diary:
+                        CaptureDialog captureDialog = new CaptureDialog(DiaryActivity.this);
 
-                // Inflating popup menu from popup_menu.xml file
-                popupMenu.getMenuInflater().inflate(R.menu.option_menu, popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.share_diary:
-                                // 1. 한 장의 폴라로이드 같은 이미지로 공유
-                                CaptureDialog captureDialog = new CaptureDialog(DiaryActivity.this);
-                                captureDialog.callCaptureDialog(
-                                        mFormat.format(date),
-                                        getImageInBitmap(diaryRecord.getImage()),
-                                        diaryRecord.getText());
-                                break;
-                            case R.id.delete_diary:
-                                // 2. 일기 삭제
-                                Diary deleteRecord = new Diary();
-                                deleteRecord.setDate(dbFormat.format(date));
-
-                                mDiaryDao.deleteDiary(deleteRecord);
-
-                                finish(); // 액티비티 종료
+                        Diary diaryRecord1 = isExist();
+                        if (diaryRecord1 == null) { // 날짜에 일기가 없음
+                            Toast.makeText(
+                                    DiaryActivity.this,
+                                    "일기가 존재하지 않습니다.",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            if (diaryRecord1.getText().matches("")) {
+                                if (diaryRecord1.getImage() == null) { // 일기 내용, 사진 없음
+                                    Toast.makeText(
+                                            DiaryActivity.this,
+                                            "일기가 존재하지 않습니다.",
+                                            Toast.LENGTH_LONG).show();
+                                }else { // 사진만 있음
+                                    captureDialog.callCaptureDialog(
+                                            mFormat.format(date),
+                                            getImageInBitmap(diaryRecord1.getImage()),
+                                            null
+                                    );
+                                }
+                            } else {
+                                if (diaryRecord1.getImage() == null) { // 내용만 있음
+                                    captureDialog.callCaptureDialog(
+                                            mFormat.format(date),
+                                            null,
+                                            diaryRecord1.getText()
+                                    );
+                                }else { // 일기 내용, 사진 다 있음
+                                    captureDialog.callCaptureDialog(
+                                            mFormat.format(date),
+                                            getImageInBitmap(diaryRecord1.getImage()),
+                                            diaryRecord1.getText());
+                                }
+                            }
                         }
-                        return true;
-                    }
-                });
-                // Showing the popup menu
-                popupMenu.show();
-            }
+                        break;
+                    case R.id.delete_diary:
+                        Diary deleteRecord = new Diary();
+                        deleteRecord.setDate(dbFormat.format(date));
+
+                        mDiaryDao.deleteDiary(deleteRecord);
+
+                        finish();
+                }
+                return true;
+            });
+            popupMenu.show();
         });
     }
 
 
     /**
-     * 뒤로가기 버튼
      * 뒤로가기 버튼으로 diaryActivity 나가도 저장
      */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Diary diaryRecord = isExist();
+        diaryRecord = isExist();
 
         if (diaryRecord == null) {
             insertRecord();
@@ -190,26 +202,25 @@ public class DiaryActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, REQUEST_CODE);
     }
-
+    /**
+     *  이미지뷰에 이미지 비트맵으로 넣기
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
-                    Diary diaryRecord = isExist();
-
-                    /* 이미지뷰에 이미지 넣기 */
                     InputStream in = getContentResolver().openInputStream(data.getData());
                     Bitmap img = BitmapFactory.decodeStream(in);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     img.compress(Bitmap.CompressFormat.JPEG, 80, stream);
-                    byte[] bytes = stream.toByteArray();
                     Glide.with(getApplicationContext())
                             .load(img)
                             .centerCrop()
                             .into(btn_diary_photo);
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
@@ -217,7 +228,7 @@ public class DiaryActivity extends AppCompatActivity {
     }
 
     /**
-     * ImageView -> bitmap -> byte array 추출
+     * convert ImageView -> bitmap -> byte array
      *
      * @param image ImageView
      * @return byte array
@@ -226,12 +237,12 @@ public class DiaryActivity extends AppCompatActivity {
         Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
-        byte[] imageInByte = baos.toByteArray();
-        return imageInByte;
+        return baos.toByteArray();
     }
 
     /**
      * convert from byte array to bitmap
+     *
      * @param image byte array
      * @return bitmap image
      */
@@ -241,11 +252,9 @@ public class DiaryActivity extends AppCompatActivity {
 
     /**
      * 해당 날짜에 레코드가 존재하는지 확인
-     * @return Diary (object)
      */
     public Diary isExist() {
-        Diary diary = mDiaryDao.findByDate(dbFormat.format(date));
-        return diary;
+        return mDiaryDao.findByDate(dbFormat.format(date));
     }
 
     /**
@@ -255,18 +264,17 @@ public class DiaryActivity extends AppCompatActivity {
         Diary insertRecord = new Diary();
         insertRecord.setDate(dbFormat.format(date));
         insertRecord.setText(et_diary.getText().toString());
-        if(btn_diary_photo.getDrawable() == null)
+        if (btn_diary_photo.getDrawable() == null)
             insertRecord.setImage(null);
         else
             insertRecord.setImage(getImageInByte(btn_diary_photo));
         mDiaryDao.insertDiary(insertRecord);
     }
-
     private void updateRecord() {
         Diary updateRecord = new Diary();
         updateRecord.setDate(dbFormat.format(date));
         updateRecord.setText(et_diary.getText().toString());
-        if(btn_diary_photo.getDrawable() == null)
+        if (btn_diary_photo.getDrawable() == null)
             updateRecord.setImage(null);
         else
             updateRecord.setImage(getImageInByte(btn_diary_photo));

@@ -2,9 +2,11 @@ package com.example.main_dialendar.view.activity;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -29,16 +31,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.main_dialendar.BuildConfig;
-import com.example.main_dialendar.util.lock.ScreenService;
 import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.adapter.CalendarAdapter;
 import com.example.main_dialendar.view.adapter.WeekAdapter;
-import com.example.main_dialendar.view.dialog.TimePickerDialog;
+import com.example.main_dialendar.view.dialog.BackupDialog;
 import com.example.main_dialendar.view.dialog.YearPickerDialog;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.material.navigation.NavigationView;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
+import com.gun0912.tedpermission.BuildConfig;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -49,10 +59,12 @@ import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, CalendarAdapter.ItemClickListener {
 
+    private static final int REQUEST_CODE_SIGN_IN = 250;
     // 월/요일 텍스트뷰
     private TextView tv_month;
 
@@ -95,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static Context context;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,14 +138,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
 
-                switch(item.getItemId()) {
-                    case (R.id.setting) :
+                switch (item.getItemId()) {
+                    case (R.id.setting):
                         startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                         break;
-                    case (R.id.backup) :
-                        createBackupFile();
+                    case (R.id.backup):
+                        BackupDialog dialog = new BackupDialog(MainActivity.this);
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.setCancelable(true);
+                        dialog.show();
+
+                        //createBackupFile();
                         break;
-                    case (R.id.mail) :
+                    case (R.id.mail):
                         sendEmailToAdmin("[일력 문의사항]", new String[]{"apps@gmail.com"});
                         break;
                 }
@@ -144,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 상단 툴바 설정
         setToolbar();
-        
+
         // 캘린더뷰 생성
         setCalendarView(getCalendar(savedInstanceState));
 
@@ -159,10 +175,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         calendar = Calendar.getInstance();
 
         // bundle에 저장되어 있는 데이터 가져오기
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             calendar.set(savedInstanceState.getInt("year"), savedInstanceState.getInt("month"), 1);
-        }
-        else
+        } else
             calendar.set(Calendar.DAY_OF_MONTH, 1);
 
         return calendar;
@@ -183,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // 툴바 설정
     private void setToolbar() {
-        setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayShowCustomEnabled(true);    // 커스터마이징을 위해 필요
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);      // 툴바 메뉴 버튼 생성
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.btn_sidebar); // 메뉴 버튼 모양 설정
@@ -208,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 달력 세팅
+     *
      * @param calendar
      */
     private void setCalendarView(Calendar calendar) {
@@ -222,25 +238,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         thisMonthLastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         calendar.add(Calendar.MONTH, -1);
-        Log.e("지난달 마지막일", calendar.get(Calendar.DAY_OF_MONTH)+"");
+        Log.e("지난달 마지막일", calendar.get(Calendar.DAY_OF_MONTH) + "");
 
         // 지난달 마지막 일자
         lastMonthStartDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         calendar.add(Calendar.MONTH, 1);
-        Log.e("이번달 시작일", calendar.get(Calendar.DAY_OF_MONTH)+"");
+        Log.e("이번달 시작일", calendar.get(Calendar.DAY_OF_MONTH) + "");
 
-        lastMonthStartDay -= (dayOfMonth-1)-1;
+        lastMonthStartDay -= (dayOfMonth - 1) - 1;
 
         // 년월 표시
-        tv_month.setText((this.calendar.get(Calendar.MONTH)+1)+"");
-        tv_year.setText(this.calendar.get(Calendar.YEAR)+"");
+        tv_month.setText((this.calendar.get(Calendar.MONTH) + 1) + "");
+        tv_year.setText(this.calendar.get(Calendar.YEAR) + "");
 
         Day day;
-        Log.e("DayOfMonth", dayOfMonth+"");
+        Log.e("DayOfMonth", dayOfMonth + "");
 
-        for(int i=0; i<dayOfMonth-1; i++){
-            int date = lastMonthStartDay+i;
+        for (int i = 0; i < dayOfMonth - 1; i++) {
+            int date = lastMonthStartDay + i;
             day = new Day();
             day.setDay(Integer.toString(date));
             day.setInMonth(false);
@@ -248,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dayList.add(day);
         }
 
-        for(int i=1; i<=thisMonthLastDay; i++){
+        for (int i = 1; i <= thisMonthLastDay; i++) {
             day = new Day();
             day.setDay(Integer.toString(i));
             day.setInMonth(true);
@@ -256,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dayList.add(day);
         }
 
-        for(int i=1; i<35-(thisMonthLastDay+dayOfMonth)+1; i++){
+        for (int i = 1; i < 35 - (thisMonthLastDay + dayOfMonth) + 1; i++) {
             day = new Day();
             day.setDay(Integer.toString(i));
             day.setInMonth(false);
@@ -277,11 +293,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_year :
+            case R.id.btn_year:
                 showYearPickerDialog();
                 break;
 
-            case R.id.btn_write :
+            case R.id.btn_write:
                 startActivity(new Intent(MainActivity.this, DiaryActivity.class));
                 break;
         }
@@ -294,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         itemCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
         String date = new SimpleDateFormat("yyyy.MM.dd.").format(itemCal.getTime());
 
-        Log.e("Date", date+"");
+        Log.e("Date", date + "");
         if (isInMonth) {
             Intent intent = new Intent(MainActivity.this, DiaryActivity.class);
             intent.putExtra("today", false);
@@ -342,48 +358,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         outState.putInt("year", calendar.get(Calendar.YEAR));
         outState.putInt("month", calendar.get(Calendar.MONTH));
     }
-
-    // 백업 파일 생성
-    private void createBackupFile() {
-        //requestSignIn();
-        TedPermission.with(MainActivity.this)
-                .setPermissionListener(permissionListener)
-                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-                .check();
-    }
-
-    // 데이터베이스 백업에 필요한 권한 요청
-    PermissionListener permissionListener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-            try {
-                File sd = Environment.getExternalStorageDirectory();
-                File data = Environment.getDataDirectory();
-
-                if (sd.canWrite()) {
-                    File currentDB = new File(data, "/data/com.example.main_dialendar/databases/dialendar.db");
-                    File backupDB = new File(sd, "/Download/dialendar.db");
-
-                    FileChannel src = new FileInputStream(currentDB).getChannel();
-                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-
-                    src.close();
-                    dst.close();
-                    Toast.makeText(MainActivity.this, "백업 성공", Toast.LENGTH_LONG);
-                    Log.i("###", "backup success");
-                }
-                Toast.makeText(MainActivity.this, "백업 실패 in try", Toast.LENGTH_LONG);
-            } catch (Exception e) {
-                Toast.makeText(MainActivity.this, "백업 실패", Toast.LENGTH_LONG);
-                Log.e("###", "backup failed");
-            }
-        }
-
-        @Override
-        public void onPermissionDenied(List<String> deniedPermissions) {
-            Toast.makeText(MainActivity.this, "접근이 거부되었습니다. 권한을 허용해주세요.", Toast.LENGTH_LONG);
-        }
-    };
 }
