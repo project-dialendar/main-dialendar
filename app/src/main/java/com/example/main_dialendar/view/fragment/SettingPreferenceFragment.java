@@ -27,7 +27,10 @@ import com.example.main_dialendar.view.activity.LockActivity;
 import com.example.main_dialendar.view.activity.SettingActivity;
 import com.example.main_dialendar.view.dialog.TimePickerDialog;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 설정 목록을 보여주는 프레그먼트
@@ -46,6 +49,7 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
     String themeColor;
     int messageHour = 20, messageMinute = 0;
+    SimpleDateFormat messageFormat = new SimpleDateFormat("a hh:mm");
 
     Context context;
 
@@ -73,13 +77,16 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
     private void setDefaultInPrefs() {
         if(!localPrefs.getBoolean("message", false))
-            messagePreference.setSummary("사용");
+            messagePreference.setSummary("사용 안 함");
+        else
+            messagePreference.setSummary(getMessageText());
 
-        if(localPrefs.getBoolean("lock", false))
+        if(!localPrefs.getBoolean("lock", false))
+            lockPreference.setSummary("사용 안 함");
+        else
             lockPreference.setSummary("사용");
 
-        if(!localPrefs.getString("darkmode", "").equals(""))
-            darkmodePreference.setSummary(localPrefs.getString("darkmode", "Default"));
+        darkmodePreference.setSummary(localPrefs.getString("darkmode", "Default"));
     }
 
     SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -97,8 +104,11 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
     private void setMessage() {
         if (localPrefs.getBoolean("message", false)) {
-            messagePreference.setSummary("사용");
             showMessageDialog();
+            messagePreference.setSummary(getMessageText());
+            prefManager.setMessageOn(true, messageHour, messageMinute);
+
+            startMessaging();
         }
         else {
             messagePreference.setSummary("사용 안 함");
@@ -162,16 +172,8 @@ public class SettingPreferenceFragment extends PreferenceFragment {
             // save message's hour and minute
             messageHour = hour;
             messageMinute = minute;
-
-            setMessagePrefOn();
         }
     };
-
-    private void setMessagePrefOn() {
-        prefManager.setMessageOn(true, messageHour, messageMinute);
-
-        startMessaging();
-    }
 
     private void startMessaging() {
         Calendar cal = createMessageTime();
@@ -200,6 +202,14 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
             Toast.makeText(context, "알림이 설정되었습니다.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private String getMessageText() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, messageHour);
+        cal.set(Calendar.MINUTE, messageMinute);
+
+        return messageFormat.format(new Date(cal.getTimeInMillis()));
     }
 
     @Override
