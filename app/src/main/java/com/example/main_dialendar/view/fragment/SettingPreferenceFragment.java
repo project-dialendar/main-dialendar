@@ -28,7 +28,6 @@ import com.example.main_dialendar.view.activity.SettingActivity;
 import com.example.main_dialendar.view.dialog.TimePickerDialog;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -37,19 +36,20 @@ import java.util.Date;
  */
 public class SettingPreferenceFragment extends PreferenceFragment {
 
-    public static SharedPreferences localPrefs;
-    SharedPrefManager prefManager;
+    static SharedPreferences localPref;
+    SharedPrefManager sharedPref;
 
-    SwitchPreference messagePreference;
-    SwitchPreference lockPreference;
-    ListPreference darkmodePreference;
+    SwitchPreference messagePref;
+    SwitchPreference lockPref;
+    ListPreference darkmodePref;
 
     private static final int LOCKMODE_ON = 10000;
-    private static final int LOCKMODE_OFF = 99999;
+    private static final int LOCKMODE_OFF = 9999;
+
+    int messageHour, messageMinute;
+    SimpleDateFormat messageFormat = new SimpleDateFormat("a hh:mm");
 
     String themeColor;
-    int messageHour = 20, messageMinute = 0;
-    SimpleDateFormat messageFormat = new SimpleDateFormat("a hh:mm");
 
     Context context;
 
@@ -60,33 +60,34 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
         context = getActivity();
 
-        messagePreference = (SwitchPreference)findPreference("message");
-        lockPreference = (SwitchPreference)findPreference("lock");
-        darkmodePreference = (ListPreference)findPreference("darkmode");
+        localPref = PreferenceManager.getDefaultSharedPreferences(context);
+        localPref.registerOnSharedPreferenceChangeListener(prefListener);
+
+        messagePref = (SwitchPreference)findPreference("message");
+        lockPref = (SwitchPreference)findPreference("lock");
+        darkmodePref = (ListPreference)findPreference("darkmode");
 
         // sharedPreferences 연결
-        prefManager = SharedPrefManager.getInstance(context);
-        localPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPref = SharedPrefManager.getInstance(context);
+        messageHour = sharedPref.getMessageHour();
+        messageMinute = sharedPref.getMessageMinute();
 
         // 디폴트 값 설정
         setDefaultInPrefs();
-
-        // 리스너 연결
-        localPrefs.registerOnSharedPreferenceChangeListener(prefListener);
     }
 
     private void setDefaultInPrefs() {
-        if(!localPrefs.getBoolean("message", false))
-            messagePreference.setSummary("사용 안 함");
+        if(!localPref.getBoolean("message", false))
+            messagePref.setSummary("사용 안 함");
         else
-            messagePreference.setSummary(getMessageText());
+            messagePref.setSummary(getMessageText(getMessageTime()));
 
-        if(!localPrefs.getBoolean("lock", false))
-            lockPreference.setSummary("사용 안 함");
+        if(!localPref.getBoolean("lock", false))
+            lockPref.setSummary("사용 안 함");
         else
-            lockPreference.setSummary("사용");
+            lockPref.setSummary("사용");
 
-        darkmodePreference.setSummary(localPrefs.getString("darkmode", "Default"));
+        darkmodePref.setSummary(localPref.getString("darkmode", "Default"));
     }
 
     SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -103,23 +104,19 @@ public class SettingPreferenceFragment extends PreferenceFragment {
     };
 
     private void setMessage() {
-        if (localPrefs.getBoolean("message", false)) {
+        if (localPref.getBoolean("message", false))
             showMessageDialog();
-            messagePreference.setSummary(getMessageText());
-            prefManager.setMessageOn(true, messageHour, messageMinute);
-
-            startMessaging();
-        }
         else {
-            messagePreference.setSummary("사용 안 함");
-            prefManager.setMessageOn(false);
+            cancelAlarmManager();
+            messagePref.setSummary("사용 안 함");
+            sharedPref.setMessageOn(false);
         }
     }
 
     private void setDarkmode() {
-        if (localPrefs.getString("darkmode", "Default").equals("Dark"))
+        if (localPref.getString("darkmode", "Default").equals("Dark"))
             themeColor = ThemeUtil.DARK_MODE;
-        else if (localPrefs.getString("darkmode", "Default").equals("Light"))
+        else if (localPref.getString("darkmode", "Default").equals("Light"))
             themeColor = ThemeUtil.LIGHT_MODE;
         else
             themeColor = ThemeUtil.DEFAULT_MODE;
@@ -127,20 +124,20 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         ThemeUtil.applyTheme(themeColor);
         ThemeUtil.modSave(SettingActivity.context, themeColor);
 
-        darkmodePreference.setSummary(localPrefs.getString("darkmode", "Default"));
-        prefManager.setDarkmode(localPrefs.getString("darkmode", "Default"));
+        darkmodePref.setSummary(localPref.getString("darkmode", "Default"));
+        sharedPref.setDarkmode(localPref.getString("darkmode", "Default"));
     }
 
     private void setLockmode() {
-        if (localPrefs.getBoolean("lock", false)) {
-            lockPreference.setSummary("사용");
-            prefManager.setLockOn(true);
+        if (localPref.getBoolean("lock", false)) {
             moveToLockActivity(LOCKMODE_ON);
+            lockPref.setSummary("사용");
+            sharedPref.setLockOn(true);
         }
         else{
-            lockPreference.setSummary("사용 안 함");
-            prefManager.setLockOn(false);
             moveToLockActivity(LOCKMODE_OFF);
+            lockPref.setSummary("사용 안 함");
+            sharedPref.setLockOn(false);
         }
     }
 
@@ -151,17 +148,10 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         timePickerDialog.setCanceledOnTouchOutside(false);
         timePickerDialog.setCancelable(true);
         timePickerDialog.show();
-
     }
 
     private void moveToLockActivity(int mode) {
-        Intent intent;
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)
-            intent = new Intent(context, LockActivity.class);
-        else
-            intent = new Intent(SettingActivity.context, LockActivity.class);
-
+        Intent intent = new Intent(context, LockActivity.class);
         intent.putExtra("lock", mode);
         startActivity(intent);
     }
@@ -172,15 +162,18 @@ public class SettingPreferenceFragment extends PreferenceFragment {
             // save message's hour and minute
             messageHour = hour;
             messageMinute = minute;
+
+            updateMessageText();
+            startAlarmManager(getMessageTime());
         }
     };
 
-    private void startMessaging() {
-        Calendar cal = createMessageTime();
-        startAlarmManager(cal);
+    private void updateMessageText() {
+        messagePref.setSummary(getMessageText(getMessageTime()));
+        sharedPref.setMessageOn(true, messageHour, messageMinute);
     }
 
-    private Calendar createMessageTime() {
+    private Calendar getMessageTime() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
         cal.set(Calendar.HOUR_OF_DAY, messageHour);
@@ -192,23 +185,23 @@ public class SettingPreferenceFragment extends PreferenceFragment {
     }
 
     private void startAlarmManager(Calendar cal) {
+        Intent intent = new Intent(context, MessageReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
+
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-
-        if (alarmManager != null) {
-            Intent intent = new Intent(context, MessageReceiver.class);
-            PendingIntent messageIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, messageIntent);
-
-            Toast.makeText(context, "알림이 설정되었습니다.", Toast.LENGTH_LONG).show();
-        }
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        Toast.makeText(context, "알림이 설정되었습니다.", Toast.LENGTH_LONG).show();
     }
 
-    private String getMessageText() {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, messageHour);
-        cal.set(Calendar.MINUTE, messageMinute);
+    private void cancelAlarmManager() {
+        Intent intent = new Intent(context, MessageReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
 
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+    }
+
+    private String getMessageText(Calendar cal) {
         return messageFormat.format(new Date(cal.getTimeInMillis()));
     }
 
