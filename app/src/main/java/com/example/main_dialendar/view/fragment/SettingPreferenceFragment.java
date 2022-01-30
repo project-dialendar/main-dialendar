@@ -1,5 +1,7 @@
 package com.example.main_dialendar.view.fragment;
 
+import static android.app.Activity.*;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,21 +11,21 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.SwitchPreference;
+import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.util.message.MessageReceiver;
 import com.example.main_dialendar.util.setting.SharedPrefManager;
 import com.example.main_dialendar.util.theme.ThemeUtil;
-import com.example.main_dialendar.view.activity.LockActivity;
 import com.example.main_dialendar.view.activity.SettingActivity;
 import com.example.main_dialendar.view.dialog.TimePickerDialog;
 
@@ -34,13 +36,13 @@ import java.util.Date;
 /**
  * 설정 목록을 보여주는 프레그먼트
  */
-public class SettingPreferenceFragment extends PreferenceFragment {
+public class SettingPreferenceFragment extends PreferenceFragmentCompat {
 
     static SharedPreferences localPref;
     SharedPrefManager sharedPref;
 
-    SwitchPreference messagePref;
-    SwitchPreference lockPref;
+    SwitchPreferenceCompat messagePref;
+    SwitchPreferenceCompat lockPref;
     ListPreference darkmodePref;
 
     private static final int LOCKMODE_ON = 10000;
@@ -54,18 +56,18 @@ public class SettingPreferenceFragment extends PreferenceFragment {
     Context context;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.settings_preference);  // xml 파일과 연동
-
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.settings_preference, rootKey);  // xml 파일과 연동
         context = getActivity();
 
         localPref = PreferenceManager.getDefaultSharedPreferences(context);
-        localPref.registerOnSharedPreferenceChangeListener(prefListener);
 
-        messagePref = (SwitchPreference)findPreference("message");
-        lockPref = (SwitchPreference)findPreference("lock");
-        darkmodePref = (ListPreference)findPreference("darkmode");
+        messagePref = findPreference("message");
+        messagePref.setOnPreferenceChangeListener(onPreferenceChangeListener);
+        lockPref = findPreference("lock");
+        lockPref.setOnPreferenceChangeListener(onPreferenceChangeListener);
+        darkmodePref = findPreference("darkmode");
+        darkmodePref.setOnPreferenceChangeListener(onPreferenceChangeListener);
 
         // sharedPreferences 연결
         sharedPref = SharedPrefManager.getInstance(context);
@@ -74,6 +76,7 @@ public class SettingPreferenceFragment extends PreferenceFragment {
 
         // 디폴트 값 설정
         setDefaultInPrefs();
+
     }
 
     private void setDefaultInPrefs() {
@@ -90,16 +93,15 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         darkmodePref.setSummary(localPref.getString("darkmode", "Default"));
     }
 
-    SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+    Preference.OnPreferenceChangeListener onPreferenceChangeListener = new Preference.OnPreferenceChangeListener() {
         @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            String key = preference.getKey();
             if (key.equals("message")) setMessage();
             if (key.equals("darkmode")) setDarkmode();
             if (key.equals("lock")) setLockmode();
 
-            // 2 deqth PreferenceScreen 내부에서 발생한 설정 내용을 적용시키기 위함
-            ((BaseAdapter) getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
+            return false;
         }
     };
 
@@ -122,23 +124,18 @@ public class SettingPreferenceFragment extends PreferenceFragment {
             themeColor = ThemeUtil.DEFAULT_MODE;
 
         ThemeUtil.applyTheme(themeColor);
-        ThemeUtil.modSave(SettingActivity.context, themeColor);
+        ThemeUtil.modSave(context, themeColor);
 
         darkmodePref.setSummary(localPref.getString("darkmode", "Default"));
         sharedPref.setDarkmode(localPref.getString("darkmode", "Default"));
     }
 
     private void setLockmode() {
-        if (localPref.getBoolean("lock", false)) {
-            moveToLockActivity(LOCKMODE_ON);
-            lockPref.setSummary("사용");
-            sharedPref.setLockOn(true);
-        }
-        else{
-            moveToLockActivity(LOCKMODE_OFF);
-            lockPref.setSummary("사용 안 함");
-            sharedPref.setLockOn(false);
-        }
+        SettingActivity settingActivity = (SettingActivity) getActivity();
+        if (localPref.getBoolean("lock", false))
+            settingActivity.moveToLockActivity(LOCKMODE_ON);
+        else
+            settingActivity.moveToLockActivity(LOCKMODE_OFF);
     }
 
     private void showMessageDialog() {
@@ -150,10 +147,29 @@ public class SettingPreferenceFragment extends PreferenceFragment {
         timePickerDialog.show();
     }
 
-    private void moveToLockActivity(int mode) {
-        Intent intent = new Intent(context, LockActivity.class);
-        intent.putExtra("lock", mode);
-        startActivity(intent);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("###", "Fragment: onActivityResult!!");
+
+        switch(data.getIntExtra("mode", LOCKMODE_OFF)) {
+            case LOCKMODE_ON:
+                if (resultCode == RESULT_OK) {
+                    lockPref.setSummary("사용");
+                    sharedPref.setLockOn(true);
+                }
+                else
+                    lockPref.setChecked(false);
+                break;
+            case LOCKMODE_OFF:
+                if (resultCode == RESULT_OK) {
+                    lockPref.setSummary("사용 안 함");
+                    sharedPref.setLockOn(false);
+                }
+                else
+                    lockPref.setChecked(true);
+                break;
+        }
     }
 
     android.app.TimePickerDialog.OnTimeSetListener timeSetListener = new android.app.TimePickerDialog.OnTimeSetListener() {

@@ -166,6 +166,10 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         if (input == mSharedPref.getPassword()) {
             Toast.makeText(LockActivity.this, "비밀번호 설정을 완료했습니다.", Toast.LENGTH_LONG);
             setLockmodeOn();
+
+            Intent intent = new Intent();
+            intent.putExtra("mode", flag);
+            setResult(RESULT_OK, intent);
             finish();
         }
         else failToOpen();
@@ -211,5 +215,14 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 iv_password4.setImageResource(R.drawable.ic_baseline_password_fill);
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent();
+        intent.putExtra("mode", flag);
+        setResult(RESULT_CANCELED, intent);
+        finish();
     }
 }

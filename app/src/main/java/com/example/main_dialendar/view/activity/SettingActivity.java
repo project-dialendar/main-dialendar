@@ -1,24 +1,20 @@
 package com.example.main_dialendar.view.activity;
 
-import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 
 import com.example.main_dialendar.R;
-import com.example.main_dialendar.util.setting.SharedPrefManager;
+import com.example.main_dialendar.view.fragment.SettingPreferenceFragment;
 
 /**
  * 설정 화면 Activity
@@ -28,14 +24,20 @@ public class SettingActivity extends AppCompatActivity {
     // 뒤로가기 버튼
     Button btn_back;
 
-    public static Context context;
+    private ActivityResultLauncher<Intent> lockOnOffLauncher;
+    private static final int LOCKMODE_ON = 10000;
+    private static final int LOCKMODE_OFF = 9999;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        context = getApplicationContext();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.settings_fragment, new SettingPreferenceFragment())
+                .commit();
 
         btn_back = findViewById(R.id.btn_back);
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +48,20 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        lockOnOffLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        Log.e("###", "Activity에서 실행");
+                    }
+                }
+        );
+    }
 
+    public void moveToLockActivity(int mode) {
+        Intent intent = new Intent(SettingActivity.this, LockActivity.class);
+        intent.putExtra("lock", mode);
+        lockOnOffLauncher.launch(intent);
     }
 }
