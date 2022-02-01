@@ -24,9 +24,7 @@ public class SettingActivity extends AppCompatActivity {
     // 뒤로가기 버튼
     Button btn_back;
 
-    private ActivityResultLauncher<Intent> lockOnOffLauncher;
-    private static final int LOCKMODE_ON = 10000;
-    private static final int LOCKMODE_OFF = 9999;
+//    private ActivityResultLauncher<Intent> lockOnOffLauncher;
 
 
     @Override
@@ -48,20 +46,14 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        lockOnOffLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        Log.e("###", "Activity에서 실행");
-                    }
-                }
-        );
-    }
-
-    public void moveToLockActivity(int mode) {
-        Intent intent = new Intent(SettingActivity.this, LockActivity.class);
-        intent.putExtra("lock", mode);
-        lockOnOffLauncher.launch(intent);
+//        lockOnOffLauncher = registerForActivityResult(
+//                new ActivityResultContracts.StartActivityForResult(),
+//                new ActivityResultCallback<ActivityResult>() {
+//                    @Override
+//                    public void onActivityResult(ActivityResult result) {
+//                        Log.e("###", "Activity에서 실행");
+//                    }
+//                }
+//        );
     }
 }
