@@ -43,9 +43,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     int flag, cnt = 0;
     Stack<Integer> pw;
 
-    private static final int SETTING_FIRST = 10000;
-    private static final int SETTING_SECOND = 10001;
-
     private static final int LOCKMODE_ON = 10002;
     private static final int LOCKMODE_OFF = 99999;
 
@@ -183,5 +180,16 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 iv_password4.setImageResource(R.drawable.ic_baseline_password_fill);
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (flag == LOCKMODE_OFF) {
+            Intent intent = new Intent();
+            setResult(RESULT_CANCELED, intent);
+            finish();
+        }
+
+        super.onBackPressed();
     }
 }

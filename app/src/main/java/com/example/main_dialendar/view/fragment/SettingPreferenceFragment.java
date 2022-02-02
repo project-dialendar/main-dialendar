@@ -152,51 +152,53 @@ public class SettingPreferenceFragment extends PreferenceFragmentCompat {
     public void moveToLockActivity(int mode) {
         if (mode == LOCKMODE_ON) {
             Intent intent = new Intent(context, PasswordSettingActivity.class);
-            lockOnOffLauncher.launch(intent);
+            lockOnLauncher.launch(intent);
         }
         else {
             Intent intent = new Intent(context, LockActivity.class);
             intent.putExtra("mode", LOCKMODE_OFF);
-            lockOnOffLauncher.launch(intent);
+            lockOffLauncher.launch(intent);
         }
     }
 
-    ActivityResultLauncher<Intent> lockOnOffLauncher = registerForActivityResult(
+    ActivityResultLauncher<Intent> lockOnLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
-
             int resultCode = result.getResultCode();
-            int mode = result.getData().getIntExtra("mode", LOCKMODE_OFF);
-
-            switch(mode) {
-                case LOCKMODE_ON:
-                    if (resultCode == RESULT_CANCELED) {
-                        Log.e("###", "LOCKMODE_ON_CANCEL");
-                        lockPref.setChecked(false);
-                    }
-                    else {
+            switch(resultCode) {
+                case RESULT_CANCELED:
+                    Log.e("###", "LOCKMODE_ON_CANCEL");
+                    lockPref.setChecked(false);
+                    break;
+                default:
                         Log.e("###", "LOCKMODE_ON_OK");
                         lockPref.setSummary("사용");
                         sharedPref.setLockOn(true);
-                    }
-                    break;
-                case LOCKMODE_OFF:
-                    if (resultCode == RESULT_CANCELED) {
-                        Log.e("###", "LOCKMODE_OFF_CANCEL");
-                        lockPref.setChecked(true);
-                    }
-                    else {
-                        Log.e("###", "LOCKMODE_OFF_OK");
-                        lockPref.setSummary("사용 안 함");
-                        sharedPref.setLockOn(false);
-                    }
                     break;
             }
         }
     });
 
+    ActivityResultLauncher<Intent> lockOffLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    int resultCode = result.getResultCode();
+                    switch(resultCode) {
+                        case RESULT_CANCELED:
+                            Log.e("###", "LOCKMODE_OFF_CANCEL");
+                            lockPref.setChecked(true);
+                        default:
+                            Log.e("###", "LOCKMODE_OFF_OK");
+                            lockPref.setSummary("사용 안 함");
+                            sharedPref.setLockOn(false);
+                            break;
+                    }
+                }
+            });
 
     private void showMessageDialog() {
         TimePickerDialog timePickerDialog = new TimePickerDialog(context);

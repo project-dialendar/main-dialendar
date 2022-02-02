@@ -24,9 +24,6 @@ public class SettingActivity extends AppCompatActivity {
     // 뒤로가기 버튼
     Button btn_back;
 
-//    private ActivityResultLauncher<Intent> lockOnOffLauncher;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +43,5 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-//        lockOnOffLauncher = registerForActivityResult(
-//                new ActivityResultContracts.StartActivityForResult(),
-//                new ActivityResultCallback<ActivityResult>() {
-//                    @Override
-//                    public void onActivityResult(ActivityResult result) {
-//                        Log.e("###", "Activity에서 실행");
-//                    }
-//                }
-//        );
     }
 }

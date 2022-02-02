@@ -162,7 +162,6 @@ public class PasswordSettingActivity extends AppCompatActivity implements View.O
             setLockmodeOn();
 
             Intent intent = new Intent();
-            intent.putExtra("mode", flag);
             setResult(RESULT_OK, intent);
             finish();
         }
@@ -209,7 +208,6 @@ public class PasswordSettingActivity extends AppCompatActivity implements View.O
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra("mode", flag);
         setResult(RESULT_CANCELED, intent);
         finish();
 
