@@ -40,7 +40,7 @@
             android:name=".view.activity.DiaryActivity"
             android:screenOrientation="landscape"></activity>
         <activity
-            android:name=".view.activity.LockActivity"
+            android:name=".view.activity.PasswordSettingActivity"
             android:exported="true"
             android:screenOrientation="landscape"></activity>
 

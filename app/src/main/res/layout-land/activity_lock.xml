@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.activity.LockActivity">
+    tools:context=".view.activity.PasswordSettingActivity">
 
     <ImageView
         android:id="@+id/iv_lock"
@@ -177,10 +177,12 @@
         <TableRow>
 
             <Button
+                android:id="@+id/btn_cancel"
                 android:height="80dp"
                 android:text=""
                 android:background="@color/background"
                 android:textSize="24sp"
+                android:letterSpacing="0.2"
                 android:textColor="@color/textColor"/>
 
             <Button

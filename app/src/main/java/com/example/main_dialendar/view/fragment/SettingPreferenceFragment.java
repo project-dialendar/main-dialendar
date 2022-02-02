@@ -29,6 +29,7 @@ import com.example.main_dialendar.R;
 import com.example.main_dialendar.util.message.MessageReceiver;
 import com.example.main_dialendar.util.setting.SharedPrefManager;
 import com.example.main_dialendar.util.theme.ThemeUtil;
+import com.example.main_dialendar.view.activity.PasswordSettingActivity;
 import com.example.main_dialendar.view.activity.LockActivity;
 import com.example.main_dialendar.view.activity.SettingActivity;
 import com.example.main_dialendar.view.dialog.TimePickerDialog;
@@ -140,16 +141,24 @@ public class SettingPreferenceFragment extends PreferenceFragmentCompat {
 
     private void setLockmode() {
         SettingActivity settingActivity = (SettingActivity) getActivity();
-        if (localPref.getBoolean("lock", false))
+        if (localPref.getBoolean("lock", false)){
             moveToLockActivity(LOCKMODE_ON);
-        else
+        }
+        else{
             moveToLockActivity(LOCKMODE_OFF);
+        }
     }
 
     public void moveToLockActivity(int mode) {
-        Intent intent = new Intent(context, LockActivity.class);
-        intent.putExtra("lock", mode);
-        lockOnOffLauncher.launch(intent);
+        if (mode == LOCKMODE_ON) {
+            Intent intent = new Intent(context, PasswordSettingActivity.class);
+            lockOnOffLauncher.launch(intent);
+        }
+        else {
+            Intent intent = new Intent(context, LockActivity.class);
+            intent.putExtra("mode", LOCKMODE_OFF);
+            lockOnOffLauncher.launch(intent);
+        }
     }
 
     ActivityResultLauncher<Intent> lockOnOffLauncher = registerForActivityResult(
@@ -157,32 +166,36 @@ public class SettingPreferenceFragment extends PreferenceFragmentCompat {
                 new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
-            Log.e("###", "Fragment에서 실행");
 
             int resultCode = result.getResultCode();
             int mode = result.getData().getIntExtra("mode", LOCKMODE_OFF);
 
             switch(mode) {
                 case LOCKMODE_ON:
-                    if (resultCode == RESULT_OK) {
+                    if (resultCode == RESULT_CANCELED) {
+                        Log.e("###", "LOCKMODE_ON_CANCEL");
+                        lockPref.setChecked(false);
+                    }
+                    else {
+                        Log.e("###", "LOCKMODE_ON_OK");
                         lockPref.setSummary("사용");
                         sharedPref.setLockOn(true);
                     }
-                    else
-                        lockPref.setChecked(false);
                     break;
                 case LOCKMODE_OFF:
-                    if (resultCode == RESULT_OK) {
+                    if (resultCode == RESULT_CANCELED) {
+                        Log.e("###", "LOCKMODE_OFF_CANCEL");
+                        lockPref.setChecked(true);
+                    }
+                    else {
+                        Log.e("###", "LOCKMODE_OFF_OK");
                         lockPref.setSummary("사용 안 함");
                         sharedPref.setLockOn(false);
                     }
-                    else
-                        lockPref.setChecked(true);
                     break;
             }
         }
     });
-
 
 
     private void showMessageDialog() {
