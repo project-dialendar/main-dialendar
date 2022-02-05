@@ -98,6 +98,7 @@ public class PasswordSettingActivity extends AppCompatActivity implements View.O
         tv_password = findViewById(R.id.tv_password);
 
         pw = new Stack<>();
+        flag = SETTING_FIRST;
     }
 
     @Override
@@ -106,7 +107,6 @@ public class PasswordSettingActivity extends AppCompatActivity implements View.O
 
         if (btn == btn_cancel) {
             Intent intent = new Intent();
-            intent.putExtra("mode", flag);
             setResult(RESULT_CANCELED, intent);
             finish();
         }

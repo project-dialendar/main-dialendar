@@ -1,7 +1,9 @@
 package com.example.main_dialendar.view.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -41,10 +43,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     SharedPrefManager mSharedPref;
 
     int flag, cnt = 0;
+    boolean isSuccess = false;
     Stack<Integer> pw;
 
     private static final int LOCKMODE_ON = 10002;
-    private static final int LOCKMODE_OFF = 99999;
+    private static final int LOCKMODE_OFF = 9999;
 
 
     @Override
@@ -98,7 +101,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         // 잠금화면으로 설정
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
-        flag = getIntent().getIntExtra("lock", LOCKMODE_ON);
+        flag = getIntent().getIntExtra("mode", LOCKMODE_ON);
         pw = new Stack<>();
     }
 
@@ -153,6 +156,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private void setLockmodeOff() {
         Intent lockService = new Intent(getApplicationContext(), ScreenService.class);
         stopService(lockService);
+        backtoSettingActivity();
     }
 
     // 비밀번호 숫자 입력할 때마다 이미지뷰 변경
@@ -185,11 +189,16 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onBackPressed() {
         if (flag == LOCKMODE_OFF) {
-            Intent intent = new Intent();
-            setResult(RESULT_CANCELED, intent);
+            setResult(Activity.RESULT_CANCELED);
             finish();
         }
 
         super.onBackPressed();
+    }
+
+    private void backtoSettingActivity() {
+        setResult(Activity.RESULT_OK);
+        isSuccess = true;
+        finish();
     }
 }

@@ -142,10 +142,10 @@ public class SettingPreferenceFragment extends PreferenceFragmentCompat {
     private void setLockmode() {
         SettingActivity settingActivity = (SettingActivity) getActivity();
         if (localPref.getBoolean("lock", false)){
-            moveToLockActivity(LOCKMODE_ON);
+            moveToLockActivity(LOCKMODE_OFF);
         }
         else{
-            moveToLockActivity(LOCKMODE_OFF);
+            moveToLockActivity(LOCKMODE_ON);
         }
     }
 
@@ -168,14 +168,14 @@ public class SettingPreferenceFragment extends PreferenceFragmentCompat {
         public void onActivityResult(ActivityResult result) {
             int resultCode = result.getResultCode();
             switch(resultCode) {
-                case RESULT_CANCELED:
-                    Log.e("###", "LOCKMODE_ON_CANCEL");
-                    lockPref.setChecked(false);
+                case RESULT_OK:
+                    lockPref.setSummary("사용");
+                    lockPref.setChecked(true);
+                    sharedPref.setLockOn(true);
                     break;
-                default:
-                        Log.e("###", "LOCKMODE_ON_OK");
-                        lockPref.setSummary("사용");
-                        sharedPref.setLockOn(true);
+                case RESULT_CANCELED:
+                    lockPref.setSummary("사용 안 함");
+                    lockPref.setChecked(false);
                     break;
             }
         }
@@ -188,13 +188,14 @@ public class SettingPreferenceFragment extends PreferenceFragmentCompat {
                 public void onActivityResult(ActivityResult result) {
                     int resultCode = result.getResultCode();
                     switch(resultCode) {
-                        case RESULT_CANCELED:
-                            Log.e("###", "LOCKMODE_OFF_CANCEL");
-                            lockPref.setChecked(true);
-                        default:
-                            Log.e("###", "LOCKMODE_OFF_OK");
+                        case RESULT_OK:
                             lockPref.setSummary("사용 안 함");
+                            lockPref.setChecked(false);
                             sharedPref.setLockOn(false);
+                            break;
+                        case RESULT_CANCELED:
+                            lockPref.setSummary("사용");
+                            lockPref.setChecked(true);
                             break;
                     }
                 }
