@@ -48,9 +48,15 @@
             android:exported="true"
             android:screenOrientation="landscape"></activity>
 
-        <receiver android:name=".util.lock.ScreenReceiver"></receiver>
+        <receiver android:name=".util.lock.ScreenReceiver"
+            android:enabled="true"
+            android:exported="true">
+        </receiver>
 
-        <service android:name=".util.lock.ScreenService"></service>
+        <service android:name=".util.lock.ScreenService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
 
         <receiver android:name=".util.message.MessageReceiver"
             android:enabled="true"

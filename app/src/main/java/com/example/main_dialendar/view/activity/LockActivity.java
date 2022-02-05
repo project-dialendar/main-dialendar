@@ -3,7 +3,6 @@ package com.example.main_dialendar.view.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -43,7 +42,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     SharedPrefManager mSharedPref;
 
     int flag, cnt = 0;
-    boolean isSuccess = false;
     Stack<Integer> pw;
 
     private static final int LOCKMODE_ON = 10002;
@@ -138,10 +136,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         if (input == mSharedPref.getPassword()) {
             switch (flag) {
                 case LOCKMODE_ON:
-                    finish();
+                    backtoActivity();
                     break;
                 case LOCKMODE_OFF:
                     setLockmodeOff();
+                    backtoActivity();
                     break;
             }
         }
@@ -156,7 +155,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private void setLockmodeOff() {
         Intent lockService = new Intent(getApplicationContext(), ScreenService.class);
         stopService(lockService);
-        backtoSettingActivity();
     }
 
     // 비밀번호 숫자 입력할 때마다 이미지뷰 변경
@@ -189,16 +187,14 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onBackPressed() {
         if (flag == LOCKMODE_OFF) {
+            super.onBackPressed();
             setResult(Activity.RESULT_CANCELED);
             finish();
         }
-
-        super.onBackPressed();
     }
 
-    private void backtoSettingActivity() {
+    private void backtoActivity() {
         setResult(Activity.RESULT_OK);
-        isSuccess = true;
         finish();
     }
 }

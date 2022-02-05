@@ -40,7 +40,7 @@ public class PasswordSettingActivity extends AppCompatActivity implements View.O
 
     SharedPrefManager mSharedPref;
 
-    int flag, cnt = 0;
+    int flag = SETTING_FIRST, cnt = 0;
     Stack<Integer> pw;
 
     private static final int SETTING_FIRST = 10000;
@@ -98,7 +98,6 @@ public class PasswordSettingActivity extends AppCompatActivity implements View.O
         tv_password = findViewById(R.id.tv_password);
 
         pw = new Stack<>();
-        flag = SETTING_FIRST;
     }
 
     @Override
@@ -174,7 +173,7 @@ public class PasswordSettingActivity extends AppCompatActivity implements View.O
     }
 
     private void failToOpen() {
-        Toast.makeText(PasswordSettingActivity.this, "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG);
+        Toast.makeText(getApplicationContext(), "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG);
         cnt = 0;
     }
 
