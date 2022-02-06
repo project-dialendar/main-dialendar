@@ -33,6 +33,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.main_dialendar.util.setting.SharedPrefManager;
 import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
@@ -51,7 +52,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, CalendarAdapter.ItemClickListener {
 
-    private static final int REQUEST_CODE_SIGN_IN = 250;
     // 월/요일 텍스트뷰
     private TextView tv_month;
 
@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String themeColor;
 
     public static Context context;
+    private SharedPrefManager sharedPref;
+    private boolean lock = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rv_month = findViewById(R.id.rv_month);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 7);
         rv_month.setLayoutManager(gridLayoutManager);
+        rv_month.setItemViewCacheSize(42);
         gv_day_of_week = findViewById(R.id.gv_day_of_week);
 
         ll_year = findViewById(R.id.btn_year);
@@ -119,6 +122,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
 
+        sharedPref = SharedPrefManager.getInstance(this);
+
         // 드로어바 메뉴 세팅
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -127,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 switch (item.getItemId()) {
                     case (R.id.setting):
-                        startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+                        startActivity(new Intent(MainActivity.this, SettingActivity.class));
                         break;
                     case (R.id.backup):
                         checkBackupPermission();
@@ -390,6 +395,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 "\n기기명(Device): \n안드로이드 OS(Android OS): \n내용(Content): \n");
         email.setType("message/rfc822");
         startActivity(email);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (sharedPref.getLockOff() && lock) {
+            lock = false;
+            startActivity(new Intent(this, LockActivity.class));
+        }
     }
 
     @Override

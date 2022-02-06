@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 알림 설정-->
+    <SwitchPreferenceCompat
+        android:key="message"
+        android:title="알림"
+        android:summary="사용 안 함"/>
 
-    <PreferenceCategory android:title="설정">
+    <!-- 잠금 모드 설정-->
+    <SwitchPreferenceCompat
+        android:key="lock"
+        android:title="잠금 모드"
+        android:summary="사용 안 함"/>
 
-        <!-- 알림 설정-->
-        <SwitchPreference
-            android:key="message"
-            android:title="알림"
-            android:summary="사용 안 함"/>
-
-        <!-- 잠금 모드 설정-->
-        <SwitchPreference
-            android:key="lock"
-            android:title="잠금 모드"
-            android:summary="사용 안 함"/>
-
-        <!-- 다크 모드 설정-->
-        <ListPreference
-            android:entries="@array/array_darkmode"
-            android:entryValues="@array/array_darkmode"
-            android:key="darkmode"
-            android:title="다크 모드"
-            android:summary="Default"/>
-
-    </PreferenceCategory>
-
+    <!-- 다크 모드 설정-->
+    <ListPreference
+        android:entries="@array/array_darkmode"
+        android:entryValues="@array/array_darkmode"
+        android:key="darkmode"
+        android:title="다크 모드"
+        android:summary="Default"/>
 </PreferenceScreen>
