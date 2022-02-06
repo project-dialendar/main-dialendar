@@ -148,7 +148,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void failToOpen() {
-        Toast.makeText(LockActivity.this, "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG);
+        Toast.makeText(LockActivity.this, "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG).show();
         cnt = 0;
     }
 

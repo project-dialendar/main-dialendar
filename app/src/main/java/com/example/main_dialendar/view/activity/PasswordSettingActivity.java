@@ -157,7 +157,7 @@ public class PasswordSettingActivity extends AppCompatActivity implements View.O
 
     private void readSecondPassword(int input) {
         if (input == mSharedPref.getPassword()) {
-            Toast.makeText(getApplicationContext(), "비밀번호 설정을 완료했습니다.", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "비밀번호 설정을 완료했습니다.", Toast.LENGTH_LONG).show();
             setLockmodeOn();
 
             Intent intent = new Intent();
@@ -173,7 +173,7 @@ public class PasswordSettingActivity extends AppCompatActivity implements View.O
     }
 
     private void failToOpen() {
-        Toast.makeText(getApplicationContext(), "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG);
+        Toast.makeText(getApplicationContext(), "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG).show();
         cnt = 0;
     }
 
