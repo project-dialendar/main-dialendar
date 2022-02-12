@@ -12,6 +12,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginTop="95dp"
+        android:contentDescription="@string/lock_image"
         app:layout_constraintEnd_toStartOf="@id/tl_lock"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +23,7 @@
         android:id="@+id/tv_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="비밀번호를 입력해주세요"
+        android:text="@string/lock_input_text"
         android:textColor="@color/textColor"
         android:fontFamily="@font/maruburittf"
         android:textSize="16sp"
@@ -47,13 +48,15 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_margin="2dp"
-            android:src="@drawable/ic_baseline_password_blank"/>
+            android:src="@drawable/ic_baseline_password_blank"
+            android:contentDescription="@string/first_password" />
 
         <ImageView
             android:id="@+id/iv_password2"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_margin="2dp"
+            android:contentDescription="@string/second_password"
             android:src="@drawable/ic_baseline_password_blank"/>
 
         <ImageView
@@ -61,6 +64,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_margin="2dp"
+            android:contentDescription="@string/third_password"
             android:src="@drawable/ic_baseline_password_blank"/>
 
         <ImageView
@@ -68,13 +72,14 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_margin="2dp"
+            android:contentDescription="@string/fourth_password"
             android:src="@drawable/ic_baseline_password_blank"/>
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="비밀번호를 잊어버렸어요! >"
+        android:text="@string/lock_password_text"
         android:textColor="@color/textColor"
         android:textSize="12sp"
         android:fontFamily="@font/maruburittf"
@@ -99,53 +104,53 @@
                 android:id="@+id/btn_1"
                 android:height="80dp"
                 android:background="@color/background"
-                android:text="1"
+                android:text="@string/_1"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
-
+                android:textColor="@color/textColor"
+                style="?android:attr/buttonBarButtonStyle" />
             <Button
                 android:id="@+id/btn_2"
                 android:height="80dp"
                 android:background="@color/background"
-                android:text="2"
+                android:text="@string/_2"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
-
+                android:textColor="@color/textColor"
+                style="?android:attr/buttonBarButtonStyle" />
             <Button
                 android:id="@+id/btn_3"
                 android:height="80dp"
                 android:background="@color/background"
-                android:text="3"
+                android:text="@string/_3"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
+                android:textColor="@color/textColor"
+                style="?android:attr/buttonBarButtonStyle" />
         </TableRow>
-
         <TableRow>
 
             <Button
                 android:id="@+id/btn_4"
                 android:height="80dp"
                 android:background="@color/background"
-                android:text="4"
+                android:text="@string/_4"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
-
+                android:textColor="@color/textColor"
+                style="?android:attr/buttonBarButtonStyle" />
             <Button
                 android:id="@+id/btn_5"
                 android:height="80dp"
                 android:background="@color/background"
-                android:text="5"
+                android:text="@string/_5"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
-
+                android:textColor="@color/textColor"
+                style="?android:attr/buttonBarButtonStyle" />
             <Button
                 android:id="@+id/btn_6"
                 android:height="80dp"
                 android:background="@color/background"
-                android:text="6"
+                android:text="@string/_6"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
-        </TableRow>
+                android:textColor="@color/textColor"
+                style="?android:attr/buttonBarButtonStyle" />        </TableRow>
 
         <TableRow>
 
@@ -153,51 +158,56 @@
                 android:id="@+id/btn_7"
                 android:height="80dp"
                 android:background="@color/background"
-                android:text="7"
+                android:text="@string/_7"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
-
+                android:textColor="@color/textColor"
+                style="?android:attr/buttonBarButtonStyle" />
             <Button
                 android:id="@+id/btn_8"
                 android:height="80dp"
                 android:background="@color/background"
-                android:text="8"
+                android:text="@string/_8"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
-
+                android:textColor="@color/textColor"
+                style="?android:attr/buttonBarButtonStyle" />
             <Button
                 android:id="@+id/btn_9"
                 android:height="80dp"
                 android:background="@color/background"
-                android:text="9"
+                android:text="@string/_9"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
+                android:textColor="@color/textColor"
+                style="?android:attr/buttonBarButtonStyle" />
         </TableRow>
 
         <TableRow>
 
             <Button
                 android:height="80dp"
-                android:text=""
                 android:background="@color/background"
+                android:text="@string/_blank"
+                android:textColor="@color/textColor"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
+                tools:ignore="SpeakableTextPresentCheck"
+                style="?android:attr/buttonBarButtonStyle" />
 
             <Button
                 android:id="@+id/btn_0"
                 android:height="80dp"
                 android:background="@color/background"
-                android:text="0"
+                android:text="@string/_0"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
+                android:textColor="@color/textColor"
+                style="?android:attr/buttonBarButtonStyle" />
 
             <Button
                 android:id="@+id/btn_delete"
                 android:height="80dp"
-                android:text="del"
+                android:text="@string/del"
                 android:background="@color/background"
                 android:textSize="24sp"
-                android:textColor="@color/textColor"/>
+                android:textColor="@color/textColor"
+                style="?android:attr/buttonBarButtonStyle" />
         </TableRow>
     </TableLayout>
 

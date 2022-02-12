@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="날짜 선택"
+        android:text="@string/select_date"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/maruburittf"
         android:textSize="16sp"
@@ -32,9 +32,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="년"
+                android:text="@string/year"
                 android:fontFamily="@font/maruburittf"
-                android:textSize="15dp"/>
+                android:textSize="15sp"/>
 
             <NumberPicker
                 android:id="@+id/picker_year"
@@ -52,9 +52,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="월"
+                android:text="@string/month"
                 android:fontFamily="@font/maruburittf"
-                android:textSize="15dp"/>
+                android:textSize="15sp"/>
 
             <NumberPicker
                 android:id="@+id/picker_month"
@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="확인"
+        android:text="@string/ok"
         android:textSize="14sp"
         android:textColor="@color/textColor"
         android:fontFamily="@font/maruburittf"
