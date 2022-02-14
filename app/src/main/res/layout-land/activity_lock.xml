@@ -76,17 +76,6 @@
             android:src="@drawable/ic_baseline_password_blank"/>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/lock_password_text"
-        android:textColor="@color/textColor"
-        android:textSize="12sp"
-        android:fontFamily="@font/maruburittf"
-        android:layout_marginBottom="55dp"
-        app:layout_constraintEnd_toStartOf="@+id/tl_lock"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
 
     <TableLayout
         android:id="@+id/tl_lock"
@@ -102,113 +91,60 @@
 
             <Button
                 android:id="@+id/btn_1"
-                android:height="80dp"
-                android:background="@color/background"
                 android:text="@string/_1"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                style="?android:attr/buttonBarButtonStyle" />
+                style="@style/Widget.Maindialendar.lockButton"/>
             <Button
                 android:id="@+id/btn_2"
-                android:height="80dp"
-                android:background="@color/background"
                 android:text="@string/_2"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                style="?android:attr/buttonBarButtonStyle" />
+                style="@style/Widget.Maindialendar.lockButton"/>
             <Button
                 android:id="@+id/btn_3"
-                android:height="80dp"
-                android:background="@color/background"
                 android:text="@string/_3"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                style="?android:attr/buttonBarButtonStyle" />
+                style="@style/Widget.Maindialendar.lockButton"/>
         </TableRow>
         <TableRow>
-
             <Button
                 android:id="@+id/btn_4"
-                android:height="80dp"
-                android:background="@color/background"
                 android:text="@string/_4"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                style="?android:attr/buttonBarButtonStyle" />
+                style="@style/Widget.Maindialendar.lockButton"/>
             <Button
                 android:id="@+id/btn_5"
-                android:height="80dp"
-                android:background="@color/background"
                 android:text="@string/_5"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                style="?android:attr/buttonBarButtonStyle" />
+                style="@style/Widget.Maindialendar.lockButton"/>
             <Button
                 android:id="@+id/btn_6"
-                android:height="80dp"
-                android:background="@color/background"
                 android:text="@string/_6"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                style="?android:attr/buttonBarButtonStyle" />        </TableRow>
-
+                style="@style/Widget.Maindialendar.lockButton"/>
+        </TableRow>
         <TableRow>
-
             <Button
                 android:id="@+id/btn_7"
-                android:height="80dp"
-                android:background="@color/background"
                 android:text="@string/_7"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                style="?android:attr/buttonBarButtonStyle" />
+                style="@style/Widget.Maindialendar.lockButton"/>
             <Button
                 android:id="@+id/btn_8"
-                android:height="80dp"
-                android:background="@color/background"
                 android:text="@string/_8"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                style="?android:attr/buttonBarButtonStyle" />
+                style="@style/Widget.Maindialendar.lockButton"/>
             <Button
                 android:id="@+id/btn_9"
-                android:height="80dp"
-                android:background="@color/background"
                 android:text="@string/_9"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                style="?android:attr/buttonBarButtonStyle" />
+                style="@style/Widget.Maindialendar.lockButton"/>
         </TableRow>
-
         <TableRow>
-
             <Button
-                android:height="80dp"
-                android:background="@color/background"
                 android:text="@string/_blank"
-                android:textColor="@color/textColor"
-                android:textSize="24sp"
                 tools:ignore="SpeakableTextPresentCheck"
-                style="?android:attr/buttonBarButtonStyle" />
+                style="@style/Widget.Maindialendar.lockButton"/>
 
             <Button
                 android:id="@+id/btn_0"
-                android:height="80dp"
-                android:background="@color/background"
                 android:text="@string/_0"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                style="?android:attr/buttonBarButtonStyle" />
+                style="@style/Widget.Maindialendar.lockButton"/>
 
             <Button
                 android:id="@+id/btn_delete"
-                android:height="80dp"
                 android:text="@string/del"
-                android:background="@color/background"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                style="?android:attr/buttonBarButtonStyle" />
+                style="@style/Widget.Maindialendar.lockButton"/>
         </TableRow>
     </TableLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

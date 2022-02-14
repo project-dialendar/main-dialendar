@@ -9,13 +9,13 @@
         android:id="@+id/tv_create"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:background="@drawable/calendar_bg_border"
-        android:text="@string/backup_save"
-        android:letterSpacing="0.2"
-        android:textSize="18sp"
-        android:textAlignment="center"
         android:gravity="center"
-        android:layout_weight="1"/>
+        android:letterSpacing="0.2"
+        android:text="@string/backup_save"
+        android:textAlignment="center"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_read"
