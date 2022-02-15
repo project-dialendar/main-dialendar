@@ -16,12 +16,13 @@ import com.example.main_dialendar.view.activity.MainActivity;
 
 // 노티 메시지 수신 및 전송
 public class MessageReceiver extends BroadcastReceiver {
-    NotificationManager manager;
-    NotificationCompat.Builder builder;
-    Context context;
 
     private static String CHANNEL_ID = "Channel1";
     private static String CHANNEL_NAME = "Channel1";
+
+    NotificationManager manager;
+    NotificationCompat.Builder builder;
+    Context context;
 
     public MessageReceiver() {}
 
@@ -51,7 +52,7 @@ public class MessageReceiver extends BroadcastReceiver {
 
     private Notification createNotification() {
         builder = null;
-        builder.setContentTitle("일력");
+        builder.setContentTitle(context.getString(R.string.app_name));
         builder.setSmallIcon(R.drawable.img_logo);
         builder.setAutoCancel(true);
 

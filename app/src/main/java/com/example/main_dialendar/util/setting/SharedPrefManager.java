@@ -11,8 +11,6 @@ public class SharedPrefManager {
     private static SharedPreferences.Editor editor;
 
     private static final String SHARED_PREFS_FILE_NAME = "Dialendar";
-
-    private static final String FONT_KEY = "Maruburi";
     private static final String LOCK_KEY = "LockOnOff";
     private static final String PASSWORD_KEY = "Password";
     private static final String DARKMODE_KEY = "Darkmode";
@@ -34,16 +32,6 @@ public class SharedPrefManager {
         }
         return manager;
     }
-
-    public void setFont(String font) {
-        editor.putString(FONT_KEY, font);
-        editor.commit();
-    }
-
-    public String getFont() {
-        return sharedPreferences.getString(FONT_KEY, "");
-    }
-
 
     public void setLockOn(boolean value) {
         editor.putBoolean(LOCK_KEY, value);
@@ -86,7 +74,6 @@ public class SharedPrefManager {
         editor.putBoolean(MESSAGE_KEY, value);
         editor.commit();
     }
-
 
     public boolean getMessageOff() {
         return sharedPreferences.getBoolean(MESSAGE_KEY, false);

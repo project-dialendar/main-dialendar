@@ -120,14 +120,14 @@ public class DiaryActivity extends AppCompatActivity {
                         if (diaryRecord1 == null) { // 날짜에 일기가 없음
                             Toast.makeText(
                                     DiaryActivity.this,
-                                    "일기가 존재하지 않습니다.",
+                                    getString(R.string.diary_not_exist),
                                     Toast.LENGTH_LONG).show();
                         } else {
                             if (diaryRecord1.getText().matches("")) {
                                 if (diaryRecord1.getImage() == null) { // 일기 내용, 사진 없음
                                     Toast.makeText(
                                             DiaryActivity.this,
-                                            "일기가 존재하지 않습니다.",
+                                            getString(R.string.diary_not_exist),
                                             Toast.LENGTH_LONG).show();
                                 }else { // 사진만 있음
                                     captureDialog.callCaptureDialog(

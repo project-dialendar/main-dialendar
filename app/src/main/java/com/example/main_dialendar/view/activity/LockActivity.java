@@ -157,14 +157,14 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private void readFirstPassword(int input) {
         mSharedPref.setPassword(input);
 
-        tv_password.setText("한번 더 입력해주세요!");
+        tv_password.setText(getString(R.string.lock_input_text2));
         cnt = 0;
         flag = SETTING_SECOND;
     }
 
     private void readSecondPassword(int input) {
         if (input == mSharedPref.getPassword()) {
-            Toast.makeText(LockActivity.this, "비밀번호 설정을 완료했습니다.", Toast.LENGTH_LONG);
+            Toast.makeText(LockActivity.this, getString(R.string.lock_setting_sucess), Toast.LENGTH_LONG);
             setLockmodeOn();
             finish();
         }
@@ -182,7 +182,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void failToOpen() {
-        Toast.makeText(LockActivity.this, "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG);
+        Toast.makeText(LockActivity.this, getString(R.string.lock_fail), Toast.LENGTH_LONG);
         cnt = 0;
     }
 

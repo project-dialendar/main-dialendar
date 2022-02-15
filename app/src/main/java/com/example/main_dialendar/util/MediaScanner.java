@@ -1,4 +1,4 @@
-package com.example.main_dialendar.view.activity;
+package com.example.main_dialendar.util;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;

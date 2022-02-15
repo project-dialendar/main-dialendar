@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -51,7 +50,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, CalendarAdapter.ItemClickListener {
 
-    private static final int REQUEST_CODE_SIGN_IN = 250;
     // 월/요일 텍스트뷰
     private TextView tv_month;
 
@@ -93,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String themeColor;
 
     public static Context context;
+
+    private static final String YEAR = "year";
+    private static final String MONTH = "month";
+    private static final String DATE = "date";
+    private static final String IS_TODAY = "today";
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // bundle에 저장되어 있는 데이터 가져오기
         if (savedInstanceState != null) {
-            calendar.set(savedInstanceState.getInt("year"), savedInstanceState.getInt("month"), 1);
+            calendar.set(savedInstanceState.getInt(YEAR), savedInstanceState.getInt(MONTH), 1);
         } else
             calendar.set(Calendar.DAY_OF_MONTH, 1);
 
@@ -220,13 +224,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         thisMonthLastDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         calendar.add(Calendar.MONTH, -1);
-        Log.e("지난달 마지막일", calendar.get(Calendar.DAY_OF_MONTH) + "");
 
         // 지난달 마지막 일자
         lastMonthStartDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         calendar.add(Calendar.MONTH, 1);
-        Log.e("이번달 시작일", calendar.get(Calendar.DAY_OF_MONTH) + "");
 
         lastMonthStartDay -= (dayOfMonth - 1) - 1;
 
@@ -235,8 +237,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_year.setText(this.calendar.get(Calendar.YEAR) + "");
 
         Day day;
-        Log.e("DayOfMonth", dayOfMonth + "");
-
         for (int i = 0; i < dayOfMonth - 1; i++) {
             int date = lastMonthStartDay + i;
             day = new Day();
@@ -292,11 +292,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         itemCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
         String date = new SimpleDateFormat("yyyy.MM.dd.").format(itemCal.getTime());
 
-        Log.e("Date", date + "");
         if (isInMonth) {
             Intent intent = new Intent(MainActivity.this, DiaryActivity.class);
-            intent.putExtra("today", false);
-            intent.putExtra("date", date);
+            intent.putExtra(IS_TODAY, false);
+            intent.putExtra(DATE, date);
             startActivity(intent);
         }
     }
@@ -396,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt("year", calendar.get(Calendar.YEAR));
-        outState.putInt("month", calendar.get(Calendar.MONTH));
+        outState.putInt(YEAR, calendar.get(Calendar.YEAR));
+        outState.putInt(MONTH, calendar.get(Calendar.MONTH));
     }
 }

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">일력</string>
+
     <string name="ok">확인</string>
     <string name="_1">1</string>
     <string name="_2">2</string>
@@ -13,30 +14,59 @@
     <string name="_0">0</string>
     <string name="del">del</string>
     <string name="_blank" />
+
+    <string name="logo">logo</string>
+    <string name="move_to_back">move to back</string>
     <string name="select_time">알림을 받고 싶은 시간을 설정해주세요!</string>
+
+    <!--diary-->
     <string name="diary_date">yyyy.mm.dd.date</string>
     <string name="diary_text_hint">오늘 하루는 어땠나요?</string>
     <string name="diary_save">save</string>
     <string name="diary_image">image</string>
     <string name="diary_option">option</string>
-    <string name="lock_input_text">비밀번호를 입력해주세요</string>
-    <string name="lock_password_text"><![CDATA[비밀번호를 잊어버렸어요! >]]></string>
+    <string name="diary_not_exist">일기가 존재하지 않습니다.</string>
+
+    <!--lock-->
+    <string name="lock_input_text">비밀번호를 입력해주세요.</string>
+    <string name="lock_input_text2">한 번 더 입력해주세요.</string>
+    <string name="lock_setting_sucess">비밀번호 설정을 완료했습니다.</string>
+    <string name="lock_fail">비밀번호가 틀렸습니다.</string>
     <string name="lock_image">lock image</string>
     <string name="first_password">first password</string>
     <string name="second_password">second password</string>
     <string name="third_password">third password</string>
     <string name="fourth_password">fourth password</string>
+
+    <!--Main-->
     <string name="main_year">2021</string>
     <string name="main_month">0</string>
     <string name="main_write">write diary</string>
     <string name="main_change_year">change year</string>
+
+    <!--setting-->
     <string name="setting_text">설 정</string>
-    <string name="move_to_back">move to back</string>
+    <string name="setting_message">알림이 설정되었습니다.</string>
+    <string name="setting_true">사용</string>
+    <string name="setting_false">사용 안 함</string>
+
+    <!--backup-->
     <string name="backup_save">일기 저장하기</string>
     <string name="backup_load">일기 불러오기</string>
+    <string name="backup_failed">백업 실패</string>
+    <string name="backup_authorization_failed">권한 거절로 인해 백업이 실패했습니다.</string>
+    <string name="backup_success">백업 성공</string>
+    <string name="restore_failed">복구 실패</string>
+    <string name="restore_authorization_failed">권한 거절로 인해 복구가 실패했습니다.</string>
+    <string name="restore_success">복구 성공</string>
+
+    <!--capture-->
+    <string name="capture_save">일기를 저장했습니다.</string>
+    <string name="capture_cancel">일기 저장을 취소했습니다.</string>
+
     <string name="select_date">날짜 선택</string>
     <string name="year">년</string>
     <string name="month">월</string>
     <string name="day">DAY</string>
-    <string name="logo">logo</string>
+
 </resources>

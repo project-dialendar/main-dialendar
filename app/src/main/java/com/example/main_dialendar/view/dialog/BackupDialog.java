@@ -21,6 +21,14 @@ import java.nio.channels.FileChannel;
 
 public class BackupDialog extends Dialog implements View.OnClickListener {
 
+    private static final String URL_APP_DB = "/data/com.example.main_dialendar/databases/dialendar_db";
+    private static final String URL_APP_SHM = "/data/com.example.main_dialendar/databases/dialendar_db-shm";
+    private static final String URL_APP_WAL = "/data/com.example.main_dialendar/databases/dialendar_db-wal";
+    private static final String URL_LOCAL_DB = "/Download/dialendar_db";
+    private static final String URL_LOCAL_SHM = "/Download/dialendar_db-shm";
+    private static final String URL_LOCAL_WAL = "/Download/dialendar_db-wal";
+    private static final String TAG = "BackupDialog";
+
     TextView tv_create;
     TextView tv_read;
 
@@ -55,12 +63,12 @@ public class BackupDialog extends Dialog implements View.OnClickListener {
     // 백업 파일 생성
     private void createBackupFile() {
         try {
-            backupEachFile("/data/com.example.main_dialendar/databases/dialendar_db-shm", "/Download/dialendar_db-shm");
-            backupEachFile("/data/com.example.main_dialendar/databases/dialendar_db-wal", "/Download/dialendar_db-wal");
-            backupEachFile("/data/com.example.main_dialendar/databases/dialendar_db", "/Download/dialendar_db");
+            backupEachFile(URL_APP_SHM, URL_LOCAL_SHM);
+            backupEachFile(URL_APP_WAL, URL_LOCAL_WAL);
+            backupEachFile(URL_APP_DB, URL_LOCAL_DB);
         } catch (Exception e) {
-            Toast.makeText(getContext(), "백업 실패", Toast.LENGTH_LONG);
-            Log.e("###", "backup failed");
+            Toast.makeText(getContext(), getContext().getString(R.string.backup_failed), Toast.LENGTH_LONG);
+            Log.e(TAG, "backup failed");
             e.printStackTrace();
         }
     }
@@ -68,12 +76,12 @@ public class BackupDialog extends Dialog implements View.OnClickListener {
     // 백업 파일 불러오기
     private void readBackupFile() {
         try {
-            restoreEachFile("/Download/dialendar_db-shm", "/data/com.example.main_dialendar/databases/dialendar_db-shm");
-            restoreEachFile("/Download/dialendar_db-wal", "/data/com.example.main_dialendar/databases/dialendar_db-wal");
-            restoreEachFile("/Download/dialendar_db", "/data/com.example.main_dialendar/databases/dialendar_db");
+            restoreEachFile(URL_LOCAL_SHM, URL_APP_SHM);
+            restoreEachFile(URL_LOCAL_WAL, URL_APP_WAL);
+            restoreEachFile(URL_LOCAL_DB, URL_APP_DB);
         } catch (Exception e) {
-            Toast.makeText(getContext(), "복구 실패", Toast.LENGTH_LONG);
-            Log.e("###", "restore failed");
+            Toast.makeText(getContext(), getContext().getString(R.string.restore_failed), Toast.LENGTH_LONG);
+            Log.e(TAG, "restore failed");
             e.printStackTrace();
         }
     }
@@ -92,13 +100,13 @@ public class BackupDialog extends Dialog implements View.OnClickListener {
 
             src.close();
             dst.close();
-            Toast.makeText(getContext(), from + ": 백업이 완료되었습니다.", Toast.LENGTH_LONG).show();
-            Log.i("###", from + "backup success");
+            Toast.makeText(getContext(), getContext().getString(R.string.backup_success), Toast.LENGTH_LONG).show();
+            Log.i(TAG, from + "backup success");
             cancel();
 
         }
         else {
-            Toast.makeText(getContext(), "권한 거절로 인해 백업이 실패하였습니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getContext().getString(R.string.backup_authorization_failed), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -117,12 +125,12 @@ public class BackupDialog extends Dialog implements View.OnClickListener {
             src.close();
             dst.close();
 
-            Toast.makeText(getContext(), from + ": 복구가 완료되었습니다.", Toast.LENGTH_LONG).show();
-            Log.i("###", "restore success");
+            Toast.makeText(getContext(), getContext().getString(R.string.restore_success), Toast.LENGTH_LONG).show();
+            Log.i(TAG, "restore success");
             cancel();
         }
         else {
-            Toast.makeText(getContext(), "권한 거절로 인해 복구가 실패하였습니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getContext().getString(R.string.restore_authorization_failed), Toast.LENGTH_LONG).show();
         }
     }
 }
