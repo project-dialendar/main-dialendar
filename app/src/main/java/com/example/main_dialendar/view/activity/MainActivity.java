@@ -33,7 +33,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.main_dialendar.util.setting.SharedPrefManager;
-import com.example.main_dialendar.util.theme.ThemeUtil;
 import com.example.main_dialendar.model.Day;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.view.adapter.CalendarAdapter;
@@ -177,8 +176,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // 다크모드 여부에 따라 테마 설정
     private void setThemeMode() {
-        themeColor = ThemeUtil.modLoad(getApplicationContext());
-        ThemeUtil.applyTheme(themeColor);
+        themeColor = sharedPref.getDarkmode();
+        sharedPref.applyTheme(themeColor);
     }
 
     @Override

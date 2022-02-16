@@ -4,13 +4,13 @@
     <SwitchPreferenceCompat
         android:key="message"
         android:title="알림"
-        android:summary="사용 안 함"/>
+        android:summary="@string/setting_false"/>
 
     <!-- 잠금 모드 설정-->
     <SwitchPreferenceCompat
         android:key="lock"
         android:title="잠금 모드"
-        android:summary="사용 안 함"/>
+        android:summary="@string/setting_false"/>
 
     <!-- 다크 모드 설정-->
     <ListPreference
@@ -18,5 +18,5 @@
         android:entryValues="@array/array_darkmode"
         android:key="darkmode"
         android:title="다크 모드"
-        android:summary="Default"/>
+        android:summary="@string/darkmode_default"/>
 </PreferenceScreen>

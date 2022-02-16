@@ -49,6 +49,9 @@
     <string name="setting_message">알림이 설정되었습니다.</string>
     <string name="setting_true">사용</string>
     <string name="setting_false">사용 안 함</string>
+    <string name="darkmode_dark">Dark</string>
+    <string name="darkmode_light">Light</string>
+    <string name="darkmode_default">Default</string>
 
     <!--backup-->
     <string name="backup_save">일기 저장하기</string>
