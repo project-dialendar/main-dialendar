@@ -23,10 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:fontFamily="@font/maruburittf"
         android:gravity="center"
         android:text="@string/_0"
         android:textColor="@color/textColor"
-        android:fontFamily="@font/maruburittf"
         android:textSize="@dimen/textSize_tab" />
 
 </RelativeLayout>
