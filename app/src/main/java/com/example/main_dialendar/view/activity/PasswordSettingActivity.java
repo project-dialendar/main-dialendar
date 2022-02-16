@@ -1,16 +1,14 @@
 package com.example.main_dialendar.view.activity;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.util.lock.ScreenService;
@@ -18,7 +16,7 @@ import com.example.main_dialendar.util.setting.SharedPrefManager;
 
 import java.util.Stack;
 
-public class LockActivity extends AppCompatActivity implements View.OnClickListener {
+public class PasswordSettingActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btn_0;
     Button btn_1;
@@ -31,6 +29,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     Button btn_8;
     Button btn_9;
     Button btn_delete;
+    Button btn_cancel;
 
     ImageView iv_password1;
     ImageView iv_password2;
@@ -41,17 +40,16 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     SharedPrefManager mSharedPref;
 
-    int flag, cnt = 0;
+    int flag = SETTING_FIRST, cnt = 0;
     Stack<Integer> pw;
 
-    private static final int LOCKMODE_ON = 10002;
-    private static final int LOCKMODE_OFF = 9999;
-
+    private static final int SETTING_FIRST = 10000;
+    private static final int SETTING_SECOND = 10001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lock);
+        setContentView(R.layout.activity_password_setting);
 
         // 변수 설정
         mSharedPref = SharedPrefManager.getInstance(getApplicationContext());
@@ -89,6 +87,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         btn_delete = findViewById(R.id.btn_delete);
         btn_delete.setOnClickListener(this);
 
+        btn_cancel = findViewById(R.id.btn_cancel);
+        btn_cancel.setOnClickListener(this);
+
         iv_password1 = findViewById(R.id.iv_password1);
         iv_password2 = findViewById(R.id.iv_password2);
         iv_password3 = findViewById(R.id.iv_password3);
@@ -96,10 +97,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         tv_password = findViewById(R.id.tv_password);
 
-        // 잠금화면으로 설정
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-
-        flag = getIntent().getIntExtra("mode", LOCKMODE_ON);
         pw = new Stack<>();
     }
 
@@ -107,7 +104,14 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         Button btn = (Button) view;
 
-        if (btn == btn_delete && cnt > 0) deletePassword();
+        if (btn == btn_cancel) {
+            Intent intent = new Intent();
+            setResult(RESULT_CANCELED, intent);
+            finish();
+        }
+        else if (btn == btn_delete) {
+            if (cnt > 0) deletePassword();
+        }
         else if (cnt < 4) {
             int input = Integer.parseInt(btn.getText().toString());
             addPassword(input);
@@ -133,28 +137,44 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         int input = 0;
         for (int i = 0; i < 4; i++) input += pw.pop() * Math.pow(10, i);
 
+        switch(flag) {
+            case SETTING_FIRST:
+                readFirstPassword(input);
+                break;
+            case SETTING_SECOND:
+                readSecondPassword(input);
+                break;
+        }
+    }
+
+    private void readFirstPassword(int input) {
+        mSharedPref.setPassword(input);
+
+        tv_password.setText("한번 더 입력해주세요!");
+        cnt = 0;
+        flag = SETTING_SECOND;
+    }
+
+    private void readSecondPassword(int input) {
         if (input == mSharedPref.getPassword()) {
-            switch (flag) {
-                case LOCKMODE_ON:
-                    backtoActivity();
-                    break;
-                case LOCKMODE_OFF:
-                    setLockmodeOff();
-                    backtoActivity();
-                    break;
-            }
+            Toast.makeText(getApplicationContext(), "비밀번호 설정을 완료했습니다.", Toast.LENGTH_LONG).show();
+            setLockmodeOn();
+
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
         }
         else failToOpen();
     }
 
-    private void failToOpen() {
-        Toast.makeText(LockActivity.this, "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG).show();
-        cnt = 0;
+    private void setLockmodeOn() {
+        Intent lockService = new Intent(getApplicationContext(), ScreenService.class);
+        startService(lockService);
     }
 
-    private void setLockmodeOff() {
-        Intent lockService = new Intent(getApplicationContext(), ScreenService.class);
-        stopService(lockService);
+    private void failToOpen() {
+        Toast.makeText(getApplicationContext(), "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG).show();
+        cnt = 0;
     }
 
     // 비밀번호 숫자 입력할 때마다 이미지뷰 변경
@@ -186,15 +206,10 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        if (flag == LOCKMODE_OFF) {
-            super.onBackPressed();
-            setResult(Activity.RESULT_CANCELED);
-            finish();
-        }
-    }
-
-    private void backtoActivity() {
-        setResult(Activity.RESULT_OK);
+        Intent intent = new Intent();
+        setResult(RESULT_CANCELED, intent);
         finish();
+
+        super.onBackPressed();
     }
 }

@@ -75,6 +75,14 @@ public class SharedPrefManager {
         editor.commit();
     }
 
+    public int getMessageHour() {
+        return sharedPreferences.getInt(MESSAGE_HOUR_KEY, 20);
+    }
+
+    public int getMessageMinute() {
+        return sharedPreferences.getInt(MESSAGE_MINUTE_KEY, 00);
+    }
+
     public boolean getMessageOff() {
         return sharedPreferences.getBoolean(MESSAGE_KEY, false);
     }
