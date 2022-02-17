@@ -3,6 +3,7 @@
     android:id="@+id/ll_week"
     android:layout_width="@dimen/gridWidth_10tab"
     android:layout_height="@dimen/gridHeight_tab"
+    android:layout_margin="3dp"
     android:background="@drawable/calendar_bg_border">
 
     <TextView
