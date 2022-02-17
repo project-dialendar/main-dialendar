@@ -21,5 +21,9 @@
         <item name="colorPrimaryDark">@color/black</item>
     </style>
 
+    <!-- Shapeable ImageView -->
+    <style name="ShapeAppearanceOverlay.App.RoundedCorner" parent="">
+        <item name="cornerSize">24dp</item>
+    </style>
 
 </resources>
