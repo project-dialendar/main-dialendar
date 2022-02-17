@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="deploymentTargetDropDown">
-    <targetSelectedWithDropDown>
+    <runningDeviceTargetSelectedWithDropDown>
       <Target>
-        <type value="QUICK_BOOT_TARGET" />
+        <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\lucet\.android\avd\Nexus_9_API_30.avd" />
+            <value value="C:\Users\lucet\.android\avd\7_WSVGA_Tablet_API_30.avd" />
           </Key>
         </deviceKey>
       </Target>
-    </targetSelectedWithDropDown>
-<<<<<<< HEAD
-    <timeTargetWasSelectedWithDropDown value="2022-01-23T09:13:27.743188600Z" />
-=======
-    <timeTargetWasSelectedWithDropDown value="2022-01-16T07:16:56.093505400Z" />
->>>>>>> 953a11f354a200e92e86d0c9a22b289a7af8cc28
+    </runningDeviceTargetSelectedWithDropDown>
+    <timeTargetWasSelectedWithDropDown value="2022-02-17T12:42:19.293266700Z" />
   </component>
 </project>

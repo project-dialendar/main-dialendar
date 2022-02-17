@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/empty_photo"
+            android:background="@drawable/empty_photo"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedCorner"
             />
 

@@ -3,12 +3,9 @@ package com.example.main_dialendar.view.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-<<<<<<< HEAD
-=======
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
->>>>>>> 953a11f354a200e92e86d0c9a22b289a7af8cc28
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
