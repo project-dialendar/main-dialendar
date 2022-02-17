@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.main_dialendar.R;
-import com.example.main_dialendar.view.activity.MediaScanner;
+import com.example.main_dialendar.util.MediaScanner;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -61,7 +60,7 @@ public class CaptureDialog {
         btn_capture_this.setOnClickListener(v -> {
             // '일기 저장' 버튼
             Request_Capture(capture_target_Layout, date);
-            Toast.makeText(context,"일기를 저장했습니다.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.capture_save), Toast.LENGTH_SHORT).show();
 
             dialog.dismiss();
         });
@@ -69,7 +68,7 @@ public class CaptureDialog {
         btn_capture_cancel.setBackgroundResource(R.drawable.btn_capture);
         btn_capture_cancel.setOnClickListener(v -> {
             // '캡쳐 취소' 버튼
-            Toast.makeText(context,"캡쳐를 취소했습니다.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.capture_save), Toast.LENGTH_SHORT).show();
 
             dialog.dismiss();
         });

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
         android:id="@+id/ll_week"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
@@ -18,12 +14,10 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="DAY"
+            android:text="@string/day"
             android:textColor="@color/textColor"
             android:textStyle="bold"
             android:fontFamily="@font/maruburittf"
             android:textSize="@dimen/textSize_tab"/>
-
-    </LinearLayout>
 
 </LinearLayout>

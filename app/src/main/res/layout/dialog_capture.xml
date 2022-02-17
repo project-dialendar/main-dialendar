@@ -32,23 +32,14 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="@dimen/textSize_tab" />
 
-        <androidx.cardview.widget.CardView
+        <com.example.main_dialendar.view.CustomImageView
+            android:id="@+id/iv_captrue_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_margin="24dp"
-            android:background="@color/background"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="0dp">
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_capture_image"
-                android:layout_width="320dp"
-                android:layout_height="320dp"
-                android:scaleType="centerCrop"
-                android:background="@drawable/empty_photo"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedCorner"
-                 />
-        </androidx.cardview.widget.CardView>
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/empty_photo" />
 
         <TextView
             android:id="@+id/tv_capture_diary"

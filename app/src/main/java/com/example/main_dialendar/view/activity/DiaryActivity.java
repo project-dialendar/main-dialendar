@@ -6,9 +6,6 @@ import android.graphics.BitmapFactory;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -19,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.database.Diary;
 import com.example.main_dialendar.database.DiaryDao;
@@ -26,8 +25,6 @@ import com.example.main_dialendar.database.DiaryDatabase;
 import com.example.main_dialendar.view.dialog.CaptureDialog;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,7 +34,7 @@ public class DiaryActivity extends AppCompatActivity {
 
     /* 위젯 */
     private ImageView btn_diary_options;
-    private ImageView btn_diary_photo;
+    private ImageView iv_photo;
     private ImageView btn_save_back;
     private TextView tv_diary_date;
     private EditText et_diary;
@@ -51,6 +48,7 @@ public class DiaryActivity extends AppCompatActivity {
 
     /* 이미지 */
     private static final int REQUEST_CODE = 0;
+    Bitmap img = null;
 
     Date date = new Date();
 
@@ -64,7 +62,8 @@ public class DiaryActivity extends AppCompatActivity {
         mDiaryDao = database.diaryDao();
 
         btn_diary_options = findViewById(R.id.btn_diary_options);
-        btn_diary_photo = findViewById(R.id.btn_diary_photo);
+        iv_photo = findViewById(R.id.iv_photo);
+
         btn_save_back = findViewById(R.id.btn_save_back);
         tv_diary_date = findViewById(R.id.tv_diary_date);
         et_diary = findViewById(R.id.et_diary);
@@ -91,12 +90,12 @@ public class DiaryActivity extends AppCompatActivity {
                 et_diary.setText(diaryRecord.getText());
             }
             if (diaryRecord.getImage() != null) {
-                btn_diary_photo.setImageBitmap(getImageInBitmap(diaryRecord.getImage()));
+                iv_photo.setImageBitmap(getBitmapInByte(diaryRecord.getImage()));
             }
         } catch (NullPointerException e) {
         }
 
-        btn_diary_photo.setOnClickListener(v -> pickFromGallery());
+        iv_photo.setOnClickListener(v -> pickFromGallery());
 
         btn_save_back.setOnClickListener(v -> {
             if (diaryRecord == null) {
@@ -120,19 +119,19 @@ public class DiaryActivity extends AppCompatActivity {
                         if (diaryRecord1 == null) { // 날짜에 일기가 없음
                             Toast.makeText(
                                     DiaryActivity.this,
-                                    "일기가 존재하지 않습니다.",
+                                    getString(R.string.diary_not_exist),
                                     Toast.LENGTH_LONG).show();
                         } else {
                             if (diaryRecord1.getText().matches("")) {
                                 if (diaryRecord1.getImage() == null) { // 일기 내용, 사진 없음
                                     Toast.makeText(
                                             DiaryActivity.this,
-                                            "일기가 존재하지 않습니다.",
+                                            getString(R.string.diary_not_exist),
                                             Toast.LENGTH_LONG).show();
                                 }else { // 사진만 있음
                                     captureDialog.callCaptureDialog(
                                             mFormat.format(date),
-                                            getImageInBitmap(diaryRecord1.getImage()),
+                                            getBitmapInByte(diaryRecord1.getImage()),
                                             null
                                     );
                                 }
@@ -146,7 +145,7 @@ public class DiaryActivity extends AppCompatActivity {
                                 }else { // 일기 내용, 사진 다 있음
                                     captureDialog.callCaptureDialog(
                                             mFormat.format(date),
-                                            getImageInBitmap(diaryRecord1.getImage()),
+                                            getBitmapInByte(diaryRecord1.getImage()),
                                             diaryRecord1.getText());
                                 }
                             }
@@ -164,6 +163,9 @@ public class DiaryActivity extends AppCompatActivity {
             });
             popupMenu.show();
         });
+
+        iv_photo.setBackground(getResources().getDrawable(R.drawable.round_image_border, null));
+        iv_photo.setClipToOutline(true);
     }
 
 
@@ -212,13 +214,15 @@ public class DiaryActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 try {
                     InputStream in = getContentResolver().openInputStream(data.getData());
-                    Bitmap img = BitmapFactory.decodeStream(in);
+                    img = BitmapFactory.decodeStream(in);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     img.compress(Bitmap.CompressFormat.JPEG, 80, stream);
                     Glide.with(getApplicationContext())
                             .load(img)
-                            .centerCrop()
-                            .into(btn_diary_photo);
+                            .transform(new CenterCrop(), new RoundedCorners(30))
+                            .into(iv_photo);
+                    iv_photo.setBackground(getResources().getDrawable(R.drawable.round_image_border, null));
+                    iv_photo.setClipToOutline(true);
                 } catch (Exception e) {
                 }
             } else if (resultCode == RESULT_CANCELED) {
@@ -230,11 +234,10 @@ public class DiaryActivity extends AppCompatActivity {
     /**
      * convert ImageView -> bitmap -> byte array
      *
-     * @param image ImageView
+     * @param bitmap Bitmap
      * @return byte array
      */
-    private byte[] getImageInByte(ImageView image) {
-        Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+    private byte[] getByteInBitmap(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         return baos.toByteArray();
@@ -246,7 +249,7 @@ public class DiaryActivity extends AppCompatActivity {
      * @param image byte array
      * @return bitmap image
      */
-    public static Bitmap getImageInBitmap(byte[] image) {
+    public static Bitmap getBitmapInByte(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
@@ -264,20 +267,20 @@ public class DiaryActivity extends AppCompatActivity {
         Diary insertRecord = new Diary();
         insertRecord.setDate(dbFormat.format(date));
         insertRecord.setText(et_diary.getText().toString());
-        if (btn_diary_photo.getDrawable() == null)
+        if (img == null)
             insertRecord.setImage(null);
         else
-            insertRecord.setImage(getImageInByte(btn_diary_photo));
+            insertRecord.setImage(getByteInBitmap(img));
         mDiaryDao.insertDiary(insertRecord);
     }
     private void updateRecord() {
         Diary updateRecord = new Diary();
         updateRecord.setDate(dbFormat.format(date));
         updateRecord.setText(et_diary.getText().toString());
-        if (btn_diary_photo.getDrawable() == null)
+        if (iv_photo.getDrawable() == null)
             updateRecord.setImage(null);
         else
-            updateRecord.setImage(getImageInByte(btn_diary_photo));
+            updateRecord.setImage(getByteInBitmap(img));
         mDiaryDao.updateDiary(updateRecord);
     }
 }

@@ -2,6 +2,9 @@ package com.example.main_dialendar.util.setting;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+
+import androidx.appcompat.app.AppCompatDelegate;
 
 // 설정 정보 관리 및 저장 매니저
 public class SharedPrefManager {
@@ -11,14 +14,15 @@ public class SharedPrefManager {
     private static SharedPreferences.Editor editor;
 
     private static final String SHARED_PREFS_FILE_NAME = "Dialendar";
-
-    private static final String FONT_KEY = "Maruburi";
     private static final String LOCK_KEY = "LockOnOff";
     private static final String PASSWORD_KEY = "Password";
     private static final String DARKMODE_KEY = "Darkmode";
     private static final String MESSAGE_KEY = "MessageOnOff";
     private static final String MESSAGE_HOUR_KEY = "MessageHour";
     private static final String MESSAGE_MINUTE_KEY = "MessageMinute";
+    public static final String LIGHT_MODE = "Light";
+    public static final String DARK_MODE = "Dark";
+    public static final String DEFAULT_MODE = "Default";
 
     public SharedPrefManager(Context context) {
         sharedPreferences = context.getSharedPreferences(
@@ -34,16 +38,6 @@ public class SharedPrefManager {
         }
         return manager;
     }
-
-    public void setFont(String font) {
-        editor.putString(FONT_KEY, font);
-        editor.commit();
-    }
-
-    public String getFont() {
-        return sharedPreferences.getString(FONT_KEY, "");
-    }
-
 
     public void setLockOn(boolean value) {
         editor.putBoolean(LOCK_KEY, value);
@@ -71,6 +65,26 @@ public class SharedPrefManager {
 
     public String getDarkmode() {
         return sharedPreferences.getString(DARKMODE_KEY, "Default");
+    }
+
+    public static void applyTheme(String themeColor) {
+        switch (themeColor) {
+            case LIGHT_MODE:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+
+            case DARK_MODE:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+
+            default :
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+                }
+
+        }
     }
 
     public void setMessageOn(boolean value, int hour, int minute) {

@@ -40,7 +40,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/maruburittf"
                         android:letterSpacing="0.2"
-                        android:text="2021"
+                        android:text="@string/main_year"
                         android:textAlignment="center"
                         android:textColor="@color/textColor"
                         android:textSize="@dimen/textSmallSize_tab"
@@ -50,7 +50,8 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:contentDescription="@string/main_change_year"
                         android:src="@drawable/img_year" />
 
                 </LinearLayout>
@@ -84,7 +85,7 @@
                     android:layout_weight="2"
                     android:fontFamily="@font/tway_sky"
                     android:gravity="center"
-                    android:text="0"
+                    android:text="@string/main_month"
                     android:textColor="@color/textColor"
                     android:textSize="120sp" />
 
@@ -129,7 +130,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="30dp"
-                android:background="@drawable/btn_write" />
+                android:background="@drawable/btn_write"
+                android:contentDescription="@string/main_write" />
         </RelativeLayout>
 
         <com.google.android.material.navigation.NavigationView
