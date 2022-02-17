@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/rl_date"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_width="@dimen/gridWidth_7tab"
+        android:layout_height="@dimen/gridWidth_7tab">
+
+        <ImageView
+            android:id="@+id/iv_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="@drawable/calendar_bg_border"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="00"
+            android:textColor="@color/textColor"
+            android:fontFamily="@font/maruburittf"
+            android:textSize="@dimen/textSize_tab" />
+
+    </RelativeLayout>
+
+</LinearLayout>
