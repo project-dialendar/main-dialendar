@@ -30,3 +30,4 @@ app/build.gradle
 .idea/runConfigurations.xml
 app/build.gradle
 .idea/misc.xml
+.idea/deploymentTargetDropDown.xml
