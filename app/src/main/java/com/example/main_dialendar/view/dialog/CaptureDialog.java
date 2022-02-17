@@ -40,7 +40,7 @@ public class CaptureDialog {
 
         final LinearLayout capture_target_Layout = (LinearLayout) dialog.findViewById(R.id.capture_target_Layout);
         final TextView tv_capture_date = (TextView) dialog.findViewById(R.id.tv_capture_date);
-        final ImageView iv_captrue_image = (ImageView) dialog.findViewById(R.id.iv_captrue_image);
+        final ImageView iv_captrue_image = (ImageView) dialog.findViewById(R.id.iv_capture_image);
         final TextView tv_capture_diary = (TextView) dialog.findViewById(R.id.tv_capture_diary);
 
         final TextView btn_capture_cancel = (TextView) dialog.findViewById(R.id.btn_capture_cancel);

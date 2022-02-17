@@ -9,14 +9,13 @@
     android:layout_width="@dimen/gridWidth_tab"
     android:layout_height="@dimen/gridWidth_tab">
 
-    <ImageView
-        android:id="@+id/iv_date"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:background="@drawable/calendar_bg_border"
-        android:contentDescription="@string/diary_image"
-        android:scaleType="centerCrop" />
+    <RelativeLayout
+        android:id="@+id/rl_date"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_width="@dimen/gridWidth_7tab"
+        android:layout_height="@dimen/gridWidth_7tab">
 
     <TextView
         android:id="@+id/tv_date"
