@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
-        android:id="@+id/ll_week"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+    android:id="@+id/ll_week"
         android:layout_width="@dimen/gridWidth_7tab"
         android:layout_height="@dimen/gridHeight_tab"
         android:background="@drawable/calendar_bg_border">
 
-        <TextView
-            android:id="@+id/tv_day_of_week"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="DAY"
-            android:textColor="@color/textColor"
-            android:textStyle="bold"
-            android:fontFamily="@font/maruburittf"
-            android:textSize="@dimen/textSize_tab"/>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_day_of_week"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="DAY"
+        android:textColor="@color/textColor"
+        android:textStyle="bold"
+        android:fontFamily="@font/maruburittf"
+        android:textSize="@dimen/textSize_tab"/>
 
 </LinearLayout>
