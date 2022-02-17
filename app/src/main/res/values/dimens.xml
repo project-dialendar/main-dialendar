@@ -4,7 +4,7 @@
     <dimen name="textSize_phone">12sp</dimen>
     <dimen name="textSmallSize_tab">16sp</dimen>
     <dimen name="textSmallSize_phone">10sp</dimen>
-    <dimen name="gridWidth_10tab">126dp</dimen>
+    <dimen name="gridWidth_10tab">96dp</dimen>
     <dimen name="gridWidth_7tab">96dp</dimen>
     <dimen name="gridHeight_tab">36dp</dimen>
     <dimen name="gridWidth_phone">72dp</dimen>

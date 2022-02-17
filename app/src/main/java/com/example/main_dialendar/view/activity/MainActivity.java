@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // 그리드뷰
     private RecyclerView rv_month;
-    private GridView gv_day_of_week;
+    private RecyclerView rv_day_of_week;
 
     // 캘린더 변수
     private Calendar calendar;
@@ -114,7 +114,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 7);
         rv_month.setLayoutManager(gridLayoutManager);
         rv_month.setItemViewCacheSize(42);
-        gv_day_of_week = findViewById(R.id.gv_day_of_week);
+        rv_day_of_week = findViewById(R.id.rv_day_of_week);
+        GridLayoutManager gridLayoutManager_week = new GridLayoutManager(this, 7);
+        rv_month.setLayoutManager(gridLayoutManager_week);
+        rv_month.setItemViewCacheSize(7);
 
         ll_year = findViewById(R.id.btn_year);
         tv_year = findViewById(R.id.tv_year);
@@ -207,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         day_of_weekList.add("SAT");
 
         day_of_weekGridAdapter = new WeekAdapter(this, day_of_weekList);
-        gv_day_of_week.setAdapter(day_of_weekGridAdapter);
+        rv_day_of_week.setAdapter(day_of_weekGridAdapter);
 
         dayList = new ArrayList<Day>();
     }
