@@ -5,10 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.main_dialendar.R;
+import com.example.main_dialendar.database.Diary;
+import com.example.main_dialendar.model.Day;
+import com.example.main_dialendar.view.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,7 +24,7 @@ import java.util.Calendar;
 /**
  * 그리드뷰 어댑터 - 요일 리스트
  */
-public class WeekAdapter extends BaseAdapter {
+public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
 
     private ArrayList<String> list;
     private Context context;
@@ -34,15 +42,16 @@ public class WeekAdapter extends BaseAdapter {
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-
+    @NonNull
     @Override
-    public int getCount() {
-        return list.size();
+    public WeekAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.item_calendar_day_of_week, parent, false);
+        return new WeekAdapter.ViewHolder(view);
     }
 
     @Override
-    public Object getItem(int position) {
-        return list.get(position);
+    public void onBindViewHolder(@NonNull WeekAdapter.ViewHolder holder, int position) {
+        holder.tv_date_of_week.setText("" + list.get(position));
     }
 
     @Override
@@ -51,25 +60,18 @@ public class WeekAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
-
-        if(convertView == null) {
-            convertView = inflater.inflate(R.layout.item_calendar_day_of_week, parent, false);
-            holder = new ViewHolder();
-            holder.tvItemGridView = (TextView)convertView.findViewById(R.id.tv_day_of_week);
-            holder.llItemGridView = convertView.findViewById(R.id.ll_week);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder)convertView.getTag();
-        }
-        holder.tvItemGridView.setText("" + getItem(position));
-        return convertView;
+    public int getItemCount() {
+        return list.size();
     }
 
-    private class ViewHolder {
-        TextView tvItemGridView;
-        LinearLayout llItemGridView;
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tv_date_of_week;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tv_date_of_week = itemView.findViewById(R.id.tv_day_of_week);
+        }
     }
 }
 
