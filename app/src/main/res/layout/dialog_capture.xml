@@ -28,6 +28,7 @@
             android:fontFamily="@font/maruburittf"
             android:paddingHorizontal="@dimen/paddingHorizontal_tab"
             android:paddingTop="@dimen/paddingVertical_tab"
+            android:paddingBottom="10dp"
             android:text="yyyy.mm.dd."
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="@dimen/textSize_tab" />
@@ -37,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:padding="20dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/empty_photo" />
@@ -48,6 +50,7 @@
             android:minHeight="120dp"
             android:fontFamily="@font/maruburittf"
             android:paddingHorizontal="@dimen/paddingHorizontal_tab"
+            android:paddingTop="10dp"
             android:text="My diary"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="@dimen/textSize_tab" />
