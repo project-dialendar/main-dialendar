@@ -11,12 +11,11 @@
         android:id="@+id/iv_lock"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginTop="95dp"
+        android:layout_marginTop="36dp"
         android:contentDescription="@string/lock_image"
         app:layout_constraintEnd_toStartOf="@id/tl_lock"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tl_lock"
         app:srcCompat="@drawable/ic_baseline_lock_24" />
 
     <TextView
@@ -27,29 +26,29 @@
         android:textColor="@color/textColor"
         android:fontFamily="@font/maruburittf"
         android:textSize="16sp"
-        android:layout_marginTop="25dp"
         app:layout_constraintTop_toBottomOf="@+id/iv_lock"
         app:layout_constraintBottom_toTopOf="@+id/ll_password"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tl_lock" />
+        app:layout_constraintStart_toStartOf="@id/iv_lock"
+        app:layout_constraintEnd_toEndOf="@+id/iv_lock" />
 
     <LinearLayout
         android:id="@+id/ll_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_password"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tl_lock"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toBottomOf="@id/tl_lock"
+        app:layout_constraintEnd_toEndOf="@id/tv_password"
+        app:layout_constraintStart_toStartOf="@id/tv_password"
+        app:layout_constraintTop_toBottomOf="@id/tv_password">
 
         <ImageView
             android:id="@+id/iv_password1"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_margin="2dp"
-            android:src="@drawable/ic_baseline_password_blank"
-            android:contentDescription="@string/first_password" />
+            android:contentDescription="@string/first_password"
+            android:src="@drawable/ic_baseline_password_blank" />
 
         <ImageView
             android:id="@+id/iv_password2"
@@ -57,7 +56,7 @@
             android:layout_height="36dp"
             android:layout_margin="2dp"
             android:contentDescription="@string/second_password"
-            android:src="@drawable/ic_baseline_password_blank"/>
+            android:src="@drawable/ic_baseline_password_blank" />
 
         <ImageView
             android:id="@+id/iv_password3"
@@ -65,7 +64,7 @@
             android:layout_height="36dp"
             android:layout_margin="2dp"
             android:contentDescription="@string/third_password"
-            android:src="@drawable/ic_baseline_password_blank"/>
+            android:src="@drawable/ic_baseline_password_blank" />
 
         <ImageView
             android:id="@+id/iv_password4"
@@ -73,7 +72,7 @@
             android:layout_height="36dp"
             android:layout_margin="2dp"
             android:contentDescription="@string/fourth_password"
-            android:src="@drawable/ic_baseline_password_blank"/>
+            android:src="@drawable/ic_baseline_password_blank" />
     </LinearLayout>
 
 
