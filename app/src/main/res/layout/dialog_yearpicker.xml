@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="400dp"
-    android:layout_height="330dp"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/pickerDialogWidth"
+    android:layout_height="@dimen/pickerDialogHeight"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="5dp"
     android:background="@drawable/round_bg_border">
 
     <TextView
+        android:id="@+id/tv_yearpicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ll_yearpicker"
         android:text="@string/select_date"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/maruburittf"
-        android:textSize="16sp"
+        android:textSize="@dimen/textSize"
         android:textColor="@color/textColor"
         android:textStyle="bold"
         android:layout_gravity="center" />
 
     <LinearLayout
+        android:id="@+id/ll_yearpicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_yearpicker"
+        app:layout_constraintStart_toStartOf="@id/tv_yearpicker"
+        app:layout_constraintEnd_toEndOf="@id/tv_yearpicker"
         android:layout_marginTop="20dp"
         android:layout_gravity="center"
         android:orientation="horizontal">
@@ -34,7 +44,7 @@
                 android:layout_gravity="center"
                 android:text="@string/year"
                 android:fontFamily="@font/maruburittf"
-                android:textSize="15sp"/>
+                android:textSize="@dimen/textSmallSize"/>
 
             <NumberPicker
                 android:id="@+id/picker_year"
@@ -54,7 +64,7 @@
                 android:layout_gravity="center"
                 android:text="@string/month"
                 android:fontFamily="@font/maruburittf"
-                android:textSize="15sp"/>
+                android:textSize="@dimen/textSmallSize"/>
 
             <NumberPicker
                 android:id="@+id/picker_month"
@@ -65,15 +75,20 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
+    <Button
         android:id="@+id/btn_ok"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/ok"
-        android:textSize="14sp"
-        android:textColor="@color/textColor"
         android:fontFamily="@font/maruburittf"
-        android:gravity="center"
-        android:letterSpacing="1" />
-</LinearLayout>
+        android:letterSpacing="1"
+        android:padding="8dp"
+        android:layout_margin="12dp"
+        android:text="@string/ok"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/textSmallSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/ll_yearpicker"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="@id/ll_yearpicker" />
+</androidx.constraintlayout.widget.ConstraintLayout>

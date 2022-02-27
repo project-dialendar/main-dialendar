@@ -44,7 +44,7 @@
                         android:text="@string/main_year"
                         android:textAlignment="center"
                         android:textColor="@color/textColor"
-                        android:textSize="@dimen/textSmallSize_tab"
+                        android:textSize="@dimen/textSize"
                         android:textStyle="bold" />
 
                     <ImageView

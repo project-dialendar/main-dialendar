@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- text size -->
-    <dimen name="textSize">18sp</dimen>
-    <dimen name="textSmallSize">16sp</dimen>
+    <dimen name="textSize">20sp</dimen>
+    <dimen name="textSmallSize">18sp</dimen>
     <dimen name="textTooSmallSize">12sp</dimen>
 
     <!-- gridView item size -->
-    <dimen name="gridWidth">96dp</dimen>
+    <dimen name="gridWidth">112dp</dimen>
     <dimen name="gridHeight">36dp</dimen>
-    <dimen name="gridMargin">3dp</dimen>
+    <dimen name="gridMargin">5dp</dimen>
 
     <!-- dialog size -->
     <dimen name="customDialogWidth">360dp</dimen>
     <dimen name="customDialogHeight">600dp</dimen>
-
-    <dimen name="pickerDialogWidth">400dp</dimen>
-    <dimen name="pickerDialogHeight">370dp</dimen>
 
     <dimen name="paddingVertical">40dp</dimen>
     <dimen name="paddingHorizontal">20dp</dimen>

@@ -175,15 +175,15 @@ public class DiaryActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Diary diaryRecord = isExist();
-        diaryRecord = isExist();
-
-        if (diaryRecord == null) {
-            insertRecord();
-        } else {
-            updateRecord();
-        }
-        finish();
+//        Diary diaryRecord = isExist();
+//        diaryRecord = isExist();
+//
+//        if (diaryRecord == null) {
+//            insertRecord();
+//        } else {
+//            updateRecord();
+//        }
+//        finish();
     }
 
     /***

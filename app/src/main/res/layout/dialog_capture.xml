@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/round_bg_border"
-    android:minWidth="@dimen/customDialogWidth_tab"
-    android:minHeight="@dimen/customDialogHeight_tab">
+    android:minWidth="@dimen/customDialogWidth"
+    android:minHeight="@dimen/customDialogHeight">
 
     <LinearLayout
         android:id="@+id/capture_target_Layout"
@@ -26,11 +26,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/maruburittf"
-            android:paddingHorizontal="@dimen/paddingHorizontal_tab"
-            android:paddingTop="@dimen/paddingVertical_tab"
+            android:paddingHorizontal="@dimen/paddingHorizontal"
+            android:paddingTop="@dimen/paddingVertical"
             android:text="yyyy.mm.dd."
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textSize="@dimen/textSize_tab" />
+            android:textSize="@dimen/textSize" />
 
         <com.example.main_dialendar.view.CustomImageView
             android:id="@+id/iv_captrue_image"
@@ -47,10 +47,10 @@
             android:layout_height="wrap_content"
             android:minHeight="120dp"
             android:fontFamily="@font/maruburittf"
-            android:paddingHorizontal="@dimen/paddingHorizontal_tab"
+            android:paddingHorizontal="@dimen/paddingHorizontal"
             android:text="My diary"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textSize="@dimen/textSize_tab" />
+            android:textSize="@dimen/textSmallSize" />
     </LinearLayout>
 
     <LinearLayout
@@ -75,7 +75,7 @@
             android:fontFamily="@font/maruburittf"
             android:gravity="center"
             android:text="캡쳐 취소"
-            android:textSize="@dimen/textSmallSize_tab" />
+            android:textSize="@dimen/textSmallSize" />
 
         <TextView
             android:id="@+id/btn_capture_this"
@@ -85,6 +85,6 @@
             android:fontFamily="@font/maruburittf"
             android:gravity="center"
             android:text="일기 저장"
-            android:textSize="@dimen/textSmallSize_tab" />
+            android:textSize="@dimen/textSmallSize" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

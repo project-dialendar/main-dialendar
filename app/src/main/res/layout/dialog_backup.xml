@@ -15,7 +15,7 @@
         android:letterSpacing="0.2"
         android:text="@string/backup_save"
         android:textAlignment="center"
-        android:textSize="18sp" />
+        android:textSize="@dimen/textSize" />
 
     <TextView
         android:id="@+id/tv_read"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:text="@string/backup_load"
         android:letterSpacing="0.2"
-        android:textSize="18sp"
+        android:textSize="@dimen/textSize"
         android:textAlignment="center"
         android:gravity="center"
         android:background="@drawable/calendar_bg_border"
