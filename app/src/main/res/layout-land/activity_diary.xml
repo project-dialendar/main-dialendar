@@ -28,9 +28,7 @@
             android:text="@string/diary_date"
             android:textAlignment="center"
             android:textColor="#8D6E63"
-            android:textSize="@dimen/textSize_phone"
-            tools:layout_editor_absoluteX="714dp"
-            tools:layout_editor_absoluteY="24dp" />
+            android:textSize="@dimen/textSize" />
 
         <ImageView
             android:id="@+id/btn_diary_options"
@@ -72,9 +70,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/round_image_border"
-            android:contentDescription="@string/diary_image"
             android:scaleType="centerCrop"
-            android:src="@drawable/empty_photo" />
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/diary_image" />
 
         <EditText
             android:id="@+id/et_diary"
@@ -90,7 +88,7 @@
             android:inputType="textMultiLine"
             android:paddingLeft="20dp"
             android:textColor="@color/textColor"
-            android:textSize="@dimen/textSize_tab" />
+            android:textSize="@dimen/textSize" />
 
     </LinearLayout>
 

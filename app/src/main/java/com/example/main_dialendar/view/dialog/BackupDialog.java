@@ -41,9 +41,9 @@ public class BackupDialog extends Dialog implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_backup);
 
-        tv_create = findViewById(R.id.tv_create);
+        tv_create = findViewById(R.id.btn_create);
         tv_create.setOnClickListener(this);
-        tv_read = findViewById(R.id.tv_read);
+        tv_read = findViewById(R.id.btn_read);
         tv_read.setOnClickListener(this);
 
     }
@@ -51,10 +51,10 @@ public class BackupDialog extends Dialog implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_create:
+            case R.id.btn_create:
                 createBackupFile();
                 break;
-            case R.id.tv_read:
+            case R.id.btn_read:
                 readBackupFile();
                 break;
         }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="400dp"
-    android:layout_height="330dp"
+    android:layout_width="@dimen/pickerDialogWidth"
+    android:layout_height="@dimen/pickerDialogHeight"
     android:padding="10dp"
     android:background="@drawable/round_bg_border"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -16,7 +16,7 @@
         android:fontFamily="@font/maruburittf"
         android:text="@string/select_time"
         android:textColor="@color/textColor"
-        android:textSize="16sp"
+        android:textSize="@dimen/textSize"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/timepicker"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,16 +34,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:timePickerMode="spinner"/>
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_ok"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/ok"
-        android:textSize="12sp"
+        android:textSize="@dimen/textSmallSize"
         android:textColor="@color/textColor"
         android:fontFamily="@font/maruburittf"
         android:letterSpacing="1"
         android:textAlignment="center"
+        app:cornerRadius="@dimen/buttonRadius"
+        app:strokeWidth="@dimen/strokeWidth"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:padding="12dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/timepicker"
         app:layout_constraintBottom_toBottomOf="parent"
