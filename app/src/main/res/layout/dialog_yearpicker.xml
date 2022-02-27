@@ -75,8 +75,10 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_ok"
+        app:cornerRadius="@dimen/buttonRadius"
+        app:strokeWidth="@dimen/strokeWidth"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

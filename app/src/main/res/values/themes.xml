@@ -4,7 +4,7 @@
         <item name="colorPrimary">@color/line_calendar</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/red</item>
-        <item name="colorSecondary">@color/textColor_out</item>
+        <item name="colorSecondary">@color/lineColor</item>
         <item name="backgroundColor">@color/background</item>
         <item name="android:textColor">@color/textColor_out</item>
         <item name="android:textColorPrimary">@color/textColor</item>

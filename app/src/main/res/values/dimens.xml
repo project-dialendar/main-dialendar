@@ -4,6 +4,8 @@
     <dimen name="textSize">18sp</dimen>
     <dimen name="textSmallSize">16sp</dimen>
     <dimen name="textTooSmallSize">12sp</dimen>
+    <dimen name="strokeWidth">3dp</dimen>
+    <dimen name="buttonRadius">8dp</dimen>
 
     <!-- gridView item size -->
     <dimen name="gridWidth">96dp</dimen>

@@ -55,36 +55,43 @@
 
     <LinearLayout
         android:id="@+id/button_Layout"
-        android:layout_width="360dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/capture_target_Layout">
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_capture_cancel"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@android:drawable/list_selector_background"
-            android:clickable="true"
-            android:focusable="true"
             android:fontFamily="@font/maruburittf"
             android:gravity="center"
+            android:layout_marginRight="8dp"
             android:text="캡쳐 취소"
+            android:padding="8dp"
+            android:textColor="@color/textColor"
+            app:cornerRadius="@dimen/buttonRadius"
+            app:strokeWidth="2dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:textSize="@dimen/textSmallSize" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_capture_this"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="8dp"
             android:fontFamily="@font/maruburittf"
             android:gravity="center"
             android:text="일기 저장"
+            android:textColor="@color/textColor"
+            app:cornerRadius="@dimen/buttonRadius"
+            app:strokeWidth="2dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:textSize="@dimen/textSmallSize" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

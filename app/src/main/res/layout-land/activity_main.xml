@@ -29,33 +29,22 @@
                 android:background="@color/background"
                 android:minHeight="?attr/actionBarSize">
 
-                <LinearLayout
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:id="@+id/tv_year"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/maruburittf"
-                        android:letterSpacing="0.2"
-                        android:text="@string/main_year"
-                        android:textAlignment="center"
-                        android:textColor="@color/textColor"
-                        android:textSize="@dimen/textSize"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="5dp"
-                        android:contentDescription="@string/main_change_year"
-                        android:src="@drawable/img_year" />
-
-                </LinearLayout>
+                    android:layout_gravity="center"
+                    app:strokeWidth="3dp"
+                    app:cornerRadius="8dp"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    app:strokeColor="@color/lineColor"
+                    android:fontFamily="@font/maruburittf"
+                    android:letterSpacing="0.2"
+                    android:text="@string/main_year"
+                    android:textAlignment="center"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/textSize"
+                    android:textStyle="bold" />
 
             </androidx.appcompat.widget.Toolbar>
 

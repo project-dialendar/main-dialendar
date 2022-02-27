@@ -19,8 +19,8 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,8 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tv_month;
 
     // 년도, 글쓰기 버튼
-    private LinearLayout ll_year;
-    private TextView tv_year;
+    private Button btn_year;
     private ImageButton btn_write;
 
     // 년도 버튼 클릭 이벤트 리스너
@@ -119,9 +118,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rv_month.setLayoutManager(gridLayoutManager_week);
         rv_month.setItemViewCacheSize(7);
 
-        ll_year = findViewById(R.id.btn_year);
-        tv_year = findViewById(R.id.tv_year);
-        ll_year.setOnClickListener(this);
+        btn_year = findViewById(R.id.btn_year);
+        btn_year.setOnClickListener(this);
 
         btn_write = findViewById(R.id.btn_write);
         btn_write.setOnClickListener(this);
@@ -242,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 년월 표시
         tv_month.setText((this.calendar.get(Calendar.MONTH) + 1) + "");
-        tv_year.setText(this.calendar.get(Calendar.YEAR) + "");
+        btn_year.setText(this.calendar.get(Calendar.YEAR) + "");
 
         Day day;
         for (int i = 0; i < dayOfMonth - 1; i++) {
