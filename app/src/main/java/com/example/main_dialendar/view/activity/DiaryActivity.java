@@ -176,7 +176,6 @@ public class DiaryActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Diary diaryRecord = isExist();
-        diaryRecord = isExist();
 
         if (diaryRecord == null) {
             insertRecord();
@@ -232,7 +231,7 @@ public class DiaryActivity extends AppCompatActivity {
     }
 
     /**
-     * convert ImageView -> bitmap -> byte array
+     * convert from bitmap to byte array
      *
      * @param bitmap Bitmap
      * @return byte array
@@ -247,7 +246,7 @@ public class DiaryActivity extends AppCompatActivity {
      * convert from byte array to bitmap
      *
      * @param image byte array
-     * @return bitmap image
+     * @return bitmap
      */
     public static Bitmap getBitmapInByte(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
