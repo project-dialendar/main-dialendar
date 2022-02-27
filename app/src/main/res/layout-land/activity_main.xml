@@ -23,28 +23,35 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                android:background="@color/background"
+                android:minHeight="?attr/actionBarSize"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@color/background"
-                android:minHeight="?attr/actionBarSize">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    app:strokeWidth="3dp"
-                    app:cornerRadius="8dp"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    app:strokeColor="@color/lineColor"
                     android:fontFamily="@font/maruburittf"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:letterSpacing="0.2"
                     android:text="@string/main_year"
                     android:textAlignment="center"
                     android:textColor="@color/textColor"
                     android:textSize="@dimen/textSize"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="8dp"
+                    app:icon="@drawable/img_year"
+                    app:iconGravity="end"
+                    app:iconPadding="6dp"
+                    app:iconTint="@color/textColor_out"
+                    app:iconSize="16dp"
+                    app:strokeColor="@color/lineColor"
+                    android:background="@color/background"
+                    app:strokeWidth="2dp" />
 
             </androidx.appcompat.widget.Toolbar>
 
