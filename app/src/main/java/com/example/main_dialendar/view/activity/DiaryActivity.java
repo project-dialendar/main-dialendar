@@ -91,6 +91,7 @@ public class DiaryActivity extends AppCompatActivity {
             }
             if (diaryRecord.getImage() != null) {
                 iv_photo.setImageBitmap(getBitmapInByte(diaryRecord.getImage()));
+                img = getBitmapInByte(diaryRecord.getImage());
             }
         } catch (NullPointerException e) {
         }
@@ -215,10 +216,10 @@ public class DiaryActivity extends AppCompatActivity {
                     InputStream in = getContentResolver().openInputStream(data.getData());
                     img = BitmapFactory.decodeStream(in);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    img.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                    img.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     Glide.with(getApplicationContext())
                             .load(img)
-                            .transform(new CenterCrop(), new RoundedCorners(30))
+                            .centerCrop()
                             .into(iv_photo);
                     iv_photo.setBackground(getResources().getDrawable(R.drawable.round_image_border, null));
                     iv_photo.setClipToOutline(true);
