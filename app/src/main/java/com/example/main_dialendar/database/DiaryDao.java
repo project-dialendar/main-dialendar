@@ -29,6 +29,16 @@ public interface DiaryDao {
     void updateDiary(Diary diary);
 
     /**
+     * 수정
+     * @param date 수정할 날짜
+     * @param text 수정할 일기
+     */
+    @Query("UPDATE diary " +
+            "SET text = :text " +
+            "WHERE date LIKE :date")
+    void updateExceptImage(String date, String text);
+
+    /**
      * 삭제
      * @param diary 삭제할 다이어리 인스턴스
      */
@@ -40,6 +50,8 @@ public interface DiaryDao {
      * @param date 조회할 날짜 스트링
      * @return 다이어리 인스턴스
      */
-    @Query("SELECT * FROM Diary WHERE date LIKE :date")
+    @Query("SELECT * " +
+            "FROM Diary " +
+            "WHERE date LIKE :date")
     Diary findByDate(String date);
 }

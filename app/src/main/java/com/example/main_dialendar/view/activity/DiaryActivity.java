@@ -4,8 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import android.graphics.drawable.BitmapDrawable;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -16,8 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.main_dialendar.R;
 import com.example.main_dialendar.database.Diary;
 import com.example.main_dialendar.database.DiaryDao;
@@ -31,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DiaryActivity extends AppCompatActivity {
+    private static final String TAG = "DiaryActivity";
 
     /* 위젯 */
     private ImageView btn_diary_options;
@@ -49,6 +49,7 @@ public class DiaryActivity extends AppCompatActivity {
     /* 이미지 */
     private static final int REQUEST_CODE = 0;
     Bitmap img = null;
+    Boolean imgUpdate = false;
 
     Date date = new Date();
 
@@ -90,7 +91,8 @@ public class DiaryActivity extends AppCompatActivity {
                 et_diary.setText(diaryRecord.getText());
             }
             if (diaryRecord.getImage() != null) {
-                iv_photo.setImageBitmap(getBitmapInByte(diaryRecord.getImage()));
+                img = getBitmapInByte(diaryRecord.getImage());
+                iv_photo.setImageBitmap(img);
             }
         } catch (NullPointerException e) {
         }
@@ -215,13 +217,14 @@ public class DiaryActivity extends AppCompatActivity {
                     InputStream in = getContentResolver().openInputStream(data.getData());
                     img = BitmapFactory.decodeStream(in);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    img.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                    img.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     Glide.with(getApplicationContext())
                             .load(img)
-                            .transform(new CenterCrop(), new RoundedCorners(30))
+                            .centerCrop()
                             .into(iv_photo);
                     iv_photo.setBackground(getResources().getDrawable(R.drawable.round_image_border, null));
                     iv_photo.setClipToOutline(true);
+                    imgUpdate = true;
                 } catch (Exception e) {
                 }
             } else if (resultCode == RESULT_CANCELED) {
@@ -237,6 +240,7 @@ public class DiaryActivity extends AppCompatActivity {
      * @return byte array
      */
     private byte[] getByteInBitmap(Bitmap bitmap) {
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         return baos.toByteArray();
@@ -271,15 +275,21 @@ public class DiaryActivity extends AppCompatActivity {
         else
             insertRecord.setImage(getByteInBitmap(img));
         mDiaryDao.insertDiary(insertRecord);
+        Log.e(TAG, "레코드 등록");
     }
     private void updateRecord() {
-        Diary updateRecord = new Diary();
-        updateRecord.setDate(dbFormat.format(date));
-        updateRecord.setText(et_diary.getText().toString());
-        if (iv_photo.getDrawable() == null)
-            updateRecord.setImage(null);
-        else
+        if (iv_photo.getDrawable() == null || !imgUpdate) {
+            mDiaryDao.updateExceptImage(
+                    dbFormat.format(date),
+                    et_diary.getText().toString());
+            Log.e(TAG, "이미지 미포함 업데이트");
+        } else {
+            Diary updateRecord = new Diary();
+            updateRecord.setDate(dbFormat.format(date));
+            updateRecord.setText(et_diary.getText().toString());
             updateRecord.setImage(getByteInBitmap(img));
-        mDiaryDao.updateDiary(updateRecord);
+            mDiaryDao.updateDiary(updateRecord);
+            Log.e(TAG, "이미지 포함 업데이트");
+        }
     }
 }
