@@ -27,29 +27,31 @@
         android:id="@+id/ll_yearpicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_yearpicker"
-        app:layout_constraintStart_toStartOf="@id/tv_yearpicker"
-        app:layout_constraintEnd_toEndOf="@id/tv_yearpicker"
-        android:layout_marginTop="20dp"
         android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/btn_ok"
+        app:layout_constraintEnd_toEndOf="@id/tv_yearpicker"
+        app:layout_constraintStart_toStartOf="@id/tv_yearpicker"
+        app:layout_constraintTop_toBottomOf="@id/tv_yearpicker">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/year"
                 android:fontFamily="@font/maruburittf"
-                android:textSize="@dimen/textSmallSize"/>
+                android:text="@string/year"
+                android:textSize="@dimen/textSmallSize" />
 
             <NumberPicker
                 android:id="@+id/picker_year"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"></NumberPicker>
         </LinearLayout>
 
@@ -62,16 +64,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/month"
                 android:fontFamily="@font/maruburittf"
-                android:textSize="@dimen/textSmallSize"/>
+                android:text="@string/month"
+                android:textSize="@dimen/textSmallSize" />
 
             <NumberPicker
                 android:id="@+id/picker_month"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:layout_margin="10dp">
-            </NumberPicker>
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"></NumberPicker>
         </LinearLayout>
     </LinearLayout>
 

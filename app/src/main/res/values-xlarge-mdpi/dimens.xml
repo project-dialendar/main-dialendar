@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- text size -->
-    <dimen name="textSize">18sp</dimen>
-    <dimen name="textSmallSize">16sp</dimen>
-    <dimen name="textTooSmallSize">12sp</dimen>
+    <dimen name="textSize">20sp</dimen>
+    <dimen name="textSmallSize">18sp</dimen>
+    <dimen name="textTooSmallSize">14sp</dimen>
 
     <!-- gridView item size -->
-    <dimen name="gridWidth">96dp</dimen>
-    <dimen name="gridHeight">36dp</dimen>
+    <dimen name="gridWidth">108dp</dimen>
+    <dimen name="gridHeight">44dp</dimen>
     <dimen name="gridMargin">3dp</dimen>
 
     <!-- dialog size -->

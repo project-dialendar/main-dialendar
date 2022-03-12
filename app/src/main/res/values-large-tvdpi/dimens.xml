@@ -4,15 +4,20 @@
     <dimen name="textSize">18sp</dimen>
     <dimen name="textSmallSize">16sp</dimen>
     <dimen name="textTooSmallSize">12sp</dimen>
+    <dimen name="strokeWidth">3dp</dimen>
+    <dimen name="buttonRadius">8dp</dimen>
 
     <!-- gridView item size -->
-    <dimen name="gridWidth">96dp</dimen>
-    <dimen name="gridHeight">36dp</dimen>
-    <dimen name="gridMargin">3dp</dimen>
+    <dimen name="gridWidth">72dp</dimen>
+    <dimen name="gridHeight">16dp</dimen>
+    <dimen name="gridMargin">8dp</dimen>
 
     <!-- dialog size -->
     <dimen name="customDialogWidth">360dp</dimen>
     <dimen name="customDialogHeight">600dp</dimen>
+
+    <dimen name="pickerDialogWidth">400dp</dimen>
+    <dimen name="pickerDialogHeight">370dp</dimen>
 
     <dimen name="paddingVertical">40dp</dimen>
     <dimen name="paddingHorizontal">20dp</dimen>
