@@ -83,7 +83,7 @@
                     android:id="@+id/tv_month"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="50dp"
                     android:layout_weight="2"
                     android:fontFamily="@font/tway_sky"
                     android:gravity="center"
@@ -99,6 +99,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_weight="6"
                     android:gravity="center"
+                    android:layout_gravity="top"
                     android:orientation="vertical">
 
                     <androidx.recyclerview.widget.RecyclerView
