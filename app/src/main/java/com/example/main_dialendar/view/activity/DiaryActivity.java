@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -49,7 +48,9 @@ public class DiaryActivity extends AppCompatActivity {
     /* 이미지 */
     private static final int REQUEST_CODE = 0;
     Bitmap img = null;
-    Boolean imgUpdate = false;
+    Bitmap resizedBitmapImg = null;
+    Boolean isImgUpdated = false;
+    byte[] imgInByte = null;
 
     Date date = new Date();
 
@@ -224,7 +225,19 @@ public class DiaryActivity extends AppCompatActivity {
                             .into(iv_photo);
                     iv_photo.setBackground(getResources().getDrawable(R.drawable.round_image_border, null));
                     iv_photo.setClipToOutline(true);
-                    imgUpdate = true;
+
+                    isImgUpdated = true;
+                    // 이미지 저장할 준비
+                    imgInByte = getByteInBitmap(img);
+                    while (imgInByte.length > 500000) {
+                        Log.e(TAG, "이미지가 너무 큽니다 | "+imgInByte.length);
+                        Log.e(TAG, "width: " + img.getWidth() + " height: " + img.getHeight());
+                        img = Bitmap.createScaledBitmap(img, (int) (img.getWidth() * 0.8), (int) (img.getHeight() * 0.8), true);
+                        imgInByte = getByteInBitmap(img);
+                    }
+
+                    Log.e(TAG, "최종 이미지 사이즈 | "+imgInByte.length);
+                    Log.e(TAG, "최종 width: " + img.getWidth() + " height: " + img.getHeight());
                 } catch (Exception e) {
                 }
             } else if (resultCode == RESULT_CANCELED) {
@@ -240,10 +253,9 @@ public class DiaryActivity extends AppCompatActivity {
      * @return byte array
      */
     private byte[] getByteInBitmap(Bitmap bitmap) {
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
-        return baos.toByteArray();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        return stream.toByteArray();
     }
 
     /**
@@ -272,22 +284,23 @@ public class DiaryActivity extends AppCompatActivity {
         insertRecord.setText(et_diary.getText().toString());
         if (img == null)
             insertRecord.setImage(null);
-        else
-            insertRecord.setImage(getByteInBitmap(img));
+        else{
+            insertRecord.setImage(imgInByte);
+        }
         mDiaryDao.insertDiary(insertRecord);
         Log.e(TAG, "레코드 등록");
     }
     private void updateRecord() {
-        if (iv_photo.getDrawable() == null || !imgUpdate) {
+        if (iv_photo.getDrawable() == null || !isImgUpdated) {
             mDiaryDao.updateExceptImage(
                     dbFormat.format(date),
                     et_diary.getText().toString());
             Log.e(TAG, "이미지 미포함 업데이트");
-        } else {
+        } else { // 이미지 변경시에만 이미지 업데이트
             Diary updateRecord = new Diary();
             updateRecord.setDate(dbFormat.format(date));
             updateRecord.setText(et_diary.getText().toString());
-            updateRecord.setImage(getByteInBitmap(img));
+            updateRecord.setImage(imgInByte);
             mDiaryDao.updateDiary(updateRecord);
             Log.e(TAG, "이미지 포함 업데이트");
         }
