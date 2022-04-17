@@ -33,7 +33,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="@dimen/textSize" />
 
-        <com.example.main_dialendar.view.CustomImageView
+        <com.apps.main_dialendar.view.CustomImageView
             android:id="@+id/iv_captrue_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"

@@ -37,6 +37,6 @@
         android:id="@+id/settings_fragment"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:name="com.example.main_dialendar.view.fragment.SettingPreferenceFragment" />
+        android:name="com.apps.main_dialendar.view.fragment.SettingPreferenceFragment" />
 
 </LinearLayout>

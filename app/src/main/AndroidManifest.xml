@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.main_dialendar">
+    package="com.apps.main_dialendar">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -27,13 +27,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Maindialendar">
         <activity
-            android:name=".view.activity.SettingActivity"
+            android:name="com.apps.main_dialendar.view.activity.SettingActivity"
             android:screenOrientation="landscape"></activity>
         <activity
-            android:name=".view.activity.MainActivity"
+            android:name="com.apps.main_dialendar.view.activity.MainActivity"
             android:screenOrientation="landscape"></activity>
         <activity
-            android:name=".view.activity.SplashActivity"
+            android:name="com.apps.main_dialendar.view.activity.SplashActivity"
             android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/SplashTheme">
@@ -44,28 +44,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activity.DiaryActivity"
+            android:name="com.apps.main_dialendar.view.activity.DiaryActivity"
             android:screenOrientation="landscape"></activity>
         <activity
-            android:name=".view.activity.PasswordSettingActivity"
+            android:name="com.apps.main_dialendar.view.activity.PasswordSettingActivity"
             android:exported="true"
             android:screenOrientation="landscape"></activity>
         <activity
-            android:name=".view.activity.LockActivity"
+            android:name="com.apps.main_dialendar.view.activity.LockActivity"
             android:exported="true"
             android:screenOrientation="landscape"></activity>
 
-        <receiver android:name=".util.lock.ScreenReceiver"
+        <receiver android:name="com.apps.main_dialendar.util.lock.ScreenReceiver"
             android:enabled="true"
             android:exported="true">
         </receiver>
 
-        <service android:name=".util.lock.ScreenService"
+        <service android:name="com.apps.main_dialendar.util.lock.ScreenService"
             android:enabled="true"
             android:exported="true">
         </service>
 
-        <receiver android:name=".util.message.MessageReceiver"
+        <receiver android:name="com.apps.main_dialendar.util.message.MessageReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

@@ -9,7 +9,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.main_dialendar"
+        applicationId "com.apps.main_dialendar"
         minSdkVersion 21
         targetSdkVersion 31
         versionCode 1
