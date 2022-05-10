@@ -6,11 +6,11 @@
 
 ◼️ 팀원: 장현애 최예빈
 
-◼️ 제작 기간: 2021.04. ~ 진행 중
+◼️ 제작 기간: 2021.04. ~ 2021.05.
 
-◼️ github : [https://github.com/project-dialendar/main-dialendar](https://github.com/project-dialendar/main-dialendar)
+◼️ gitHub : [https://github.com/project-dialendar/main-dialendar](https://github.com/project-dialendar/main-dialendar)
 
-◼️ apk 파일 : [설치 링크](https://drive.google.com/file/d/1e6Jrh3O7ND-YcrD6Vl7K4nfZLb3bWdSr/view?usp=sharing)
+◼️ Google Play : [설치 링크](https://play.google.com/store/apps/details?id=com.apps.main_dialendar)
 
 <br>
 
@@ -41,24 +41,17 @@
 
 ## 실행 화면
 
-![홈화면1](https://github.com/Sookmyung-APPS/Dia-lendar/blob/main/images/img_home1.jpg)
+![이미지1](https://github.com/project-dialendar/main-dialendar/blob/master/images/Image0.png)
 
 <br>
 
-![홈화면2](https://github.com/Sookmyung-APPS/Dia-lendar/blob/main/images/img_home2.jpg)
+![이미지2](https://github.com/project-dialendar/main-dialendar/blob/master/images/Image1.png)
 
 <br>
 
-![글쓰기화면](https://github.com/Sookmyung-APPS/Dia-lendar/blob/main/images/img_write.jpg)
+![이미지3](https://github.com/project-dialendar/main-dialendar/blob/master/images/Image2.png)
 
 <br>
 
-![사이드바화면](https://github.com/Sookmyung-APPS/Dia-lendar/blob/main/images/img_sidebar.jpg)
+![이미지4](https://github.com/project-dialendar/main-dialendar/blob/master/images/Image3.png)
 
-<br>
-
-![날짜선택화면](https://github.com/Sookmyung-APPS/Dia-lendar/blob/main/images/img_yearPick.jpg)
-
-<br>
-
-![설정화면](https://github.com/Sookmyung-APPS/Dia-lendar/blob/main/images/img_setting.jpg)
